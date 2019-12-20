@@ -64,6 +64,13 @@ class CheckoutServiceProvider extends ServiceProvider
             ], 'migrations');
         }
 
+        if (!class_exists('CreateCouponsTable')) {
+            $migrationFileName = $this->getMigrationFilename('create_coupons_table', $time + 4, $filesystem);
+            $this->publishes([
+                __DIR__.'/../database/migrations/006_create_coupons_table.php' => $migrationFileName,
+            ], 'migrations');
+        }
+
         $this->publishes([
             __DIR__.'/../database/factories/' => database_path('factories'),
         ], 'migrations');
