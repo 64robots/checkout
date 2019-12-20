@@ -65,7 +65,7 @@ if (!function_exists('normalize_tag')) {
 if (!function_exists('isAdmin')) {
     function isAdmin()
     {
-        return (bool) optional(auth()->user())->isAdmin();
+        return (bool) optional(auth()->user())->is_admin;
     }
 }
 
