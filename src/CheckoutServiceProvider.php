@@ -27,12 +27,37 @@ class CheckoutServiceProvider extends ServiceProvider
     {
         $time = time();
 
+        if (!class_exists('CreateCheckoutProductsTable')) {
+            $this->publishes([
+                __DIR__.'/../database/migrations/001_create_checkout_products_table.php' => database_path('migrations/' . date('Y_m_d_His', $time) . '_create_checkout_products_table.php'),
+            ], 'migrations');
+        }
+
+        if (!class_exists('CreateCartsTable')) {
+            $this->publishes([
+                __DIR__.'/../database/migrations/002_create_carts_table.php' => database_path('migrations/' . date('Y_m_d_His', $time + 1) . '_create_carts_table.php'),
+            ], 'migrations');
+        }
+
+        if (!class_exists('CreateCartItemsTable')) {
+            $this->publishes([
+                __DIR__ . '/../database/migrations/003_create_cart_items_table.php' => database_path('migrations/' . date('Y_m_d_His', $time + 2) . '_create_cart_items_table.php'),
+            ], 'migrations');
+        }
+
+        if (!class_exists('CreateOrdersTable')) {
+            $this->publishes([
+                __DIR__.'/../database/migrations/004_create_orders_table.php' => database_path('migrations/' . date('Y_m_d_His', $time + 3) . '_create_orders_table.php'),
+            ], 'migrations');
+        }
+
+        if (!class_exists('CreateOrderItemsTable')) {
+            $this->publishes([
+                __DIR__.'/../database/migrations/005_create_order_items_table.php' => database_path('migrations/' . date('Y_m_d_His', $time + 4) . '_create_order_items_table.php'),
+            ], 'migrations');
+        }
+
         $this->publishes([
-            __DIR__.'/../database/migrations/001_create_checkout_products_table.php' => database_path('migrations/' . date('Y_m_d_His', $time) . '_create_checkout_products_table.php'),
-            __DIR__.'/../database/migrations/002_create_carts_table.php' => database_path('migrations/' . date('Y_m_d_His', $time + 1) . '_create_carts_table.php'),
-            __DIR__.'/../database/migrations/003_create_cart_items_table.php' => database_path('migrations/' . date('Y_m_d_His', $time + 2) . '_create_cart_items_table.php'),
-            __DIR__.'/../database/migrations/004_create_orders_table.php' => database_path('migrations/' . date('Y_m_d_His', $time + 3) . '_create_orders_table.php'),
-            __DIR__.'/../database/migrations/005_create_order_items_table.php' => database_path('migrations/' . date('Y_m_d_His', $time + 4) . '_create_order_items_table.php'),
             __DIR__.'/../database/factories/' => database_path('factories'),
         ], 'migrations');
 
