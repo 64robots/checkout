@@ -30,7 +30,7 @@ class CheckoutProductPolicy
      */
     public function create(User $user)
     {
-        if ($user->isAdmin()) {
+        if ($user->is_admin) {
             return true;
         }
 
@@ -46,7 +46,7 @@ class CheckoutProductPolicy
      */
     public function update(User $user, CheckoutProduct $checkoutProduct)
     {
-        if ($user->isAdmin()) {
+        if ($user->is_admin) {
             return true;
         }
 
@@ -62,7 +62,7 @@ class CheckoutProductPolicy
      */
     public function delete(User $user, CheckoutProduct $checkoutProduct)
     {
-        if ($user->isAdmin()) {
+        if ($user->is_admin) {
             return true;
         }
 
@@ -78,7 +78,7 @@ class CheckoutProductPolicy
      */
     public function restore(User $user, CheckoutProduct $checkoutProduct)
     {
-        if ($user->isAdmin()) {
+        if ($user->is_admin) {
             return true;
         }
 
@@ -94,7 +94,7 @@ class CheckoutProductPolicy
      */
     public function forceDelete(User $user, CheckoutProduct $checkoutProduct)
     {
-        if ($user->isAdmin()) {
+        if ($user->is_admin) {
             return true;
         }
 

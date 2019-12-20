@@ -19,12 +19,12 @@ class CheckoutAuthServiceProvider extends ServiceProvider
      * @var array
      */
     protected $policies = [
-        Cart::class => App\Policies\CartPolicy::class,
-        CartItem::class => App\Policies\CartItemPolicy::class,
-        CheckoutProduct::class => App\Policies\CheckoutProductPolicy::class,
-        Coupon::class => App\Policies\CouponPolicy::class,
-        Order::class => App\Policies\OrderPolicy::class,
-        OrderItem::class => App\Policies\OrderItemPolicy::class,
+        Cart::class => \App\Policies\CartPolicy::class,
+        CartItem::class => \App\Policies\CartItemPolicy::class,
+        CheckoutProduct::class => \App\Policies\CheckoutProductPolicy::class,
+        Coupon::class => \App\Policies\CouponPolicy::class,
+        Order::class => \App\Policies\OrderPolicy::class,
+        OrderItem::class => \App\Policies\OrderItemPolicy::class,
     ];
 
     /**
