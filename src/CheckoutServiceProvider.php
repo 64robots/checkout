@@ -25,8 +25,14 @@ class CheckoutServiceProvider extends ServiceProvider
 
     protected function publishDatabaseMigrations()
     {
+        $time = time();
+
         $this->publishes([
-            __DIR__.'/../database/migrations/' => database_path('migrations'),
+            __DIR__.'/../database/migrations/001_create_checkout_products_table.php' => database_path('migrations/' . date('Y_m_d_His', $time) . '_create_checkout_products_table.php'),
+            __DIR__.'/../database/migrations/002_create_carts_table.php' => database_path('migrations/' . date('Y_m_d_His', $time + 1) . '_create_carts_table.php'),
+            __DIR__.'/../database/migrations/003_create_cart_items_table.php' => database_path('migrations/' . date('Y_m_d_His', $time + 2) . '_create_cart_items_table.php'),
+            __DIR__.'/../database/migrations/004_create_orders_table.php' => database_path('migrations/' . date('Y_m_d_His', $time + 3) . '_create_orders_table.php'),
+            __DIR__.'/../database/migrations/005_create_order_items_table.php' => database_path('migrations/' . date('Y_m_d_His', $time + 4) . '_create_order_items_table.php'),
             __DIR__.'/../database/factories/' => database_path('factories'),
         ], 'migrations');
 

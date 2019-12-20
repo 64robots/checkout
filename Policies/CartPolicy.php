@@ -30,7 +30,7 @@ class CartPolicy
      */
     public function create(User $user)
     {
-        if ($user->isAdmin()) {
+        if ($user->is_admin) {
             return true;
         }
 
@@ -46,7 +46,7 @@ class CartPolicy
      */
     public function update(User $user, Cart $cart)
     {
-        if ($user->isAdmin()) {
+        if ($user->is_admin) {
             return true;
         }
         if ($user->id === $cart->user_id) {
@@ -65,7 +65,7 @@ class CartPolicy
      */
     public function delete(User $user, Cart $cart)
     {
-        if ($user->isAdmin()) {
+        if ($user->is_admin) {
             return true;
         }
         if ($user->id === $cart->user_id) {
@@ -84,7 +84,7 @@ class CartPolicy
      */
     public function restore(User $user, Cart $cart)
     {
-        if ($user->isAdmin()) {
+        if ($user->is_admin) {
             return true;
         }
 
@@ -100,7 +100,7 @@ class CartPolicy
      */
     public function forceDelete(User $user, Cart $cart)
     {
-        if ($user->isAdmin()) {
+        if ($user->is_admin) {
             return true;
         }
 

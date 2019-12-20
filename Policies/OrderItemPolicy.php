@@ -30,7 +30,7 @@ class OrderItemPolicy
      */
     public function create(User $user)
     {
-        if ($user->isAdmin()) {
+        if ($user->is_admin) {
             return true;
         }
 
@@ -46,7 +46,7 @@ class OrderItemPolicy
      */
     public function update(User $user, OrderItem $orderItem)
     {
-        if ($user->isAdmin()) {
+        if ($user->is_admin) {
             return true;
         }
 
@@ -62,7 +62,7 @@ class OrderItemPolicy
      */
     public function delete(User $user, OrderItem $orderItem)
     {
-        if ($user->isAdmin()) {
+        if ($user->is_admin) {
             return true;
         }
 
@@ -78,7 +78,7 @@ class OrderItemPolicy
      */
     public function restore(User $user, OrderItem $orderItem)
     {
-        if ($user->isAdmin()) {
+        if ($user->is_admin) {
             return true;
         }
 
@@ -94,7 +94,7 @@ class OrderItemPolicy
      */
     public function forceDelete(User $user, OrderItem $orderItem)
     {
-        if ($user->isAdmin()) {
+        if ($user->is_admin) {
             return true;
         }
 
