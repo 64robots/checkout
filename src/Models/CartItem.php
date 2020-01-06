@@ -86,7 +86,7 @@ class CartItem extends Model
 
     public function updateMe(array $data)
     {
-        $this->price = $this->price * $data['quantity'];
+        $this->price = $this->product->getPrice() * $data['quantity'];
         $this->quantity = $data['quantity'];
         $this->save();
     }
