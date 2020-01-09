@@ -4,6 +4,7 @@ namespace R64\Checkout\Http\Controllers;
 
 use R64\Checkout\Http\Requests\CartItemRequest;
 use R64\Checkout\Http\Resources\CartItemResource;
+use R64\Checkout\Http\Resources\CartResource;
 use R64\Checkout\Models\Cart;
 use R64\Checkout\Models\CartItem;
 use Illuminate\Http\Request;
@@ -15,9 +16,11 @@ class CartItemController extends Controller
      ***************************************************************************************/
     public function create(CartItemRequest $request, Cart $cart)
     {
-        $cartItem = CartItem::makeOne($cart, $request->validated());
+        CartItem::makeOne($cart, $request->validated());
 
-        return $this->success(new CartItemResource($cartItem));
+        $cart->fresh();
+
+        return $this->success(new CartResource($cart));
     }
 
     /***************************************************************************************
