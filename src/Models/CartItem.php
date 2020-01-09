@@ -2,12 +2,12 @@
 namespace R64\Checkout\Models;
 
 // extends
+use Illuminate\Support\Str;
 use R64\Checkout\Helpers\Token;
 use Illuminate\Database\Eloquent\Model;
-
+use R64\Checkout\Facades\Product;
 // includes
 use Illuminate\Database\Eloquent\SoftDeletes;
-use R64\Checkout\ProductRepository;
 
 class CartItem extends Model
 {
@@ -62,7 +62,7 @@ class CartItem extends Model
 
     public function product()
     {
-        return $this->belongsTo(get_class(app(ProductRepository::class)->getModel()), 'product_id');
+        return $this->belongsTo(Product::getClassName(), Product::getForeignKey());
     }
 
     /***************************************************************************************
@@ -71,14 +71,12 @@ class CartItem extends Model
 
     public static function makeOne(Cart $cart, array $data)
     {
-        /** @var ProductRepository $productRepository */
-        $productRepository = app(ProductRepository::class);
-        $product = $productRepository->getModel();
-        $product = $product->findOrFail($data['product_id']);
+        $productForeignKey = Product::getForeignKey();
+        $product = (Product::getModel())->findOrFail($data[$productForeignKey]);
 
         $cartItem = new CartItem;
         $cartItem->cart_id = $cart->id;
-        $cartItem->product_id = $product->id;
+        $cartItem->{$productForeignKey} = $product->id;
         $cartItem->price = $product->getPrice();
         $cartItem->quantity = isset($data['quantity']) ? $data['quantity'] : 1;
         $cartItem->token = Token::generate();

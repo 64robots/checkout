@@ -2,10 +2,7 @@
 
 namespace R64\Checkout\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator;
-use R64\Checkout\Http\Requests\JsonFormRequest;
-use R64\Checkout\Models\Order;
-use Illuminate\Support\Str;
+use R64\Checkout\Facades\Customer;
 
 class OrderRequest extends JsonFormRequest
 {
@@ -38,6 +35,9 @@ class OrderRequest extends JsonFormRequest
      */
     public function rules()
     {
+        $customerTableName = Customer::getTableName();
+        $customerForeignKey = Customer::getForeignKey();
+
         $rules = [
             'cart_token' => 'string|exists:carts,token',
             'status' => 'string|min:2',
@@ -46,7 +46,7 @@ class OrderRequest extends JsonFormRequest
             'order_items.*.price' => 'required_without:cart_token|integer',
             'order_items.*.quantity' => 'integer',
             'shipping_total' => 'required|integer',
-            'customer_id' => 'integer',
+            $customerForeignKey => "integer|exists:${customerTableName},id",
             'customer_email' => 'string|email',
             'shipping_first_name' => 'string',
             'shipping_last_name' => 'string',

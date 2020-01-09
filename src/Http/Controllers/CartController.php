@@ -2,6 +2,8 @@
 
 namespace R64\Checkout\Http\Controllers;
 
+use R64\Checkout\Facades\Customer;
+use R64\Checkout\Facades\Product;
 use R64\Checkout\Http\Requests\CartRequest;
 use R64\Checkout\Http\Resources\CartResource;
 use R64\Checkout\Models\Cart;
@@ -22,10 +24,13 @@ class CartController extends Controller
      ***************************************************************************************/
     public function create(CartRequest $request)
     {
+        $customerForeignKey = Customer::getForeignKey();
+        $productForeignKey = Product::getForeignKey();
+
         $cart = Cart::makeOne([
-            'user_id' => auth()->user()->id ?? null,
+            $customerForeignKey => auth()->user()->id ?? null,
             'ip_address' => $request->ip(),
-            'product_id' => $request->get('product_id')
+            $productForeignKey => $request->get($productForeignKey)
         ]);
 
         return $this->success(new CartResource($cart->fresh()->load('cartItems')));

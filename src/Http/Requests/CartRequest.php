@@ -3,6 +3,7 @@
 namespace R64\Checkout\Http\Requests;
 
 use Illuminate\Contracts\Validation\Validator;
+use R64\Checkout\Facades\Product;
 use R64\Checkout\Http\Requests\JsonFormRequest;
 use R64\Checkout\Models\Cart;
 
@@ -25,8 +26,11 @@ class CartRequest extends JsonFormRequest
      */
     public function rules()
     {
+        $productTableName = Product::getTableName();
+        $productForeignKey = Product::getForeignKey();
+
         return [
-            'product_id' => 'integer|exists:checkout_products,id',
+            $productForeignKey => "integer|exists:${productTableName},id",
             'discount_code' => 'string|exists:coupons,code'
         ];
     }

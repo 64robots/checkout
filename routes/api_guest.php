@@ -19,5 +19,11 @@ Route::namespace('\\R64\\Checkout\\Http\\Controllers')->group(function () {
     Route::post('carts/{cart}/cart-items', 'CartItemController@create');
     Route::put('cart-items/{cartItem}', 'CartItemController@update');
     Route::delete('cart-items/{cartItem}', 'CartItemController@delete');
+
+    /***************************************************************************************
+     ** Checkout
+     ***************************************************************************************/
+
+    Route::get('checkout/settings', 'CheckoutSettingsController@index');
 });
 

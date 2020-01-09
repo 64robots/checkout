@@ -30,6 +30,7 @@ class OrderResource extends JsonResource
             'shipping_address_city' => $this->shipping_address_city,
             'shipping_address_region' => $this->shipping_address_region,
             'shipping_address_zipcode' => $this->shipping_address_zipcode,
+            'billing_address_line1' => $this->billing_address_line1,
             'billing_address_line2' => $this->billing_address_line2,
             'billing_address_city' => $this->billing_address_city,
             'billing_address_region' => $this->billing_address_region,

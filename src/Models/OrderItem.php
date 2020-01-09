@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
 use R64\Checkout\Models\CartItem;
-use R64\Checkout\Models\Product;
+use R64\Checkout\Facades\Product;
 
 class OrderItem extends Model
 {
@@ -25,7 +25,7 @@ class OrderItem extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::class, 'product_id');
+        return $this->belongsTo(Product::getClassName(), Product::getForeignKey());
     }
 
     public function cartItem()
@@ -41,8 +41,10 @@ class OrderItem extends Model
     {
         $orderItem = new self;
 
+        $productForeignKey = Product::getForeignKey();
+
         $orderItem->order_id = Arr::get($data, 'order_id');
-        $orderItem->product_id = Arr::get($data, 'product_id');
+        $orderItem->{$productForeignKey} = Arr::get($data, $productForeignKey);
         $orderItem->cart_item_id = Arr::get($data, 'cart_item_id');
         $orderItem->price = Arr::get($data, 'price');
         $orderItem->quantity = Arr::get($data, 'quantity');
@@ -56,9 +58,11 @@ class OrderItem extends Model
     {
         $product = $cartItem->product;
 
+        $productForeignKey = Product::getForeignKey();
+
         return static::makeOne([
             'order_id' => $orderId,
-            'product_id' => $product->id,
+            $productForeignKey => $product->id,
             'cart_item_id' => $cartItem->id,
             'price' => $product->getPrice(),
             'quantity' => $cartItem->quantity,

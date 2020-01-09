@@ -2,6 +2,7 @@
 namespace R64\Checkout\Models;
 
 // extends
+use R64\Checkout\Facades\Customer;
 use R64\Checkout\Helpers\Price;
 use Illuminate\Database\Eloquent\Model;
 
@@ -36,7 +37,7 @@ class Order extends Model
 
     public function customer()
     {
-        return $this->belongsTo(Customer::class, 'customer_id');
+        return $this->belongsTo(Customer::getClassName(), Customer::getForeignKey());
     }
 
     /***************************************************************************************
@@ -51,7 +52,10 @@ class Order extends Model
         $order->shipping_total = Arr::get($data, 'shipping_total');
         $order->tax_total = 0;
         $order->total = 0;
-        $order->customer_id = Arr::get($data, 'customer_id');
+
+        $customerForeignKey = Customer::getForeignKey();
+
+        $order->{$customerForeignKey} = Arr::get($data, $customerForeignKey);
         $order->customer_email = Arr::get($data, 'customer_email');
         $order->shipping_first_name = Arr::get($data, 'shipping_first_name');
         $order->shipping_last_name = Arr::get($data, 'shipping_last_name');

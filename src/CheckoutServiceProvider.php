@@ -6,15 +6,23 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
+use R64\Checkout\Contracts\Customer;
+use R64\Checkout\Contracts\Product;
 
 class CheckoutServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->app->singleton(ProductRepository::class, function () {
+        $this->app->singleton(Product::class, function () {
             $productClass = config('checkout.product_model');
 
-            return new ProductRepository(new $productClass);
+            return new ConfigurableModel(new $productClass);
+        });
+
+        $this->app->singleton(Customer::class, function () {
+            $customerClass = config('checkout.customer_model');
+
+            return new ConfigurableModel(new $customerClass);
         });
     }
     
@@ -40,44 +48,51 @@ class CheckoutServiceProvider extends ServiceProvider
         $time = time();
 
         if (!class_exists('CreateCheckoutProductsTable')) {
-            $migrationFileName = $this->getMigrationFilename('create_checkout_products_table', $time, $filesystem);
+            $migrationFileName = $this->getMigrationFilename('create_products_table', $time, $filesystem);
             $this->publishes([
-                __DIR__.'/../database/migrations/001_create_checkout_products_table.php' => $migrationFileName,
+                __DIR__.'/../database/migrations/001_create_products_table.php' => $migrationFileName,
+            ], 'migrations');
+        }
+
+        if (!class_exists('CreateCustomersTable')) {
+            $migrationFileName = $this->getMigrationFilename('create_customers_table', $time + 1, $filesystem);
+            $this->publishes([
+                __DIR__.'/../database/migrations/002_create_customers_table.php' => $migrationFileName,
             ], 'migrations');
         }
 
         if (!class_exists('CreateCartsTable')) {
-            $migrationFileName = $this->getMigrationFilename('create_carts_table', $time + 1, $filesystem);
+            $migrationFileName = $this->getMigrationFilename('create_carts_table', $time + 2, $filesystem);
             $this->publishes([
-                __DIR__.'/../database/migrations/002_create_carts_table.php' => $migrationFileName,
+                __DIR__.'/../database/migrations/003_create_carts_table.php' => $migrationFileName,
             ], 'migrations');
         }
 
         if (!class_exists('CreateCartItemsTable')) {
-            $migrationFileName = $this->getMigrationFilename('create_cart_items_table', $time + 2, $filesystem);
+            $migrationFileName = $this->getMigrationFilename('create_cart_items_table', $time + 3, $filesystem);
             $this->publishes([
-                __DIR__ . '/../database/migrations/003_create_cart_items_table.php' => $migrationFileName,
+                __DIR__ . '/../database/migrations/004_create_cart_items_table.php' => $migrationFileName,
             ], 'migrations');
         }
 
         if (!class_exists('CreateOrdersTable')) {
-            $migrationFileName = $this->getMigrationFilename('create_orders_table', $time + 3, $filesystem);
+            $migrationFileName = $this->getMigrationFilename('create_orders_table', $time + 4, $filesystem);
             $this->publishes([
-                __DIR__.'/../database/migrations/004_create_orders_table.php' => $migrationFileName,
+                __DIR__.'/../database/migrations/005_create_orders_table.php' => $migrationFileName,
             ], 'migrations');
         }
 
         if (!class_exists('CreateOrderItemsTable')) {
-            $migrationFileName = $this->getMigrationFilename('create_order_items_table', $time + 4, $filesystem);
+            $migrationFileName = $this->getMigrationFilename('create_order_items_table', $time + 5, $filesystem);
             $this->publishes([
-                __DIR__.'/../database/migrations/005_create_order_items_table.php' => $migrationFileName,
+                __DIR__.'/../database/migrations/006_create_order_items_table.php' => $migrationFileName,
             ], 'migrations');
         }
 
         if (!class_exists('CreateCouponsTable')) {
-            $migrationFileName = $this->getMigrationFilename('create_coupons_table', $time + 5, $filesystem);
+            $migrationFileName = $this->getMigrationFilename('create_coupons_table', $time + 6, $filesystem);
             $this->publishes([
-                __DIR__.'/../database/migrations/006_create_coupons_table.php' => $migrationFileName,
+                __DIR__.'/../database/migrations/007_create_coupons_table.php' => $migrationFileName,
             ], 'migrations');
         }
 
