@@ -6,7 +6,7 @@ use R64\Checkout\Models\OrderItem;
 $factory->define(OrderItem::class, function (Faker $faker) {
     return [
         'product_id' => function () {
-            return factory(R64\Checkout\Models\CheckoutProduct::class)->create()->id;
+            return factory(R64\Checkout\Models\Product::class)->create()->id;
         },
         'cart_item_id' => function () {
             return factory(R64\Checkout\Models\CartItem::class)->create()->id;

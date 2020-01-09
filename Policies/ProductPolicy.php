@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use R64\Checkout\Models\CheckoutProduct;
+use R64\Checkout\Models\Product;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class CheckoutProductPolicy
+class ProductPolicy
 {
     use HandlesAuthorization;
 
@@ -17,7 +17,7 @@ class CheckoutProductPolicy
      * @param  \App\Models\CheckoutProduct $checkoutProduct
      * @return mixed
      */
-    public function view(User $user, CheckoutProduct $checkoutProduct)
+    public function view(User $user, Product $checkoutProduct)
     {
         return true;
     }
@@ -44,7 +44,7 @@ class CheckoutProductPolicy
      * @param  \App\Models\CheckoutProduct $checkoutProduct
      * @return mixed
      */
-    public function update(User $user, CheckoutProduct $checkoutProduct)
+    public function update(User $user, Product $checkoutProduct)
     {
         if ($user->is_admin) {
             return true;
@@ -60,7 +60,7 @@ class CheckoutProductPolicy
      * @param  \App\Models\CheckoutProduct $checkoutProduct
      * @return mixed
      */
-    public function delete(User $user, CheckoutProduct $checkoutProduct)
+    public function delete(User $user, Product $checkoutProduct)
     {
         if ($user->is_admin) {
             return true;
@@ -76,7 +76,7 @@ class CheckoutProductPolicy
      * @param  \App\Models\CheckoutProduct $checkoutProduct
      * @return mixed
      */
-    public function restore(User $user, CheckoutProduct $checkoutProduct)
+    public function restore(User $user, Product $checkoutProduct)
     {
         if ($user->is_admin) {
             return true;
@@ -92,7 +92,7 @@ class CheckoutProductPolicy
      * @param  \App\Models\CheckoutProduct $checkoutProduct
      * @return mixed
      */
-    public function forceDelete(User $user, CheckoutProduct $checkoutProduct)
+    public function forceDelete(User $user, Product $checkoutProduct)
     {
         if ($user->is_admin) {
             return true;

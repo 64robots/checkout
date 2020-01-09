@@ -17,5 +17,7 @@ return [
 //        'billing_address_region',
 //        'billing_address_zipcode',
 //        'billing_address_phone',
-    ]
+    ],
+
+    'product_model' => R64\Checkout\Models\Product::class
 ];
