@@ -26,12 +26,10 @@ class Product extends Model implements ProductContract
 
     public function hasImage()
     {
-        // TODO: Implement hasImage() method.
     }
 
     public function getImageUrl()
     {
-        // TODO: Implement getImageUrl() method.
     }
 
     public function hasTaxRate()
@@ -46,11 +44,9 @@ class Product extends Model implements ProductContract
 
     public function hasShipping()
     {
-        // TODO: Implement hasShipping() method.
     }
 
     public function getShipping()
     {
-        // TODO: Implement getShipping() method.
     }
 }

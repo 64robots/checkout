@@ -10,7 +10,8 @@ use R64\Checkout\Helpers\Token;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use R64\Checkout\Contracts\Product;
+use R64\Checkout\Facades\Product;
+use R64\Checkout\Facades\Customer;
 
 class Cart extends Model
 {
@@ -47,9 +48,9 @@ class Cart extends Model
      ** RELATIONS
      ***************************************************************************************/
 
-    public function user()
+    public function customer()
     {
-        return $this->belongsTo(\R64\Checkout\Models\User::class, 'user_id');
+        return $this->belongsTo(Customer::getClassName(), Customer::getForeignKey());
     }
 
     public function cartItems()
@@ -65,7 +66,9 @@ class Cart extends Model
     {
         $cart = new self;
 
-        $cart->user_id = isset($data['user_id']) ? $data['user_id'] : null;
+        $customerForeignKey = Customer::getForeignKey();
+
+        $cart->{$customerForeignKey} = isset($data[$customerForeignKey]) ? $data[$customerForeignKey] : null;
         $cart->items_subtotal = isset($data['items_subtotal']) ? $data['items_subtotal'] : 0;
         $cart->tax_rate = isset($data['tax_rate']) ? $data['tax_rate'] : null;
         $cart->tax = isset($data['tax']) ? $data['tax'] : 0;
@@ -74,9 +77,10 @@ class Cart extends Model
         $cart->ip_address = $data['ip_address'];
         $cart->save();
 
-        if (Arr::get($data, 'product_id') !== null) {
+        $productForeignKey = Product::getForeignKey();
+        if (Arr::get($data, $productForeignKey) !== null) {
             CartItem::makeOne($cart, [
-                'product_id' => $data['product_id']
+                $productForeignKey => $data[$productForeignKey]
             ]);
         }
 
@@ -119,7 +123,7 @@ class Cart extends Model
         $this->save();
     }
 
-    public function setTaxRate(Product $product)
+    public function setTaxRate(\R64\Checkout\Contracts\Product $product)
     {
         if (is_null($this->tax_rate) && $product->hasTaxRate()) {
             $this->tax_rate = $product->getTaxRate();

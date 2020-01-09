@@ -3,8 +3,10 @@
 namespace R64\Checkout\Http\Requests;
 
 use Illuminate\Contracts\Validation\Validator;
+use R64\Checkout\Facades\Product;
 use R64\Checkout\Http\Requests\JsonFormRequest;
 use R64\Checkout\Models\OrderItem;
+use R64\Checkout\ProductRepository;
 
 class OrderItemRequest extends JsonFormRequest
 {
@@ -38,8 +40,11 @@ class OrderItemRequest extends JsonFormRequest
      */
     public function rules()
     {
+        $productTableName = Product::getTableName();
+        $productForeignKey = Product::getForeignKey();
+
         return [
-            'product_id' => 'integer|exists:products,id',
+            $productForeignKey => "integer|exists:${productTableName},id",
             'cart_item_id' => 'integer|exists:cart_items,id',
             'price' => 'required_if:is_post,true|integer',
             'quantity' => 'required_if:is_post,true|integer',

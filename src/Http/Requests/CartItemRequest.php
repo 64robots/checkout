@@ -2,7 +2,7 @@
 
 namespace R64\Checkout\Http\Requests;
 
-use R64\Checkout\ProductRepository;
+use R64\Checkout\Facades\Product;
 
 class CartItemRequest extends JsonFormRequest
 {
@@ -23,9 +23,11 @@ class CartItemRequest extends JsonFormRequest
      */
     public function rules()
     {
-        $tableName = $this->getProductTableName();
+        $productTableName = Product::getTableName();
+        $productForeignKey = Product::getForeignKey();
+
         return [
-            'product_id' => "required_if:is_post,true|integer|exists:${tableName},id",
+            $productForeignKey => "required_if:is_post,true|integer|exists:${productTableName},id",
             'quantity' => 'required_if:is_editing,true|integer|min:1'
         ];
     }
@@ -75,10 +77,5 @@ class CartItemRequest extends JsonFormRequest
         });
 
         return $validator;
-    }
-
-    private function getProductTableName()
-    {
-        return app(ProductRepository::class)->getModel()->getTable();
     }
 }
