@@ -2,10 +2,10 @@
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 
-use R64\Checkout\Models\CheckoutProduct;
+use R64\Checkout\Models\Product;
 use Faker\Generator as Faker;
 
-$factory->define(CheckoutProduct::class, function (Faker $faker) {
+$factory->define(Product::class, function (Faker $faker) {
     return [
         'price' => $faker->numberBetween(100, 400),
         'description' => $faker->sentence,

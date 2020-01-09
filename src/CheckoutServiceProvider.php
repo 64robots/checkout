@@ -9,8 +9,18 @@ use Illuminate\Support\Facades\Route;
 
 class CheckoutServiceProvider extends ServiceProvider
 {
+    public function register()
+    {
+        $this->app->singleton(ProductRepository::class, function () {
+            $productClass = config('checkout.product_model');
+
+            return new ProductRepository(new $productClass);
+        });
+    }
+    
     public function boot(Filesystem $filesystem)
     {
+        require_once __DIR__ . '/Helpers/Globals.php';
         $this->publishConfig();
         $this->publishPolicies();
         $this->publishDatabaseMigrations($filesystem);

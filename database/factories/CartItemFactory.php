@@ -10,7 +10,7 @@ $factory->define(CartItem::class, function (Faker $faker) {
             return factory(R64\Checkout\Models\Cart::class)->create()->id;
         },
         'product_id' => function () {
-            return factory(R64\Checkout\Models\CheckoutProduct::class)->create()->id;
+            return factory(R64\Checkout\Models\Product::class)->create()->id;
         },
         'price' => $faker->numberBetween(200, 400),
         'quantity' => $faker->numberBetween(1, 10),

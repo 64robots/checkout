@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 // includes
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Str;
+use R64\Checkout\ProductRepository;
 
 class CartItem extends Model
 {
@@ -62,7 +62,7 @@ class CartItem extends Model
 
     public function product()
     {
-        return $this->belongsTo(\R64\Checkout\Models\CheckoutProduct::class, 'product_id');
+        return $this->belongsTo(get_class(app(ProductRepository::class)->getModel()), 'product_id');
     }
 
     /***************************************************************************************
@@ -71,7 +71,10 @@ class CartItem extends Model
 
     public static function makeOne(Cart $cart, array $data)
     {
-        $product = CheckoutProduct::findOrFail($data['product_id']);
+        /** @var ProductRepository $productRepository */
+        $productRepository = app(ProductRepository::class);
+        $product = $productRepository->getModel();
+        $product = $product->findOrFail($data['product_id']);
 
         $cartItem = new CartItem;
         $cartItem->cart_id = $cart->id;

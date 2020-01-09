@@ -6,9 +6,8 @@ namespace R64\Checkout\Models;
 use Illuminate\Database\Eloquent\Model;
 use R64\Checkout\Contracts\Product as ProductContract;
 
-class CheckoutProduct extends Model implements ProductContract
+class Product extends Model implements ProductContract
 {
-    protected $table = 'checkout_products';
     protected $guarded = ['id'];
     protected $hidden = [];
     protected $dates = ['created_at', 'updated_at'];
