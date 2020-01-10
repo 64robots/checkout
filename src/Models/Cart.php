@@ -111,7 +111,7 @@ class Cart extends Model
     public function setItemSubtotal()
     {
         $this->items_subtotal = $this->cartItems->sum(function (CartItem $cartItem) {
-            return $cartItem->price * $cartItem->quantity;
+            return $cartItem->price;
         });
 
         $this->save();

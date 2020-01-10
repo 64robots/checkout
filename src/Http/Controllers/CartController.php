@@ -16,7 +16,7 @@ class CartController extends Controller
      ***************************************************************************************/
     public function get(Cart $cart)
     {
-        return $this->success(new CartResource($cart->load('cartItems')));
+        return $this->success(new CartResource($cart->load('cartItems.product')));
     }
 
     /***************************************************************************************
@@ -33,7 +33,7 @@ class CartController extends Controller
             $productForeignKey => $request->get($productForeignKey)
         ]);
 
-        return $this->success(new CartResource($cart->fresh()->load('cartItems')));
+        return $this->success(new CartResource($cart->fresh()->load('cartItems.product')));
     }
 
     /***************************************************************************************
@@ -43,7 +43,7 @@ class CartController extends Controller
     {
         $cart->updateMe($request->only('discount_code'));
 
-        return $this->success(new CartResource($cart->load('cartItems')));
+        return $this->success(new CartResource($cart->load('cartItems.product')));
     }
 
     /***************************************************************************************

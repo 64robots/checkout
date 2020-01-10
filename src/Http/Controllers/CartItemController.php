@@ -18,7 +18,7 @@ class CartItemController extends Controller
     {
         CartItem::makeOne($cart, $request->validated());
 
-        $cart->fresh();
+        $cart->load('cartItems.product')->fresh();
 
         return $this->success(new CartResource($cart));
     }
@@ -28,7 +28,7 @@ class CartItemController extends Controller
      ***************************************************************************************/
     public function update(CartItem $cartItem, Request $request)
     {
-        $cartItem->updateMe($request->only('quantity'));
+        $cartItem->updateMe($request->only(['quantity', 'customer_note']));
 
         return $this->success(new CartItemResource($cartItem));
     }

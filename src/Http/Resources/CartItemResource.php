@@ -18,6 +18,8 @@ class CartItemResource extends JsonResource
             'cart_item_token' => $this->token,
             'price' => displayMoney($this->price),
             'quantity' => $this->quantity,
+            'customer_note' => $this->customer_note,
+            'product' => new ProductResource($this->whenLoaded('product'))
         ];
     }
 }

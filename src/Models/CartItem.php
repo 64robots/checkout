@@ -2,6 +2,7 @@
 namespace R64\Checkout\Models;
 
 // extends
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use R64\Checkout\Helpers\Token;
 use Illuminate\Database\Eloquent\Model;
@@ -78,7 +79,7 @@ class CartItem extends Model
         $cartItem->cart_id = $cart->id;
         $cartItem->{$productForeignKey} = $product->id;
         $cartItem->price = $product->getPrice();
-        $cartItem->quantity = isset($data['quantity']) ? $data['quantity'] : 1;
+        $cartItem->quantity = Arr::get($data, 'quantity', 1);
         $cartItem->token = Token::generate();
         $cartItem->save();
 
@@ -87,8 +88,9 @@ class CartItem extends Model
 
     public function updateMe(array $data)
     {
-        $this->price = $this->product->getPrice() * $data['quantity'];
-        $this->quantity = $data['quantity'];
+        $this->price = $this->product->getPrice() * Arr::get($data, 'quantity');
+        $this->customer_note = Arr::get($data, 'customer_note');
+        $this->quantity = Arr::get($data, 'quantity', $this->quantity);
         $this->save();
     }
 }
