@@ -22,8 +22,8 @@ return [
     ],
 
     'tax_rate' => 600,
-
+    'toc_url' => '#',
     'product_model' => R64\Checkout\Models\Product::class,
     'customer_model' => R64\Checkout\Models\Customer::class,
-    'shipping' => R64\Checkout\Shipping\Shipping::class
+    'shipping' => R64\Checkout\Shipping::class
 ];

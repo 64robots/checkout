@@ -8,6 +8,7 @@ Route::namespace('\\R64\\Checkout\\Http\\Controllers')->group(function () {
      ***************************************************************************************/
 
     Route::get('carts/{cart}', 'CartController@get');
+    Route::get('carts/{cart}/total', 'CartTotalController@get');
     Route::post('carts', 'CartController@create');
     Route::put('carts/{cart}', 'CartController@update');
     Route::delete('carts/{cart}', 'CartController@delete');
