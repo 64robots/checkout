@@ -30,13 +30,11 @@ class CartItem extends Model
         parent::boot();
         static::created(function ($cartItem) {
             $cartItem->cart->setItemSubtotal();
-            $cartItem->cart->setTaxRate($cartItem->product);
             $cartItem->cart->setTax();
             $cartItem->cart->setTotal();
         });
         static::updated(function ($cartItem) {
             $cartItem->cart->setItemSubtotal();
-            $cartItem->cart->setTaxRate($cartItem->product);
             $cartItem->cart->setTax();
             $cartItem->cart->setTotal();
         });
@@ -96,6 +94,10 @@ class CartItem extends Model
 
     public function updateMe(array $data)
     {
+        if ((int) Arr::get($data, 'quantity') === 0) {
+            return $this->delete();
+        }
+
         $this->price = $this->product->getPrice() * Arr::get($data, 'quantity');
         $this->customer_note = Arr::get($data, 'customer_note');
         $this->quantity = Arr::get($data, 'quantity', $this->quantity);

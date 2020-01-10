@@ -21,6 +21,9 @@ return [
 //        'billing_address_phone',
     ],
 
+    'tax_rate' => 600,
+
     'product_model' => R64\Checkout\Models\Product::class,
-    'customer_model' => R64\Checkout\Models\Customer::class
+    'customer_model' => R64\Checkout\Models\Customer::class,
+    'shipping' => R64\Checkout\Shipping\Shipping::class
 ];

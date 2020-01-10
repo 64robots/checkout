@@ -16,7 +16,7 @@ class ProductResource extends JsonResource
     {
        return [
             'name' => $this->getName(),
-
+            'image' => $this->getImageUrl()
        ];
     }
 }

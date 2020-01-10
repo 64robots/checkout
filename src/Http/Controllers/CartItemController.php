@@ -26,7 +26,7 @@ class CartItemController extends Controller
     /***************************************************************************************
      ** PUT
      ***************************************************************************************/
-    public function update(CartItem $cartItem, Request $request)
+    public function update(CartItem $cartItem, CartItemRequest $request)
     {
         $cartItem->updateMe($request->only(['quantity', 'customer_note']));
 

@@ -2,10 +2,15 @@
 
 namespace R64\Checkout\Http\Controllers;
 
-class CheckoutSettingsController
+use R64\Checkout\Contracts\Shipping;
+
+class CheckoutSettingsController extends Controller
 {
-    public function index()
+    public function index(Shipping $shipping)
     {
-        return config('checkout.required');
+        return $this->success([
+            'required' => config('checkout.required'),
+            'shipping_methods' => $shipping->getShippingMethods()
+        ]);
     }
 }

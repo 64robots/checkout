@@ -70,8 +70,8 @@ class Cart extends Model
 
         $cart->{$customerForeignKey} = isset($data[$customerForeignKey]) ? $data[$customerForeignKey] : null;
         $cart->items_subtotal = isset($data['items_subtotal']) ? $data['items_subtotal'] : 0;
-        $cart->tax_rate = isset($data['tax_rate']) ? $data['tax_rate'] : null;
-        $cart->tax = isset($data['tax']) ? $data['tax'] : 0;
+        $cart->tax_rate = config('checkout.tax_rate');
+        $cart->tax = 0;
         $cart->total = isset($data['total']) ? $data['total'] : 0;
         $cart->discount = isset($data['discount']) ? $data['discount'] : 0;
         $cart->ip_address = $data['ip_address'];
@@ -121,14 +121,6 @@ class Cart extends Model
     {
         $this->total = is_null($this->tax) ? $this->items_subtotal : $this->items_subtotal + $this->tax;
         $this->save();
-    }
-
-    public function setTaxRate(\R64\Checkout\Contracts\Product $product)
-    {
-        if (is_null($this->tax_rate) && $product->hasTaxRate()) {
-            $this->tax_rate = $product->getTaxRate();
-            $this->save();
-        }
     }
 
     public function setTax()

@@ -8,6 +8,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
 use R64\Checkout\Contracts\Customer;
 use R64\Checkout\Contracts\Product;
+use R64\Checkout\Contracts\Shipping;
 
 class CheckoutServiceProvider extends ServiceProvider
 {
@@ -23,6 +24,12 @@ class CheckoutServiceProvider extends ServiceProvider
             $customerClass = config('checkout.customer_model');
 
             return new ConfigurableModel(new $customerClass);
+        });
+
+        $this->app->singleton(Shipping::class, function () {
+            $shippingClass = config('checkout.shipping');
+
+            return new $shippingClass;
         });
     }
     
