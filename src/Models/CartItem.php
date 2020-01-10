@@ -75,6 +75,14 @@ class CartItem extends Model
         $productForeignKey = Product::getForeignKey();
         $product = (Product::getModel())->findOrFail($data[$productForeignKey]);
 
+        $cartItem = $cart->cartItems()->where('product_id', $product->id)->first();
+
+        if (!is_null($cartItem)) {
+            $data['quantity'] = Arr::get($data, 'quantity') + $cartItem->quantity;
+            $cartItem->updateMe($data);
+            return $cartItem;
+        }
+
         $cartItem = new CartItem;
         $cartItem->cart_id = $cart->id;
         $cartItem->{$productForeignKey} = $product->id;
