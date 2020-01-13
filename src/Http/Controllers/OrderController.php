@@ -9,13 +9,21 @@ use R64\Checkout\Models\Order;
 class OrderController extends Controller
 {
     /***************************************************************************************
-     ** GET
+     ** LIST
      ***************************************************************************************/
     public function list()
     {
         $orders = Order::byEmail(auth()->user()->email)->get();
 
         return $this->success(OrderResource::collection($orders));
+    }
+
+    /***************************************************************************************
+     ** GET
+     ***************************************************************************************/
+    public function get(Order $order)
+    {
+        return $this->success(new OrderResource($order));
     }
 
     /***************************************************************************************

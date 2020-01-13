@@ -2,6 +2,7 @@
 
 namespace R64\Checkout\Http\Controllers;
 
+use R64\Checkout\CheckoutFields;
 use R64\Checkout\Contracts\Shipping;
 
 class CheckoutSettingsController extends Controller
@@ -14,7 +15,7 @@ class CheckoutSettingsController extends Controller
         });
 
         return $this->success([
-            'required' => config('checkout.required'),
+            'required' => CheckoutFields::required(),
             'shipping_methods' => $shippingMethods,
             'toc_url' => config('checkout.toc_url')
         ]);

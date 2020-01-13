@@ -8,6 +8,7 @@ Route::namespace('\\R64\\Checkout\\Http\\Controllers')->group(function () {
      ***************************************************************************************/
 
     Route::get('my/orders', 'OrderController@list');
+    Route::get('my/orders/{order}', 'OrderController@get');
     Route::post('orders', 'OrderController@create');
     Route::delete('orders/{order}', 'OrderController@delete');
 });

@@ -2,6 +2,7 @@
 
 namespace R64\Checkout\Http\Requests;
 
+use R64\Checkout\CheckoutFields;
 use R64\Checkout\Facades\Customer;
 
 class OrderRequest extends JsonFormRequest
@@ -45,8 +46,9 @@ class OrderRequest extends JsonFormRequest
             'order_items.*.name' => 'required_without:cart_token|string',
             'order_items.*.price' => 'required_without:cart_token|integer',
             'order_items.*.quantity' => 'integer',
-            'shipping_total' => 'required|integer',
-            $customerForeignKey => "integer|exists:${customerTableName},id",
+            'shipping_id' => 'required|integer',
+            $customerForeignKey => "nullable|integer|exists:${customerTableName},id",
+            'customer_notes' => 'nullable|string',
             'customer_email' => 'string|email',
             'shipping_first_name' => 'string',
             'shipping_last_name' => 'string',
@@ -116,10 +118,14 @@ class OrderRequest extends JsonFormRequest
 
     private function addRequiredFields(array $rules)
     {
-        $requiredFields = array_flip(config('checkout.required', []));
+        $requiredFields = CheckoutFields::required();
 
         return collect($rules)->map(function ($rule, $fieldName) use ($requiredFields) {
-            return isset($requiredFields[$fieldName]) ? 'required_if:is_post|' . $rule : $rule;
+            if (isset($requiredFields[$fieldName])) {
+                return $requiredFields[$fieldName] ? 'required_if:is_post,true|' . $rule : 'nullable|' . $rule;
+            }
+
+            return $rule;
         })->toArray();
     }
 }

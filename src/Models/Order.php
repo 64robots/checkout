@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 // includes
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
+use R64\Checkout\Facades\Shipping;
 
 class Order extends Model
 {
@@ -49,7 +50,8 @@ class Order extends Model
         $order = new self;
 
         $order->items_total = 0;
-        $order->shipping_total = Arr::get($data, 'shipping_total');
+
+        $order->shipping_total = Arr::get(Shipping::find(Arr::get($data, 'shipping_id')), 'price');
         $order->tax_total = 0;
         $order->total = 0;
 
@@ -107,6 +109,7 @@ class Order extends Model
             $order->tax_rate = Arr::get($data, 'tax_rate', null);
             $order->total = $order->items_total + $order->shipping_total + $order->tax_total;
         }
+        $order->save();
 
         return $order;
     }
