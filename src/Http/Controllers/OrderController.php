@@ -2,9 +2,13 @@
 
 namespace R64\Checkout\Http\Controllers;
 
+use R64\Checkout\Events\NewOrder;
+use R64\Checkout\Events\NewOrderPurchase;
 use R64\Checkout\Http\Requests\OrderRequest;
 use R64\Checkout\Http\Resources\OrderResource;
 use R64\Checkout\Models\Order;
+use R64\Checkout\PaymentHandler;
+use R64\Checkout\PaymentHandlerFactory;
 
 class OrderController extends Controller
 {
@@ -31,11 +35,18 @@ class OrderController extends Controller
     /***************************************************************************************
      ** POST
      ***************************************************************************************/
-    public function create(OrderRequest $request)
+    public function create(OrderRequest $request, PaymentHandlerFactory $factory)
     {
-        $order = Order::makeOne($request->validated());
+        /** @var PaymentHandler $handler */
+        $handler = $factory->createHandler($request->order, $request->stripe);
+        $purchase = $handler->purchase();
 
+        event(new NewOrderPurchase($purchase));
+
+        $order = Order::makeOne($request->validated());
         $order->load('order_items');
+
+        event(new NewOrder($order));
 
         return $this->success(new OrderResource($order));
     }

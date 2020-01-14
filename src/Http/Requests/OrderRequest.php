@@ -39,17 +39,21 @@ class OrderRequest extends JsonFormRequest
         $customerTableName = Customer::getTableName();
         $customerForeignKey = Customer::getForeignKey();
 
-        $rules = [
+        $stripeRules = [
+            'stripe.token' => 'required_if:is_post,true|string|max:255',
+        ];
+
+        $orderRules = [
             'cart_token' => 'string|exists:carts,token',
             'status' => 'string|min:2',
-            'tax_rate' => 'required_without:cart_token|integer',
-            'order_items.*.name' => 'required_without:cart_token|string',
-            'order_items.*.price' => 'required_without:cart_token|integer',
+            'tax_rate' => 'required_without:order.cart_token|integer',
+            'order_items.*.name' => 'required_without:order.cart_token|string',
+            'order_items.*.price' => 'required_without:order.cart_token|integer',
             'order_items.*.quantity' => 'integer',
             'shipping_id' => 'required|integer',
-            $customerForeignKey => "nullable|integer|exists:${customerTableName},id",
+            'customer_email' => 'required_if:is_post,true|string|email',
+            "${customerForeignKey}" => "nullable|integer|exists:${customerTableName},id",
             'customer_notes' => 'nullable|string',
-            'customer_email' => 'string|email',
             'shipping_first_name' => 'string',
             'shipping_last_name' => 'string',
             'shipping_address_line1' => 'string',
@@ -66,7 +70,10 @@ class OrderRequest extends JsonFormRequest
             'billing_address_phone' => 'string'
         ];
 
-        return $this->addRequiredFields($rules);
+        $orderRules = $this->addRequiredFields($orderRules);
+        $orderRules = $this->addOrderPrefix($orderRules);
+
+        return array_merge($stripeRules, $orderRules);
     }
 
     /***************************************************************************************
@@ -127,5 +134,13 @@ class OrderRequest extends JsonFormRequest
 
             return $rule;
         })->toArray();
+    }
+
+    private function addOrderPrefix(array $rules)
+    {
+        return array_combine(
+            array_map(function ($key) { return "order.${key}"; }, array_keys($rules)),
+            $rules
+        );
     }
 }

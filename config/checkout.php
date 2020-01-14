@@ -25,5 +25,6 @@ return [
     'toc_url' => '#',
     'product_model' => R64\Checkout\Models\Product::class,
     'customer_model' => R64\Checkout\Models\Customer::class,
-    'shipping' => R64\Checkout\Shipping::class
+    'shipping' => R64\Checkout\Shipping::class,
+    'payment' => R64\Checkout\PaymentHandler::class
 ];

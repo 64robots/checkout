@@ -7,7 +7,8 @@
     "require": {
         "laravel/framework": "^6.0",
         "php": "^7.1.3",
-        "illuminate/support": "^6.10"
+        "illuminate/support": "^6.10",
+        "64robots/stripe": "*"
     },
     "require-dev": {
         "filp/whoops": "^2.0",
@@ -27,6 +28,12 @@
             "R64\\Checkout\\Tests\\": "tests/"
         }
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/64robots/stripe"
+        }
+    ],
     "extra": {
         "laravel": {
             "providers": [

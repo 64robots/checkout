@@ -4,11 +4,12 @@ use R64\Checkout\Helpers\Token;
 use R64\Checkout\Models\CartItem;
 use Faker\Generator as Faker;
 use R64\Checkout\Models\Cart;
+use R64\Checkout\Models\Customer;
 
 $factory->define(Cart::class, function (Faker $faker) {
     return [
-        'user_id' => function () {
-            return factory(App\Models\User::class)->create()->id;
+        'customer_id' => function () {
+            return factory(Customer::class)->create()->id;
         },
         'items_subtotal' => $faker->numberBetween(100, 200),
         'total' => $faker->numberBetween(400, 1000),

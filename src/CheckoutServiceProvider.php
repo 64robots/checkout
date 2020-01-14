@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
 use R64\Checkout\Contracts\Customer;
+use R64\Checkout\Contracts\Payment;
 use R64\Checkout\Contracts\Product;
 use R64\Checkout\Contracts\Shipping;
 
@@ -30,6 +31,10 @@ class CheckoutServiceProvider extends ServiceProvider
             $shippingClass = config('checkout.shipping');
 
             return new $shippingClass;
+        });
+
+        $this->app->singleton(PaymentHandlerFactory::class, function () {
+            return new PaymentHandlerFactory(config('checkout.payment'));
         });
     }
     
@@ -100,6 +105,13 @@ class CheckoutServiceProvider extends ServiceProvider
             $migrationFileName = $this->getMigrationFilename('create_coupons_table', $time + 6, $filesystem);
             $this->publishes([
                 __DIR__.'/../database/migrations/007_create_coupons_table.php' => $migrationFileName,
+            ], 'migrations');
+        }
+
+        if (!class_exists('CreateOrderPurchasesTable')) {
+            $migrationFileName = $this->getMigrationFilename('create_order_purchases_table', $time + 7, $filesystem);
+            $this->publishes([
+                __DIR__.'/../database/migrations/008_create_order_purchases_table.php' => $migrationFileName,
             ], 'migrations');
         }
 
