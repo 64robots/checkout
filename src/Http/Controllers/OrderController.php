@@ -23,6 +23,8 @@ class OrderController extends Controller
      ***************************************************************************************/
     public function get(Order $order)
     {
+        $order->load('order_items.product');
+
         return $this->success(new OrderResource($order));
     }
 
