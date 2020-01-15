@@ -41,6 +41,11 @@ class Order extends Model
         return $this->belongsTo(Customer::getClassName(), Customer::getForeignKey());
     }
 
+    public function orderPurchase()
+    {
+        return $this->hasOne(OrderPurchase::class);
+    }
+
     /***************************************************************************************
      ** CRUD
      ***************************************************************************************/
