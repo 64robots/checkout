@@ -2,6 +2,7 @@
 namespace R64\Checkout\Models;
 
 // extends
+use R64\Checkout\Facades\Shipping;
 use R64\Checkout\Helpers\Price;
 use Illuminate\Database\Eloquent\Model;
 
@@ -127,5 +128,12 @@ class Cart extends Model
     {
         $this->tax = Price::getTax($this->items_subtotal, $this->tax_rate);
         $this->save();
+    }
+
+    public function calculateTotal($shippingId)
+    {
+        $shippingMethod = Shipping::find($shippingId);
+
+        return $this->total + Arr::get($shippingMethod, 'price', 0);
     }
 }

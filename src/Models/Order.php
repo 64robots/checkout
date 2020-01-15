@@ -45,7 +45,7 @@ class Order extends Model
      ** CRUD
      ***************************************************************************************/
 
-    public static function makeOne(array $data)
+    public static function makeOne(OrderPurchase $purchase, array $data)
     {
         $order = new self;
 
@@ -57,8 +57,8 @@ class Order extends Model
 
         $customerForeignKey = Customer::getForeignKey();
 
-        $order->{$customerForeignKey} = Arr::get($data, $customerForeignKey);
-        $order->customer_email = Arr::get($data, 'customer_email');
+        $order->{$customerForeignKey} = $purchase->{$customerForeignKey};
+        $order->customer_email = $purchase->email;
         $order->shipping_first_name = Arr::get($data, 'shipping_first_name');
         $order->shipping_last_name = Arr::get($data, 'shipping_last_name');
         $order->shipping_address_line1 = Arr::get($data, 'shipping_address_line1');
@@ -80,36 +80,20 @@ class Order extends Model
         $order->save();
 
         $cart = Cart::byToken(Arr::get($data, 'cart_token'))->first();
+        $cart->cartItems->each(function (CartItem $cartItem) use ($order) {
+            OrderItem::makeOneFromCartItem($cartItem, $order->id);
+        });
 
-        if (!is_null($cart)) {
-            $cart->cartItems->each(function (CartItem $cartItem) use ($order) {
-                OrderItem::makeOneFromCartItem($cartItem, $order->id);
-            });
+        $order->cart_id = $cart->id;
 
-            $order->cart_id = $cart->id;
-
-            // @TODO how to calculate shipping ?
-            $order->items_total = $cart->items_subtotal;
-            $order->tax_total = $cart->tax;
-            $order->tax_rate = $cart->tax_rate;
-            $order->total = $cart->total + $order->shipping_total;
-        } else {
-            $order->items_total = collect(Arr::get($data, 'order_items'))->map(function ($orderItem) use ($order) {
-                return OrderItem::makeOne([
-                    'order_id' => $order->id,
-                    'price' => $orderItem['price'],
-                    'quantity' => Arr::get($orderItem, 'quantity', 1),
-                    'name' => $orderItem['name']
-                ]);
-            })->sum(function (OrderItem $orderItem) {
-                return $orderItem->price * $orderItem->quantity;
-            });
-
-            $order->tax_total = Arr::has($data, 'tax_rate') ? Price::getTax($order->items_total, Arr::get($data, 'tax_rate')) : 0;
-            $order->tax_rate = Arr::get($data, 'tax_rate', null);
-            $order->total = $order->items_total + $order->shipping_total + $order->tax_total;
-        }
+        $order->items_total = $cart->items_subtotal;
+        $order->tax_total = $cart->tax;
+        $order->tax_rate = $cart->tax_rate;
+        $order->total = $cart->calculateTotal(Arr::get($data, 'shipping_id'));
         $order->save();
+
+        $purchase->order()->associate($order);
+        $purchase->save();
 
         return $order;
     }

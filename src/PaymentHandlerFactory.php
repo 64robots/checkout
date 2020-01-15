@@ -2,6 +2,8 @@
 
 namespace R64\Checkout;
 
+use R64\Checkout\Contracts\Customer;
+
 class PaymentHandlerFactory
 {
     /** @var string */
@@ -18,11 +20,12 @@ class PaymentHandlerFactory
     /**
      * @param array $order
      * @param array $stripeDetails
+     * @param Customer $customer
      *
      * @return PaymentHandler
      */
-    public function createHandler(array $order, array $stripeDetails)
+    public function createHandler(array $order, array $stripeDetails, Customer $customer)
     {
-        return new $this->paymentHandlerClass($order, $stripeDetails);
+        return new $this->paymentHandlerClass($order, $stripeDetails, $customer);
     }
 }

@@ -14,11 +14,10 @@ class CartTotalController extends Controller
      ***************************************************************************************/
     public function get(Cart $cart, Request $request, Shipping $shipping)
     {
-        $shippingMethod = $shipping->find($request->get('shipping_id'));
-        $shippingPrice = Arr::get($shippingMethod, 'price', 0);
+        $total = $cart->calculateTotal($request->shipping_id);
 
         return $this->success([
-            'total' => displayMoney($cart->total + $shippingPrice)
+            'total' => displayMoney($total)
         ]);
     }
 }

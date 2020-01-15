@@ -3,7 +3,6 @@
 namespace R64\Checkout\Http\Requests;
 
 use R64\Checkout\CheckoutFields;
-use R64\Checkout\Facades\Customer;
 
 class OrderRequest extends JsonFormRequest
 {
@@ -36,23 +35,16 @@ class OrderRequest extends JsonFormRequest
      */
     public function rules()
     {
-        $customerTableName = Customer::getTableName();
-        $customerForeignKey = Customer::getForeignKey();
-
         $stripeRules = [
-            'stripe.token' => 'required_if:is_post,true|string|max:255',
+            'stripe.token' => 'required_if:is_post,true|string|max:255'
         ];
 
         $orderRules = [
-            'cart_token' => 'string|exists:carts,token',
+            'cart_token' => 'required_if:is_post,true|string|exists:carts,token',
             'status' => 'string|min:2',
             'tax_rate' => 'required_without:order.cart_token|integer',
-            'order_items.*.name' => 'required_without:order.cart_token|string',
-            'order_items.*.price' => 'required_without:order.cart_token|integer',
-            'order_items.*.quantity' => 'integer',
             'shipping_id' => 'required|integer',
-            'customer_email' => 'required_if:is_post,true|string|email',
-            "${customerForeignKey}" => "nullable|integer|exists:${customerTableName},id",
+            'customer_email' => 'nullable|string|email',
             'customer_notes' => 'nullable|string',
             'shipping_first_name' => 'string',
             'shipping_last_name' => 'string',

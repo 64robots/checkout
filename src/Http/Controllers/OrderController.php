@@ -6,6 +6,7 @@ use R64\Checkout\Events\NewOrder;
 use R64\Checkout\Events\NewOrderPurchase;
 use R64\Checkout\Http\Requests\OrderRequest;
 use R64\Checkout\Http\Resources\OrderResource;
+use R64\Checkout\Models\Customer;
 use R64\Checkout\Models\Order;
 use R64\Checkout\PaymentHandler;
 use R64\Checkout\PaymentHandlerFactory;
@@ -38,12 +39,13 @@ class OrderController extends Controller
     public function create(OrderRequest $request, PaymentHandlerFactory $factory)
     {
         /** @var PaymentHandler $handler */
-        $handler = $factory->createHandler($request->order, $request->stripe);
+        $customer = auth()->user();
+        $handler = $factory->createHandler($request->order, $request->stripe, $customer);
         $purchase = $handler->purchase();
 
         event(new NewOrderPurchase($purchase));
 
-        $order = Order::makeOne($request->validated());
+        $order = Order::makeOne($purchase, $request->order);
         $order->load('order_items');
 
         event(new NewOrder($order));

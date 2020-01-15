@@ -23,6 +23,10 @@ return [
 
     'tax_rate' => 600,
     'toc_url' => '#',
+    'stripe' => [
+        'percentage_fee' => 29 / 1000,
+        'fixed_fee' => 30
+    ],
     'product_model' => R64\Checkout\Models\Product::class,
     'customer_model' => R64\Checkout\Models\Customer::class,
     'shipping' => R64\Checkout\Shipping::class,

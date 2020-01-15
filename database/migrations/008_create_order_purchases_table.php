@@ -15,18 +15,19 @@ class CreateOrderPurchasesTable extends Migration
     {
         Schema::create('order_purchases', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('order_id');
+            $table->unsignedBigInteger('order_id')->nullable();
 
             $table->unsignedBigInteger('customer_id')->nullable();
-
-            $table->string('card_holder_name');
+            $table->text('order_data');
+            $table->string('email');
+            $table->integer('amount');
+            $table->string('card_type');
+            $table->string('card_last4');
             $table->string('stripe_customer_id')->nullable();
             $table->string('stripe_charge_id')->nullable();
             $table->string('stripe_card_id')->nullable();
-            $table->integer('amount');
             $table->integer('stripe_fee')->default(0);
-            $table->integer('refunded_amount')->default(0);
-            $table->timestamp('refunded_at')->nullable();
+
             $table->timestamps();
             $table->softDeletes();
 

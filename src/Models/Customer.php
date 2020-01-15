@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use R64\Checkout\Contracts\Customer as CustomerContract;
 
-class Customer extends Authenticatable
+class Customer extends Authenticatable implements CustomerContract
 {
     protected $table = 'customers';
     protected $guarded = ['id'];
@@ -21,4 +22,24 @@ class Customer extends Authenticatable
 
     use SoftDeletes;
     use Notifiable;
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getFirstName()
+    {
+        return $this->first_name;
+    }
+
+    public function getLastName()
+    {
+        return $this->last_name;
+    }
+
+    public function getEmail()
+    {
+        return $this->email;
+    }
 }
