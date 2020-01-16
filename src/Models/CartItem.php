@@ -95,15 +95,8 @@ class CartItem extends Model
     public function updateMe(array $data)
     {
         $newQuantity = !empty($data['quantity']) ? $data['quantity'] : $this->quantity;
-
-        if ($newQuantity === 0) {
-            return $this->delete();
-        }
-
-        $newNote = !empty($data['customer_note']) ? $data['customer_note'] : $this->customer_note;
-
         $this->price = $this->product->getPrice() * $newQuantity;
-        $this->customer_note = $newNote;
+        $this->customer_note = Arr::get($data, 'customer_note');
         $this->quantity = $newQuantity;
         $this->save();
     }

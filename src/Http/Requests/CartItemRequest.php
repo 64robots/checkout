@@ -28,7 +28,7 @@ class CartItemRequest extends JsonFormRequest
 
         return [
             $productForeignKey => "required_if:is_post,true|integer|exists:${productTableName},id",
-            'quantity' => 'nullable|integer|gte:0',
+            'quantity' => 'integer|gte:0',
             'customer_note' => 'nullable|string'
         ];
     }
