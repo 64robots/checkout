@@ -94,13 +94,17 @@ class CartItem extends Model
 
     public function updateMe(array $data)
     {
-        if ((int) Arr::get($data, 'quantity') === 0) {
+        $newQuantity = !empty($data['quantity']) ? $data['quantity'] : $this->quantity;
+
+        if ($newQuantity === 0) {
             return $this->delete();
         }
 
-        $this->price = $this->product->getPrice() * Arr::get($data, 'quantity');
-        $this->customer_note = Arr::get($data, 'customer_note');
-        $this->quantity = Arr::get($data, 'quantity', $this->quantity);
+        $newNote = !empty($data['customer_note']) ? $data['customer_note'] : $this->customer_note;
+
+        $this->price = $this->product->getPrice() * $newQuantity;
+        $this->customer_note = $newNote;
+        $this->quantity = $newQuantity;
         $this->save();
     }
 }

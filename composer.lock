@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "64robots/stripe",
-            "version": "v1.0.0",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/64robots/stripe.git",
-                "reference": "b06ce53464fc67f57507b01f9f45bdcc0bee6164"
+                "reference": "57582bb971e9cde97a2412597cc26bdf66e08462"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/64robots/stripe/zipball/b06ce53464fc67f57507b01f9f45bdcc0bee6164",
-                "reference": "b06ce53464fc67f57507b01f9f45bdcc0bee6164",
+                "url": "https://api.github.com/repos/64robots/stripe/zipball/57582bb971e9cde97a2412597cc26bdf66e08462",
+                "reference": "57582bb971e9cde97a2412597cc26bdf66e08462",
                 "shasum": ""
             },
             "require": {
@@ -66,10 +66,10 @@
                 "stripe"
             ],
             "support": {
-                "source": "https://github.com/64robots/stripe/tree/v1.0.0",
+                "source": "https://github.com/64robots/stripe/tree/v1.0.2",
                 "issues": "https://github.com/64robots/stripe/issues"
             },
-            "time": "2020-01-07T19:36:13+00:00"
+            "time": "2020-01-15T18:25:59+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -558,16 +558,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "1.2.0",
+            "version": "1.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "2533c389fd2a7573d4f7be279b1c33cf941c8dfc"
+                "reference": "34cf4ddb3892c715ae785c880e6691d839cff88d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/2533c389fd2a7573d4f7be279b1c33cf941c8dfc",
-                "reference": "2533c389fd2a7573d4f7be279b1c33cf941c8dfc",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/34cf4ddb3892c715ae785c880e6691d839cff88d",
+                "reference": "34cf4ddb3892c715ae785c880e6691d839cff88d",
                 "shasum": ""
             },
             "require": {
@@ -625,7 +625,7 @@
                 "markdown",
                 "parser"
             ],
-            "time": "2020-01-09T22:41:09+00:00"
+            "time": "2020-01-16T01:18:13+00:00"
         },
         {
             "name": "league/commonmark-ext-table",
@@ -3036,16 +3036,16 @@
         },
         {
             "name": "filp/whoops",
-            "version": "2.7.0",
+            "version": "2.7.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/filp/whoops.git",
-                "reference": "4c97f814aa2f0dd4d5bedc89181c10ef12c004c5"
+                "reference": "fff6f1e4f36be0e0d0b84d66b413d9dcb0c49130"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/filp/whoops/zipball/4c97f814aa2f0dd4d5bedc89181c10ef12c004c5",
-                "reference": "4c97f814aa2f0dd4d5bedc89181c10ef12c004c5",
+                "url": "https://api.github.com/repos/filp/whoops/zipball/fff6f1e4f36be0e0d0b84d66b413d9dcb0c49130",
+                "reference": "fff6f1e4f36be0e0d0b84d66b413d9dcb0c49130",
                 "shasum": ""
             },
             "require": {
@@ -3093,7 +3093,7 @@
                 "throwable",
                 "whoops"
             ],
-            "time": "2019-12-29T10:00:00+00:00"
+            "time": "2020-01-15T10:00:00+00:00"
         },
         {
             "name": "myclabs/deep-copy",
