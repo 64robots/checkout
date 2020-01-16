@@ -40,6 +40,9 @@ class CreateOrdersTable extends Migration
             $table->string('status')->nullable();
             $table->text('customer_notes')->nullable();
             $table->text('admin_notes')->nullable();
+            $table->string('shipping_id');
+            $table->unsignedInteger('delivery_days');
+            $table->date('delivery_date');
             $table->timestamps();
             $table->softDeletes();
         });

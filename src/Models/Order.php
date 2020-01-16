@@ -18,7 +18,7 @@ class Order extends Model
     protected $table = 'orders';
     protected $guarded = ['id'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
-    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+    protected $dates = ['created_at', 'updated_at', 'deleted_at', 'delivery_date'];
     protected $casts = [];
     public $timestamps = true;
 
@@ -56,7 +56,9 @@ class Order extends Model
 
         $order->items_total = 0;
 
-        $order->shipping_total = Arr::get(Shipping::find(Arr::get($data, 'shipping_id')), 'price');
+        $shipping = Shipping::find($data['shipping_id']);
+
+        $order->shipping_total = $shipping['price'];
         $order->tax_total = 0;
         $order->total = 0;
 
@@ -82,6 +84,9 @@ class Order extends Model
         $order->status = Arr::get($data, 'status');
         $order->customer_notes = Arr::get($data, 'customer_notes');
         $order->admin_notes = Arr::get($data, 'admin_notes');
+        $order->shipping_id = $shipping['id'];
+        $order->delivery_days = $shipping['delivery_days'];
+        $order->delivery_date = $shipping['delivery_date'];
         $order->save();
 
         $cart = Cart::byToken(Arr::get($data, 'cart_token'))->first();

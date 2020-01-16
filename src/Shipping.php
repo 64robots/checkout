@@ -11,14 +11,14 @@ class Shipping implements ShippingContract
         return [
             [
                 'id' => 1,
-                'title' => '5 business days',
-                'sub_title' => 'Get it ' . (new \DateTime('+5 days'))->format('l M d'),
+                'delivery_days' => 5,
+                'delivery_date' => (new \DateTime('+5 days')),
                 'price' => 0
             ],
             [
                 'id' => 2,
-                'title' => '2 business days',
-                'sub_title' => 'Get it ' . (new \DateTime('+2 days'))->format('l M d'),
+                'delivery_days' => 2,
+                'delivery_date' => (new \DateTime('+2 days')),
                 'price' => 650
             ]
         ];

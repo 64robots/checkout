@@ -11,6 +11,7 @@ class CheckoutSettingsController extends Controller
     {
         $shippingMethods = collect($shipping->getShippingMethods())->map(function ($shippingMethod) {
             $shippingMethod['price'] = displayMoney($shippingMethod['price']);
+            $shippingMethod['delivery_date'] = $shippingMethod['delivery_date']->format('l M d');
             return $shippingMethod;
         });
 
