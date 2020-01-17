@@ -87,33 +87,17 @@ class PaymentHandler implements PaymentHandlerContract
 
     public function chargeCard(StripeCustomer $customer, array $stripeDetails)
     {
-        $card = $this->createCard($customer, $stripeDetails);
-
         $charge = $this->processor->createCharge([
             'customer' => $customer->id,
             'amount' => $this->getAmount(),
-            'currency' => 'USD',
-            'source' => $card->id,
+            'currency' => 'USD'
         ]);
+
         if (! $this->processor->attemptSuccessful()) {
             abort(400, $this->processor->getErrorMessage());
         }
 
         return $charge;
-    }
-
-    public function createCard(StripeCustomer $customer, array $stripeDetails)
-    {
-        $card = $this->processor->createCard([
-            'customer' => $customer->id,
-            'token' => Arr::get($stripeDetails, 'token'),
-        ]);
-
-        if (! $this->processor->attemptSuccessful()) {
-            abort(400, $this->processor->getErrorMessage());
-        }
-
-        return $card;
     }
 
     public function getAmount()

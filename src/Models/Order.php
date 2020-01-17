@@ -65,7 +65,7 @@ class Order extends Model
         $customerForeignKey = Customer::getForeignKey();
 
         $order->{$customerForeignKey} = $purchase->{$customerForeignKey};
-        $order->customer_email = $purchase->email;
+        $order->customer_email = !empty($data['customer_email']) ? $data['customer_email'] : $purchase->email;
         $order->shipping_first_name = Arr::get($data, 'shipping_first_name');
         $order->shipping_last_name = Arr::get($data, 'shipping_last_name');
         $order->shipping_address_line1 = Arr::get($data, 'shipping_address_line1');
