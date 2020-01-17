@@ -54,6 +54,8 @@ class OrderRequest extends JsonFormRequest
             'shipping_address_region' => 'string',
             'shipping_address_zipcode' => 'string',
             'shipping_address_phone' => 'string',
+            'billing_first_name' => 'string',
+            'billing_last_name' => 'string',
             'billing_address_line1' => 'string',
             'billing_address_line2' => 'string',
             'billing_address_city' => 'string',

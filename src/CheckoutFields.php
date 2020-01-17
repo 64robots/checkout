@@ -15,6 +15,8 @@ class CheckoutFields
         'shipping_address_region',
         'shipping_address_zipcode',
         'shipping_address_phone',
+        'billing_first_name',
+        'billing_last_name',
         'billing_address_line1',
         'billing_address_line2',
         'billing_address_city',

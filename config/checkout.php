@@ -2,9 +2,9 @@
 
 return [
     'required' => [
+//        'customer_email',
 //        'shipping_first_name',
 //        'shipping_last_name',
-//        'customer_email',
 //        'shipping_address_line1',
 //        'shipping_address_line2',
 //        'shipping_address_city',
@@ -12,10 +12,11 @@ return [
 //        'shipping_address_region',
 //        'shipping_address_zipcode',
 //        'shipping_address_phone',
+//        'billing_first_name',
+//        'billing_last_name',
 //        'billing_address_line1',
 //        'billing_address_line2',
 //        'billing_address_city',
-//        'billing_address_region',
 //        'billing_address_region',
 //        'billing_address_zipcode',
 //        'billing_address_phone',
