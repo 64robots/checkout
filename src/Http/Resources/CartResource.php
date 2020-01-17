@@ -20,7 +20,8 @@ class CartResource extends JsonResource
             'tax_rate' => displayTaxRate($this->tax_rate),
             'tax' => displayMoney($this->tax),
             'total' => displayMoney($this->total),
-            'discount' => $this->discount,
+            'discount' => displayMoney($this->discount),
+            'has_coupon_code' => $this->discount > 0,
             'user' => new \App\Http\Resources\UserResource($this->whenLoaded('user')),
             'cart_items' => CartItemResource::collection($this->whenLoaded('cartItems')),
         ];

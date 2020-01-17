@@ -99,6 +99,7 @@ class Order extends Model
         $order->items_total = $cart->items_subtotal;
         $order->tax_total = $cart->tax;
         $order->tax_rate = $cart->tax_rate;
+        $order->discount = $cart->discount;
         $order->total = $cart->calculateTotal(Arr::get($data, 'shipping_id'));
         $order->save();
 

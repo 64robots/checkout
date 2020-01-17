@@ -15,4 +15,28 @@ class Coupon extends Model
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
     protected $casts = [];
     public $timestamps = true;
+
+    /***************************************************************************************
+     ** SCOPES
+     ***************************************************************************************/
+
+    public function scopeByCode($query, $code)
+    {
+        return $query->where('code', $code);
+    }
+
+    /***************************************************************************************
+     ** HELPERS
+     ***************************************************************************************/
+
+    public function calculateDiscount(Cart $cart)
+    {
+        if ($this->percentage) {
+            return $cart->items_subtotal * $this->discount / 100 / 100;
+        }
+
+        $discount = $this->discount;
+
+        return $discount < $cart->items_subtotal ? $discount : $cart->items_subtotal;
+    }
 }

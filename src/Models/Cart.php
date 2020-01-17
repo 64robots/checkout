@@ -59,6 +59,11 @@ class Cart extends Model
         return $this->hasMany(\R64\Checkout\Models\CartItem::class, 'cart_id');
     }
 
+    public function coupon()
+    {
+        return $this->belongsTo(Coupon::class);
+    }
+
     /***************************************************************************************
      ** CRUD
      ***************************************************************************************/
@@ -90,11 +95,14 @@ class Cart extends Model
 
     public function updateMe(array $data)
     {
-        if (Arr::get($data, 'discount_code') !== null) {
-            // Do something with discount code
+        if (Arr::has($data, 'coupon_code')) {
+            $coupon = Coupon::byCode($data['coupon_code'])->first();
+            $this->coupon_id = $coupon->id;
+            $this->discount = $coupon->calculateDiscount($this);
+            $this->save();
+            $this->setTax();
+            $this->setTotal();
         }
-
-        $this->save();
     }
 
     /***************************************************************************************
@@ -120,13 +128,21 @@ class Cart extends Model
 
     public function setTotal()
     {
-        $this->total = is_null($this->tax) ? $this->items_subtotal : $this->items_subtotal + $this->tax;
+        $this->total = $this->items_subtotal - $this->discount + $this->tax;
         $this->save();
+    }
+
+    public function setDiscount()
+    {
+        if (!is_null($this->coupon_id)) {
+            $this->discount = $this->coupon->calculateDiscount($this);
+            $this->save();
+        }
     }
 
     public function setTax()
     {
-        $this->tax = Price::getTax($this->items_subtotal, $this->tax_rate);
+        $this->tax = Price::getTax($this->items_subtotal - $this->discount, $this->tax_rate);
         $this->save();
     }
 
@@ -135,5 +151,10 @@ class Cart extends Model
         $shippingMethod = Shipping::find($shippingId);
 
         return $this->total + Arr::get($shippingMethod, 'price', 0);
+    }
+
+    public function hasDiscount()
+    {
+        return $this->discount > 0;
     }
 }

@@ -22,6 +22,7 @@ class OrderResource extends JsonResource
             'total' => displayMoney($this->total),
             'tax_rate' => displayTaxRate($this->tax_rate),
             'tax_total' => displayMoney($this->tax_total),
+            'discount' => displayMoney($this->discount),
             'currency' => $this->currency,
             'shipping_first_name' => $this->shipping_first_name,
             'shipping_last_name' => $this->shipping_last_name,

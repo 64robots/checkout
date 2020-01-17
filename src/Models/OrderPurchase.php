@@ -45,4 +45,16 @@ class OrderPurchase extends Model
 
         return $purchase;
     }
+
+    public static function makeFreePurchase(CustomerContract $customer, array $data)
+    {
+        $purchase = new self;
+        $purchase->customer_id = $customer->getId();
+        $purchase->order_data = $data;
+        $purchase->email = !empty($data['email']) ? $data['email'] : $customer->getEmail();
+        $purchase->amount = 0;
+        $purchase->save();
+
+        return $purchase;
+    }
 }

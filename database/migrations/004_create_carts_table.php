@@ -16,17 +16,19 @@ class CreateCartsTable extends Migration
         Schema::create('carts', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('customer_id')->nullable();
+            $table->unsignedBigInteger('coupon_id')->nullable();
             $table->integer('items_subtotal');
             $table->integer('tax_rate')->nullable();
             $table->integer('tax')->nullable();
             $table->integer('total')->nullable();
-            $table->integer('discount')->nullable();
+            $table->integer('discount')->default(0);
             $table->string('token');
             $table->ipAddress('ip_address');
             $table->timestamps();
             $table->softDeletes();
 
             $table->foreign('customer_id')->references('id')->on('customers');
+            $table->foreign('coupon_id')->references('id')->on('coupons');
         });
     }
 

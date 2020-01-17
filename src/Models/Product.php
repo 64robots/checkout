@@ -31,22 +31,4 @@ class Product extends Model implements ProductContract
     public function getImageUrl()
     {
     }
-
-    public function hasTaxRate()
-    {
-        return true;
-    }
-
-    public function getTaxRate()
-    {
-        return 600;
-    }
-
-    public function hasShipping()
-    {
-    }
-
-    public function getShipping()
-    {
-    }
 }

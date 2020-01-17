@@ -30,16 +30,19 @@ class CartItem extends Model
         parent::boot();
         static::created(function ($cartItem) {
             $cartItem->cart->setItemSubtotal();
+            $cartItem->cart->setDiscount();
             $cartItem->cart->setTax();
             $cartItem->cart->setTotal();
         });
         static::updated(function ($cartItem) {
             $cartItem->cart->setItemSubtotal();
+            $cartItem->cart->setDiscount();
             $cartItem->cart->setTax();
             $cartItem->cart->setTotal();
         });
         static::deleted(function ($cartItem) {
             $cartItem->cart->setItemSubtotal();
+            $cartItem->cart->setDiscount();
             $cartItem->cart->setTax();
             $cartItem->cart->setTotal();
         });

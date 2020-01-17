@@ -17,7 +17,7 @@ class CreateCartItemsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('cart_id');
             $table->unsignedBigInteger('product_id');
-            $table->string('promo_code')->nullable();
+            $table->unsignedInteger('discount')->default(0);
             $table->string('customer_note')->nullable();
             $table->integer('price');
             $table->integer('quantity');

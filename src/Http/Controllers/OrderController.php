@@ -6,8 +6,10 @@ use R64\Checkout\Events\NewOrder;
 use R64\Checkout\Events\NewOrderPurchase;
 use R64\Checkout\Http\Requests\OrderRequest;
 use R64\Checkout\Http\Resources\OrderResource;
+use R64\Checkout\Models\Cart;
 use R64\Checkout\Models\Customer;
 use R64\Checkout\Models\Order;
+use R64\Checkout\Models\OrderPurchase;
 use R64\Checkout\PaymentHandler;
 use R64\Checkout\PaymentHandlerFactory;
 
@@ -40,8 +42,13 @@ class OrderController extends Controller
     {
         /** @var PaymentHandler $handler */
         $customer = auth()->user();
-        $handler = $factory->createHandler($request->order, $request->stripe, $customer);
-        $purchase = $handler->purchase();
+
+        if (!empty($request->get('stripe.token'))) {
+            $handler = $factory->createHandler($request->order, $request->stripe, $customer);
+            $purchase = $handler->purchase();
+        } else {
+            $purchase = OrderPurchase::makeFreePurchase($customer, $request->order);
+        }
 
         event(new NewOrderPurchase($purchase));
 

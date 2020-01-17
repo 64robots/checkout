@@ -73,38 +73,38 @@ class CheckoutServiceProvider extends ServiceProvider
             ], 'migrations');
         }
 
-        if (!class_exists('CreateCartsTable')) {
-            $migrationFileName = $this->getMigrationFilename('create_carts_table', $time + 2, $filesystem);
+        if (!class_exists('CreateCouponsTable')) {
+            $migrationFileName = $this->getMigrationFilename('create_coupons_table', $time + 2, $filesystem);
             $this->publishes([
-                __DIR__.'/../database/migrations/003_create_carts_table.php' => $migrationFileName,
+                __DIR__.'/../database/migrations/003_create_coupons_table.php' => $migrationFileName,
+            ], 'migrations');
+        }
+
+        if (!class_exists('CreateCartsTable')) {
+            $migrationFileName = $this->getMigrationFilename('create_carts_table', $time + 3, $filesystem);
+            $this->publishes([
+                __DIR__.'/../database/migrations/004_create_carts_table.php' => $migrationFileName,
             ], 'migrations');
         }
 
         if (!class_exists('CreateCartItemsTable')) {
-            $migrationFileName = $this->getMigrationFilename('create_cart_items_table', $time + 3, $filesystem);
+            $migrationFileName = $this->getMigrationFilename('create_cart_items_table', $time + 4, $filesystem);
             $this->publishes([
-                __DIR__ . '/../database/migrations/004_create_cart_items_table.php' => $migrationFileName,
+                __DIR__ . '/../database/migrations/005_create_cart_items_table.php' => $migrationFileName,
             ], 'migrations');
         }
 
         if (!class_exists('CreateOrdersTable')) {
-            $migrationFileName = $this->getMigrationFilename('create_orders_table', $time + 4, $filesystem);
+            $migrationFileName = $this->getMigrationFilename('create_orders_table', $time + 5, $filesystem);
             $this->publishes([
-                __DIR__.'/../database/migrations/005_create_orders_table.php' => $migrationFileName,
+                __DIR__.'/../database/migrations/006_create_orders_table.php' => $migrationFileName,
             ], 'migrations');
         }
 
         if (!class_exists('CreateOrderItemsTable')) {
-            $migrationFileName = $this->getMigrationFilename('create_order_items_table', $time + 5, $filesystem);
+            $migrationFileName = $this->getMigrationFilename('create_order_items_table', $time + 6, $filesystem);
             $this->publishes([
-                __DIR__.'/../database/migrations/006_create_order_items_table.php' => $migrationFileName,
-            ], 'migrations');
-        }
-
-        if (!class_exists('CreateCouponsTable')) {
-            $migrationFileName = $this->getMigrationFilename('create_coupons_table', $time + 6, $filesystem);
-            $this->publishes([
-                __DIR__.'/../database/migrations/007_create_coupons_table.php' => $migrationFileName,
+                __DIR__.'/../database/migrations/007_create_order_items_table.php' => $migrationFileName,
             ], 'migrations');
         }
 

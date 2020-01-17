@@ -41,7 +41,7 @@ class CartController extends Controller
      ***************************************************************************************/
     public function update(Cart $cart, Request $request)
     {
-        $cart->updateMe($request->only('discount_code'));
+        $cart->updateMe($request->only('coupon_code'));
 
         return $this->success(new CartResource($cart->load('cartItems.product')));
     }

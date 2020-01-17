@@ -2,7 +2,10 @@
 
 namespace R64\Checkout\Http\Requests;
 
+use Illuminate\Support\Arr;
+use Illuminate\Validation\Rule;
 use R64\Checkout\CheckoutFields;
+use R64\Checkout\Models\Cart;
 
 class OrderRequest extends JsonFormRequest
 {
@@ -36,13 +39,28 @@ class OrderRequest extends JsonFormRequest
     public function rules()
     {
         $stripeRules = [
-            'stripe.token' => 'required_if:is_post,true|string|max:255'
+            'stripe.token' => [
+                'string',
+                'max:255',
+                Rule::requiredIf(function () {
+                    // Stripe token is required only when total > 0
+                    $cartToken = Arr::get($this->get('order'), 'cart_token');
+                    $shippingId = Arr::get($this->get('order'), 'shipping_id');
+
+                    if (!is_null($cartToken) || !is_null($shippingId)) {
+                        return false;
+                    }
+
+                    $cart = Cart::byToken($cartToken)->firstOrFail();
+
+                    return $cart->calculateTotal($shippingId) > 0;
+                })
+            ]
         ];
 
         $orderRules = [
             'cart_token' => 'required_if:is_post,true|string|exists:carts,token',
             'status' => 'string|min:2',
-            'tax_rate' => 'required_without:order.cart_token|integer',
             'shipping_id' => 'required|integer',
             'customer_email' => 'nullable|string|email',
             'customer_notes' => 'nullable|string',

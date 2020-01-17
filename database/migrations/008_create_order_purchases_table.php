@@ -21,8 +21,8 @@ class CreateOrderPurchasesTable extends Migration
             $table->text('order_data');
             $table->string('email');
             $table->integer('amount');
-            $table->string('card_type');
-            $table->string('card_last4');
+            $table->string('card_type')->nullable();
+            $table->string('card_last4')->nullable();
             $table->string('stripe_customer_id')->nullable();
             $table->string('stripe_charge_id')->nullable();
             $table->string('stripe_card_id')->nullable();

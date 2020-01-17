@@ -2,10 +2,7 @@
 
 namespace R64\Checkout\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator;
-use R64\Checkout\Facades\Product;
-use R64\Checkout\Http\Requests\JsonFormRequest;
-use R64\Checkout\Models\Cart;
+use Illuminate\Validation\Rule;
 
 class CartRequest extends JsonFormRequest
 {
@@ -26,12 +23,14 @@ class CartRequest extends JsonFormRequest
      */
     public function rules()
     {
-        $productTableName = Product::getTableName();
-        $productForeignKey = Product::getForeignKey();
-
         return [
-            $productForeignKey => "integer|exists:${productTableName},id",
-            'discount_code' => 'string|exists:coupons,code'
+            'coupon_code' => [
+                'string',
+                Rule::exists('coupons')->where(function ($query) {
+                    $query->where('code', $this->request->get('coupon_code'))
+                        ->where('active', true);
+                })
+            ]
         ];
     }
 

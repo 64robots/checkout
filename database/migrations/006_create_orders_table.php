@@ -22,6 +22,7 @@ class CreateOrdersTable extends Migration
             $table->integer('tax_total');
             $table->integer('total');
             $table->integer('tax_rate')->nullable();
+            $table->unsignedInteger('discount')->default(0);
             $table->string('customer_email');
             $table->string('shipping_first_name')->nullable();
             $table->string('shipping_last_name')->nullable();
