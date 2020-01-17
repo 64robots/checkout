@@ -39,7 +39,7 @@ class CartController extends Controller
     /***************************************************************************************
      ** PUT
      ***************************************************************************************/
-    public function update(Cart $cart, Request $request)
+    public function update(Cart $cart, CartRequest $request)
     {
         $cart->updateMe($request->only('coupon_code'));
 
