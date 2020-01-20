@@ -10,6 +10,9 @@ use R64\Checkout\Contracts\Customer;
 use R64\Checkout\Contracts\Payment;
 use R64\Checkout\Contracts\Product;
 use R64\Checkout\Contracts\Shipping;
+use R64\Checkout\Contracts\State;
+use R64\Checkout\Contracts\OrderEstimateHandler;
+use R64\Checkout\Models\Cart;
 
 class CheckoutServiceProvider extends ServiceProvider
 {
@@ -27,14 +30,30 @@ class CheckoutServiceProvider extends ServiceProvider
             return new ConfigurableModel(new $customerClass);
         });
 
+        $this->app->bind(Cart::class, function () {
+            $cartClass = config('checkout.cart_model');
+
+            return new $cartClass;
+        });
+
         $this->app->singleton(Shipping::class, function () {
             $shippingClass = config('checkout.shipping');
 
             return new $shippingClass;
         });
 
+        $this->app->singleton(State::class, function () {
+            return new \R64\Checkout\State();
+        });
+
         $this->app->singleton(PaymentHandlerFactory::class, function () {
             return new PaymentHandlerFactory(config('checkout.payment'));
+        });
+
+        $this->app->singleton(OrderEstimateHandler::class, function () {
+            $orderEstimateClass = config('checkout.order_estimate');
+
+            return new $orderEstimateClass;
         });
     }
     

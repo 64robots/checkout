@@ -99,7 +99,6 @@ class Cart extends Model
             $coupon = Coupon::byCode($data['coupon_code'])->first();
             $this->coupon_id = $coupon->id;
             $this->discount = $coupon->calculateDiscount($this);
-            $this->save();
             $this->setTax();
             $this->setTotal();
         }

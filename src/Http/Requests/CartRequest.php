@@ -35,7 +35,12 @@ class CartRequest extends JsonFormRequest
                 Rule::exists('coupons', 'code')->where(function ($query) {
                     $query->where('active', true);
                 })
-            ]
+            ],
+            'shipping_address_line1' => 'string',
+            'shipping_address_line2' => 'string',
+            'shipping_address_city' => 'string',
+            'shipping_address_region' => 'string',
+            'shipping_address_zipcode' => 'string'
         ];
     }
 
