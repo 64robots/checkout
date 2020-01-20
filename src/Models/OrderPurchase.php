@@ -30,8 +30,10 @@ class OrderPurchase extends Model
 
     public static function makeOne(CustomerContract $customer, array $data)
     {
+        $customerForeignKey = Customer::getForeignKey();
+
         $purchase = new self;
-        $purchase->customer_id = $customer->getId();
+        $purchase->{$customerForeignKey} = $customer->getId();
         $purchase->order_data = $data['order_data'];
         $purchase->email = $data['email'];
         $purchase->amount = $data['amount'];
@@ -48,8 +50,10 @@ class OrderPurchase extends Model
 
     public static function makeFreePurchase(CustomerContract $customer, array $data)
     {
+        $customerForeignKey = Customer::getForeignKey();
+
         $purchase = new self;
-        $purchase->customer_id = $customer->getId();
+        $purchase->{$customerForeignKey} = $customer->getId();
         $purchase->order_data = $data;
         $purchase->email = !empty($data['email']) ? $data['email'] : $customer->getEmail();
         $purchase->amount = 0;
