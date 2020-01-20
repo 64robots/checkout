@@ -60,7 +60,7 @@ class OrderItem extends Model
 
         $productForeignKey = Product::getForeignKey();
 
-        return static::makeOne([
+        $orderItem = static::makeOne([
             'order_id' => $orderId,
             $productForeignKey => $product->id,
             'cart_item_id' => $cartItem->id,
@@ -68,6 +68,11 @@ class OrderItem extends Model
             'quantity' => $cartItem->quantity,
             'name' => $product->getName()
         ]);
+
+        $product->purchased = true;
+        $product->save();
+
+        return $orderItem;
     }
 
 }
