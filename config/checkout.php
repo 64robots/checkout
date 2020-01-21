@@ -21,8 +21,6 @@ return [
 //        'billing_address_zipcode',
 //        'billing_address_phone',
     ],
-
-    'tax_rate' => 600,
     'toc_url' => '#',
     'stripe' => [
         'percentage_fee' => 29 / 1000,
@@ -31,6 +29,5 @@ return [
     'product_model' => R64\Checkout\Models\Product::class,
     'customer_model' => R64\Checkout\Models\Customer::class,
     'cart_model' => R64\Checkout\Models\Cart::class,
-    'payment' => R64\Checkout\PaymentHandler::class,
-    'order_estimate' => R64\Checkout\OrderEstimateHandler::class
+    'payment' => R64\Checkout\PaymentHandler::class
 ];
