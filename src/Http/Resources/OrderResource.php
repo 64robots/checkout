@@ -18,10 +18,10 @@ class OrderResource extends JsonResource
             'id' => $this->id,
             'customer_email' => $this->customer_email,
             'items_total' => displayMoney($this->items_total),
-            'shipping_total' => displayMoney($this->shipping_total),
+            'shipping' => displayMoney($this->shipping),
             'total' => displayMoney($this->total),
             'tax_rate' => displayTaxRate($this->tax_rate),
-            'tax_total' => displayMoney($this->tax_total),
+            'tax' => displayMoney($this->tax),
             'discount' => displayMoney($this->discount),
             'currency' => $this->currency,
             'shipping_first_name' => $this->shipping_first_name,
@@ -31,6 +31,7 @@ class OrderResource extends JsonResource
             'shipping_address_city' => $this->shipping_address_city,
             'shipping_address_region' => $this->shipping_address_region,
             'shipping_address_zipcode' => $this->shipping_address_zipcode,
+            'shipping_address_phone' => $this->shipping_address_phone,
             'billing_address_line1' => $this->billing_address_line1,
             'billing_address_line2' => $this->billing_address_line2,
             'billing_address_city' => $this->billing_address_city,
@@ -42,8 +43,6 @@ class OrderResource extends JsonResource
             'admin_notes' => $this->admin_notes,
             'order_items' => OrderItemResource::collection($this->whenLoaded('order_items')),
             'order_purchase' => new OrderPurchaseResource($this->whenLoaded('orderPurchase')),
-            'delivery_days' => $this->delivery_days,
-            'delivery_date' => $this->delivery_date->format('l M d'),
             'created_at' => $this->created_at->format('M, d, Y')
         ];
     }

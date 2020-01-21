@@ -53,17 +53,9 @@ class Order extends Model
     public static function makeOne(OrderPurchase $purchase, array $data)
     {
         $order = new self;
-
-        $order->items_total = 0;
-
-        $shipping = Shipping::find($data['shipping_id']);
-
-        $order->shipping_total = $shipping['price'];
-        $order->tax_total = 0;
-        $order->total = 0;
+        $cart = Cart::byToken(Arr::get($data, 'cart_token'))->first();
 
         $customerForeignKey = Customer::getForeignKey();
-
         $order->{$customerForeignKey} = $purchase->{$customerForeignKey};
         $order->customer_email = !empty($data['customer_email']) ? $data['customer_email'] : $purchase->email;
         $order->shipping_first_name = Arr::get($data, 'shipping_first_name');
@@ -84,24 +76,19 @@ class Order extends Model
         $order->status = Arr::get($data, 'status');
         $order->customer_notes = Arr::get($data, 'customer_notes');
         $order->admin_notes = Arr::get($data, 'admin_notes');
-        $order->shipping_id = $shipping['id'];
-        $order->delivery_days = $shipping['delivery_days'];
-        $order->delivery_date = $shipping['delivery_date'];
+
+        $order->cart_id = $cart->id;
+        $order->items_total = $cart->items_subtotal;
+        $order->tax = $cart->tax;
+        $order->tax_rate = $cart->tax_rate;
+        $order->discount = $cart->discount;
+        $order->shipping = $cart->shipping;
+        $order->total = $cart->total;
         $order->save();
 
-        $cart = Cart::byToken(Arr::get($data, 'cart_token'))->first();
         $cart->cartItems->each(function (CartItem $cartItem) use ($order) {
             OrderItem::makeOneFromCartItem($cartItem, $order->id);
         });
-
-        $order->cart_id = $cart->id;
-
-        $order->items_total = $cart->items_subtotal;
-        $order->tax_total = $cart->tax;
-        $order->tax_rate = $cart->tax_rate;
-        $order->discount = $cart->discount;
-        $order->total = $cart->calculateTotal(Arr::get($data, 'shipping_id'));
-        $order->save();
 
         $purchase->order()->associate($order);
         $purchase->save();

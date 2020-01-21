@@ -28,7 +28,7 @@ class CartItemController extends Controller
      ***************************************************************************************/
     public function update(CartItem $cartItem, CartItemRequest $request)
     {
-        $cartItem->updateMe($request->only(['quantity', 'customer_note']));
+        $cartItem->updateMe($request->validated());
 
         return $this->success(new CartItemResource($cartItem));
     }

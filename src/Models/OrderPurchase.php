@@ -3,6 +3,7 @@
 namespace R64\Checkout\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use R64\Checkout\Facades\Customer;
 use R64\Checkout\Contracts\Customer as CustomerContract;
 
 class OrderPurchase extends Model

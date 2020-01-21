@@ -43,7 +43,7 @@ class OrderController extends Controller
         /** @var PaymentHandler $handler */
         $customer = auth()->user();
 
-        if (!empty($request->get('stripe.token'))) {
+        if ($request->has('stripe.token')) {
             $handler = $factory->createHandler($request->order, $request->stripe, $customer);
             $purchase = $handler->purchase();
         } else {

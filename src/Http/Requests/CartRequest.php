@@ -30,17 +30,29 @@ class CartRequest extends JsonFormRequest
         return [
             $productForeignKey => "integer|exists:${productTableName},id",
             'coupon_code' => [
-                'required_if:is_update, true',
                 'string',
                 Rule::exists('coupons', 'code')->where(function ($query) {
                     $query->where('active', true);
                 })
             ],
-            'shipping_address_line1' => 'string',
-            'shipping_address_line2' => 'string',
-            'shipping_address_city' => 'string',
-            'shipping_address_region' => 'string',
-            'shipping_address_zipcode' => 'string'
+            'customer_email' => 'nullable|string',
+            'shipping_first_name' => 'nullable|string',
+            'shipping_last_name' => 'nullable|string',
+            'shipping_address_line1' => 'nullable|string',
+            'shipping_address_line2' => 'nullable|string',
+            'shipping_address_city' => 'nullable|string',
+            'shipping_address_region' => 'nullable|string',
+            'shipping_address_zipcode' => 'nullable|string',
+            'shipping_address_phone' => 'nullable|string',
+            'billing_same' => 'boolean',
+            'billing_first_name' => 'nullable|string',
+            'billing_last_name' => 'nullable|string',
+            'billing_address_line1' => 'nullable|string',
+            'billing_address_line2' => 'nullable|string',
+            'billing_address_city' => 'nullable|string',
+            'billing_address_region' => 'nullable|string',
+            'billing_address_zipcode' => 'nullable|string',
+            'billing_address_phone' => 'nullable|string',
         ];
     }
 

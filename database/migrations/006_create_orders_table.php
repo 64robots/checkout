@@ -18,8 +18,8 @@ class CreateOrdersTable extends Migration
             $table->unsignedBigInteger('cart_id')->nullable();
             $table->unsignedBigInteger('customer_id')->nullable();
             $table->integer('items_total');
-            $table->integer('shipping_total');
-            $table->integer('tax_total');
+            $table->unsignedInteger('shipping');
+            $table->integer('tax');
             $table->integer('total');
             $table->integer('tax_rate')->nullable();
             $table->unsignedInteger('discount')->default(0);
@@ -41,9 +41,6 @@ class CreateOrdersTable extends Migration
             $table->string('status')->nullable();
             $table->text('customer_notes')->nullable();
             $table->text('admin_notes')->nullable();
-            $table->string('shipping_id');
-            $table->unsignedInteger('delivery_days');
-            $table->date('delivery_date');
             $table->timestamps();
             $table->softDeletes();
         });

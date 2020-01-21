@@ -31,7 +31,6 @@ return [
     'product_model' => R64\Checkout\Models\Product::class,
     'customer_model' => R64\Checkout\Models\Customer::class,
     'cart_model' => R64\Checkout\Models\Cart::class,
-    'shipping' => R64\Checkout\Shipping::class,
     'payment' => R64\Checkout\PaymentHandler::class,
     'order_estimate' => R64\Checkout\OrderEstimateHandler::class
 ];

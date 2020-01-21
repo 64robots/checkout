@@ -104,7 +104,7 @@ class PaymentHandler implements PaymentHandlerContract
     {
         $cart = Cart::byToken($this->order['cart_token'])->first();
 
-        return $cart->calculateTotal(Arr::get($this->order, 'shipping_id'));
+        return $cart->total;
     }
 
     public function recordPurchase(StripeCustomer $stripeCustomer , $paymentResponse)

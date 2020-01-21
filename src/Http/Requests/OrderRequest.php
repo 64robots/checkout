@@ -45,15 +45,14 @@ class OrderRequest extends JsonFormRequest
                 Rule::requiredIf(function () {
                     // Stripe token is required only when total > 0
                     $cartToken = Arr::get($this->get('order'), 'cart_token');
-                    $shippingId = Arr::get($this->get('order'), 'shipping_id');
 
-                    if (!is_null($cartToken) || !is_null($shippingId)) {
+                    if (!is_null($cartToken)) {
                         return false;
                     }
 
                     $cart = Cart::byToken($cartToken)->firstOrFail();
 
-                    return $cart->calculateTotal($shippingId) > 0;
+                    return $cart->total > 0;
                 })
             ]
         ];
@@ -61,7 +60,6 @@ class OrderRequest extends JsonFormRequest
         $orderRules = [
             'cart_token' => 'required_if:is_post,true|string|exists:carts,token',
             'status' => 'string|min:2',
-            'shipping_id' => 'required|integer',
             'customer_email' => 'nullable|string|email',
             'customer_notes' => 'nullable|string',
             'shipping_first_name' => 'string',
