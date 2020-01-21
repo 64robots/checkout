@@ -93,31 +93,31 @@ class Cart extends Model
 
     public function updateMe(array $data)
     {
-        $this->customer_email = $data['customer_email'];
-        $this->shipping_first_name = $data['shipping_first_name'];
-        $this->shipping_last_name = $data['shipping_last_name'];
-        $this->shipping_address_line1 = $data['shipping_address_line1'];
-        $this->shipping_address_line2 = $data['shipping_address_line2'];
-        $this->shipping_address_city = $data['shipping_address_city'];
-        $this->shipping_address_region = $data['shipping_address_region'];
-        $this->shipping_address_zipcode = $data['shipping_address_zipcode'];
-        $this->shipping_address_phone = $data['shipping_address_phone'];
-        $this->billing_same = $data['billing_same'];
-        $this->billing_first_name = $data['billing_first_name'];
-        $this->billing_last_name = $data['billing_last_name'];
-        $this->billing_address_line1 = $data['billing_address_line1'];
-        $this->billing_address_line2 = $data['billing_address_line2'];
-        $this->billing_address_city = $data['billing_address_city'];
-        $this->billing_address_region = $data['billing_address_region'];
-        $this->billing_address_zipcode = $data['billing_address_zipcode'];
-        $this->billing_address_phone = $data['billing_address_phone'];
-
-        if (!empty($data['coupon_code'])) {
+        if (isset($data['coupon_code'])) {
             $coupon = Coupon::byCode($data['coupon_code'])->first();
             $this->coupon_id = $coupon->id;
             $this->discount = $coupon->calculateDiscount($this);
             $this->setTax();
             $this->setTotal();
+        } else {
+            $this->customer_email = $data['customer_email'];
+            $this->shipping_first_name = $data['shipping_first_name'];
+            $this->shipping_last_name = $data['shipping_last_name'];
+            $this->shipping_address_line1 = $data['shipping_address_line1'];
+            $this->shipping_address_line2 = $data['shipping_address_line2'];
+            $this->shipping_address_city = $data['shipping_address_city'];
+            $this->shipping_address_region = $data['shipping_address_region'];
+            $this->shipping_address_zipcode = $data['shipping_address_zipcode'];
+            $this->shipping_address_phone = $data['shipping_address_phone'];
+            $this->billing_same = $data['billing_same'];
+            $this->billing_first_name = $data['billing_first_name'];
+            $this->billing_last_name = $data['billing_last_name'];
+            $this->billing_address_line1 = $data['billing_address_line1'];
+            $this->billing_address_line2 = $data['billing_address_line2'];
+            $this->billing_address_city = $data['billing_address_city'];
+            $this->billing_address_region = $data['billing_address_region'];
+            $this->billing_address_zipcode = $data['billing_address_zipcode'];
+            $this->billing_address_phone = $data['billing_address_phone'];
         }
 
         $this->save();
