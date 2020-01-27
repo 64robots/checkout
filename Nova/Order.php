@@ -67,7 +67,6 @@ class Order extends Resource
             BelongsTo::make('Customer', 'customer', \App\Nova\Order::class),
 
             Text::make('Customer Email', 'customer_email'),
-            Text::make('Currency', 'currency'),
             Text::make('Shipping First Name', 'shipping_first_name'),
             Text::make('Shipping Last Name', 'shipping_last_name'),
             Text::make('Shipping Address Line1', 'shipping_address_line1'),
@@ -76,6 +75,8 @@ class Order extends Resource
             Text::make('Shipping Address Region', 'shipping_address_region'),
             Text::make('Shipping Address Zipcode', 'shipping_address_zipcode'),
             Text::make('Shipping Address Phone', 'shipping_address_phone'),
+            Text::make('Billing First Name', 'billing_first_name'),
+            Text::make('Billing Last Name', 'billing_last_name'),
             Text::make('Billing Address Line1', 'billing_address_line1'),
             Text::make('Billing Address Line2', 'billing_address_line2'),
             Text::make('Billing Address City', 'billing_address_city'),

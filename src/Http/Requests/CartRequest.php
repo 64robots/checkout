@@ -35,7 +35,8 @@ class CartRequest extends JsonFormRequest
                     $query->where('active', true);
                 })
             ],
-            'customer_email' => 'nullable|string',
+            'customer_email' => 'string',
+            'customer_notes' => 'nullable|string',
             'shipping_first_name' => 'nullable|string',
             'shipping_last_name' => 'nullable|string',
             'shipping_address_line1' => 'nullable|string',
@@ -52,8 +53,7 @@ class CartRequest extends JsonFormRequest
             'billing_address_city' => 'nullable|string',
             'billing_address_region' => 'nullable|string',
             'billing_address_zipcode' => 'nullable|string',
-            'billing_address_phone' => 'nullable|string',
-            'customer_notes' => 'nullable|string'
+            'billing_address_phone' => 'nullable|string'
         ];
     }
 

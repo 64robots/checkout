@@ -3,13 +3,11 @@ namespace R64\Checkout\Models;
 
 // extends
 use R64\Checkout\Facades\Customer;
-use R64\Checkout\Helpers\Price;
 use Illuminate\Database\Eloquent\Model;
 
 // includes
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
-use R64\Checkout\Facades\Shipping;
 
 class Order extends Model
 {
