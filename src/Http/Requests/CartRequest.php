@@ -53,6 +53,7 @@ class CartRequest extends JsonFormRequest
             'billing_address_region' => 'nullable|string',
             'billing_address_zipcode' => 'nullable|string',
             'billing_address_phone' => 'nullable|string',
+            'customer_notes' => 'nullable|string'
         ];
     }
 

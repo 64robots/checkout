@@ -118,6 +118,7 @@ class Cart extends Model
             $this->billing_address_region = $data['billing_address_region'];
             $this->billing_address_zipcode = $data['billing_address_zipcode'];
             $this->billing_address_phone = $data['billing_address_phone'];
+            $this->customer_notes = $data['customer_notes'];
         }
 
         $this->save();

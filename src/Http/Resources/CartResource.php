@@ -40,6 +40,7 @@ class CartResource extends JsonResource
             'billing_address_region' => $this->billing_address_region,
             'billing_address_zipcode' => $this->billing_address_zipcode,
             'billing_address_phone' => $this->billing_address_phone,
+            'customer_notes' => $this->customer_notes,
             'cart_items' => CartItemResource::collection($this->whenLoaded('cartItems')),
         ];
     }

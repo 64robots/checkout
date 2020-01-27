@@ -41,6 +41,7 @@ class CreateCartsTable extends Migration
             $table->string('billing_address_region')->nullable();
             $table->string('billing_address_zipcode')->nullable();
             $table->string('billing_address_phone')->nullable();
+            $table->text('customer_notes')->nullable();
             $table->string('token');
             $table->ipAddress('ip_address');
             $table->timestamps();
