@@ -75,6 +75,7 @@ class Cart extends Model
         $customerForeignKey = Customer::getForeignKey();
 
         $cart->{$customerForeignKey} = isset($data[$customerForeignKey]) ? $data[$customerForeignKey] : null;
+        $cart->customer_email = auth()->user() ? auth()->user()->email : null;
         $cart->items_subtotal = isset($data['items_subtotal']) ? $data['items_subtotal'] : 0;
         $cart->total = isset($data['total']) ? $data['total'] : 0;
         $cart->discount = isset($data['discount']) ? $data['discount'] : 0;
