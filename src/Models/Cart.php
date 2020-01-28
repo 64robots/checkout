@@ -111,15 +111,37 @@ class Cart extends Model
         $this->shipping_address_region = Arr::has($data, 'shipping_address_region') ? $data['shipping_address_region'] : $this->shipping_address_region;
         $this->shipping_address_zipcode = Arr::has($data, 'shipping_address_zipcode') ? $data['shipping_address_zipcode'] : $this->shipping_address_zipcode;
         $this->shipping_address_phone = Arr::has($data, 'shipping_address_phone') ? $data['shipping_address_phone'] : $this->shipping_address_phone;
+
         $this->billing_same = Arr::has($data, 'billing_same') ? $data['billing_same'] : $this->billing_same;
-        $this->billing_first_name = Arr::has($data, 'billing_first_name') ? $data['billing_first_name'] : $this->billing_first_name;
-        $this->billing_last_name = Arr::has($data, 'billing_last_name') ? $data['billing_last_name'] : $this->billing_last_name;
-        $this->billing_address_line1 = Arr::has($data, 'billing_address_line1') ? $data['billing_address_line1'] : $this->billing_address_line1;
-        $this->billing_address_line2 = Arr::has($data, 'billing_address_line2') ? $data['billing_address_line2'] : $this->billing_address_line2;
-        $this->billing_address_city = Arr::has($data, 'billing_address_city') ? $data['billing_address_city'] : $this->billing_address_city;
-        $this->billing_address_region = Arr::has($data, 'billing_address_region') ? $data['billing_address_region'] : $this->billing_address_region;
-        $this->billing_address_zipcode = Arr::has($data, 'billing_address_zipcode') ? $data['billing_address_zipcode'] : $this->billing_address_zipcode;
-        $this->billing_address_phone = Arr::has($data, 'billing_address_phone') ? $data['billing_address_phone'] : $this->billing_address_phone;
+
+        if (Arr::has($data, 'billing_same') && !$data['billing_same']) {
+            $this->billing_first_name = null;
+            $this->billing_last_name = null;
+            $this->billing_address_line1 = null;
+            $this->billing_address_line2 = null;
+            $this->billing_address_city = null;
+            $this->billing_address_region = null;
+            $this->billing_address_zipcode = null;
+            $this->billing_address_phone = null;
+        } else if ($this->billing_same) {
+            $this->billing_first_name = $this->shipping_first_name;
+            $this->billing_last_name = $this->shipping_last_name;
+            $this->billing_address_line1 = $this->shipping_address_line1;
+            $this->billing_address_line2 = $this->shipping_address_line2;
+            $this->billing_address_city = $this->shipping_address_city;
+            $this->billing_address_region = $this->shipping_address_region;
+            $this->billing_address_zipcode = $this->shipping_address_zipcode;
+            $this->billing_address_phone = $this->shipping_address_phone;
+        } else {
+            $this->billing_first_name = Arr::has($data, 'billing_first_name') ? $data['billing_first_name'] : $this->billing_first_name;
+            $this->billing_last_name = Arr::has($data, 'billing_last_name') ? $data['billing_last_name'] : $this->billing_last_name;
+            $this->billing_address_line1 = Arr::has($data, 'billing_address_line1') ? $data['billing_address_line1'] : $this->billing_address_line1;
+            $this->billing_address_line2 = Arr::has($data, 'billing_address_line2') ? $data['billing_address_line2'] : $this->billing_address_line2;
+            $this->billing_address_city = Arr::has($data, 'billing_address_city') ? $data['billing_address_city'] : $this->billing_address_city;
+            $this->billing_address_region = Arr::has($data, 'billing_address_region') ? $data['billing_address_region'] : $this->billing_address_region;
+            $this->billing_address_zipcode = Arr::has($data, 'billing_address_zipcode') ? $data['billing_address_zipcode'] : $this->billing_address_zipcode;
+            $this->billing_address_phone = Arr::has($data, 'billing_address_phone') ? $data['billing_address_phone'] : $this->billing_address_phone;
+        }
 
         $this->save();
     }
