@@ -35,7 +35,7 @@ class CartRequest extends JsonFormRequest
                     $query->where('active', true);
                 })
             ],
-            'customer_email' => 'string',
+            'customer_email' => 'string|email',
             'customer_notes' => 'nullable|string',
             'shipping_first_name' => 'nullable|string',
             'shipping_last_name' => 'nullable|string',
