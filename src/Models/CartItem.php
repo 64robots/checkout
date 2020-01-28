@@ -99,7 +99,7 @@ class CartItem extends Model
     {
         $newQuantity = !empty($data['quantity']) ? $data['quantity'] : $this->quantity;
         $this->price = $this->product->getPrice() * $newQuantity;
-        $this->customer_note = Arr::get($data, 'customer_note', $this->customer_note);
+        $this->customer_note = Arr::has($data, 'customer_note') ? $data['customer_note'] : $this->customer_note;
         $this->quantity = $newQuantity;
         $this->save();
     }
