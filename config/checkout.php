@@ -23,12 +23,12 @@ return [
     ],
     'toc_url' => '#',
     'stripe' => [
-        'percentage_fee' => 29 / 1000,
-        'fixed_fee' => 30
+        'percentage_fee' => env('STRIPE_PERCENTAGE_FEE', 29 / 1000),
+        'fixed_fee' => env('STRIPE_FIXED_FEE', 30)
     ],
     'geo_names' => [
-        'username' => 'demo',
-        'country_code' => 'US'
+        'username' => env('GEO_NAMES_USERNAME', 'demo'),
+        'country_code' => env('GEO_NAMES_COUNTRY', 'US')
     ],
     'product_model' => R64\Checkout\Models\Product::class,
     'customer_model' => R64\Checkout\Models\Customer::class,
