@@ -114,7 +114,7 @@ class Cart extends Model
         $this->shipping_address_zipcode = Arr::has($data, 'shipping_address_zipcode') ? $data['shipping_address_zipcode'] : $this->shipping_address_zipcode;
         $this->shipping_address_phone = Arr::has($data, 'shipping_address_phone') ? $data['shipping_address_phone'] : $this->shipping_address_phone;
 
-        if (Arr::has($data, 'shipping_address_zipcode') && empty($this->shipping_address_city) && empty($this->shipping_address_region)) {
+        if (Arr::has($data, 'shipping_address_zipcode') && $data['shipping_address_zipcode'] !== $this->shipping_address_zipcode) {
             $address = AddressSearch::getByPostalCode($data['shipping_address_zipcode'])->first();
 
             if (!is_null($address)) {
