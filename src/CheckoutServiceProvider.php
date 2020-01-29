@@ -2,6 +2,7 @@
 
 namespace R64\Checkout;
 
+use GuzzleHttp\Client;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Route;
 use R64\Checkout\Contracts\Customer;
 use R64\Checkout\Contracts\Product;
 use R64\Checkout\Contracts\State;
+use R64\Checkout\Helpers\GeoNames;
 use R64\Checkout\Models\Cart;
 
 class CheckoutServiceProvider extends ServiceProvider
@@ -39,6 +41,14 @@ class CheckoutServiceProvider extends ServiceProvider
 
         $this->app->singleton(PaymentHandlerFactory::class, function () {
             return new PaymentHandlerFactory(config('checkout.payment'));
+        });
+
+        $this->app->singleton(GeoNames::class, function () {
+            return new GeoNames(
+                new Client(),
+                config('checkout.geo_names.username'),
+                config('checkout.geo_names.country_code')
+            );
         });
     }
     

@@ -2,17 +2,18 @@
 namespace R64\Checkout\Models;
 
 // extends
-use R64\Checkout\Facades\Shipping;
-use R64\Checkout\Helpers\Price;
 use Illuminate\Database\Eloquent\Model;
 
 // includes
 use R64\Checkout\Helpers\Token;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use R64\Checkout\Facades\Product;
 use R64\Checkout\Facades\Customer;
+use R64\Checkout\Contracts\State;
+use R64\Checkout\Facades\AddressSearch;
+use R64\Checkout\Facades\Shipping;
+use R64\Checkout\Helpers\Price;
 
 class Cart extends Model
 {
@@ -112,6 +113,17 @@ class Cart extends Model
         $this->shipping_address_region = Arr::has($data, 'shipping_address_region') ? $data['shipping_address_region'] : $this->shipping_address_region;
         $this->shipping_address_zipcode = Arr::has($data, 'shipping_address_zipcode') ? $data['shipping_address_zipcode'] : $this->shipping_address_zipcode;
         $this->shipping_address_phone = Arr::has($data, 'shipping_address_phone') ? $data['shipping_address_phone'] : $this->shipping_address_phone;
+
+        if (Arr::has($data, 'shipping_address_zipcode') && empty($this->shipping_address_city) && empty($this->shipping_address_region)) {
+            $address = AddressSearch::getByPostalCode($data['shipping_address_zipcode'])->first();
+
+            if (!is_null($address)) {
+                /** @var State $states */
+                $states = app(State::class);
+                $this->shipping_address_city = $address->getCityName();
+                $this->shipping_address_region = Arr::get($states->getByCode($address->getStateCode()), 'value');
+            }
+        }
 
         $this->billing_same = Arr::has($data, 'billing_same') ? $data['billing_same'] : $this->billing_same;
 

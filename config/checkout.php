@@ -26,6 +26,10 @@ return [
         'percentage_fee' => 29 / 1000,
         'fixed_fee' => 30
     ],
+    'geo_names' => [
+        'username' => 'demo',
+        'country_code' => 'US'
+    ],
     'product_model' => R64\Checkout\Models\Product::class,
     'customer_model' => R64\Checkout\Models\Customer::class,
     'cart_model' => R64\Checkout\Models\Cart::class,
