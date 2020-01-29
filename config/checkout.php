@@ -28,7 +28,7 @@ return [
     ],
     'geo_names' => [
         'username' => env('GEO_NAMES_USERNAME', 'demo'),
-        'country_code' => env('GEO_NAMES_COUNTRY', 'US')
+        'country_code' => env('GEO_NAMES_COUNTRY_CODE', 'US')
     ],
     'product_model' => R64\Checkout\Models\Product::class,
     'customer_model' => R64\Checkout\Models\Customer::class,
