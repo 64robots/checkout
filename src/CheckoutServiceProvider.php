@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Route;
 use R64\Checkout\Contracts\Customer;
 use R64\Checkout\Contracts\Product;
 use R64\Checkout\Contracts\State;
-use R64\Checkout\Helpers\GeoNames;
+use R64\Checkout\Helpers\Address\GeoNames;
 use R64\Checkout\Models\Cart;
 
 class CheckoutServiceProvider extends ServiceProvider
