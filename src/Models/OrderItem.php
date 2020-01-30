@@ -5,7 +5,6 @@ namespace R64\Checkout\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
-use R64\Checkout\Models\CartItem;
 use R64\Checkout\Facades\Product;
 
 class OrderItem extends Model
@@ -64,13 +63,10 @@ class OrderItem extends Model
             'order_id' => $orderId,
             $productForeignKey => $product->id,
             'cart_item_id' => $cartItem->id,
-            'price' => $product->getPrice(),
+            'price' => $cartItem->price,
             'quantity' => $cartItem->quantity,
             'name' => $product->getName()
         ]);
-
-        $product->purchased = true;
-        $product->save();
 
         return $orderItem;
     }

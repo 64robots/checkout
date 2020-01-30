@@ -15,8 +15,10 @@ class CreateCartsTable extends Migration
     {
         Schema::create('carts', function (Blueprint $table) {
             $table->bigIncrements('id');
+
             $table->unsignedBigInteger('customer_id')->nullable();
             $table->unsignedBigInteger('coupon_id')->nullable();
+
             $table->integer('items_subtotal')->default(0);
             $table->integer('tax_rate')->default(0);
             $table->integer('tax')->default(0);
@@ -42,7 +44,7 @@ class CreateCartsTable extends Migration
             $table->string('billing_address_zipcode')->nullable();
             $table->string('billing_address_phone')->nullable();
             $table->text('customer_notes')->nullable();
-            $table->string('token');
+            $table->string('token')->unique();
             $table->ipAddress('ip_address');
             $table->timestamps();
             $table->softDeletes();

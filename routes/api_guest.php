@@ -25,5 +25,11 @@ Route::namespace('\\R64\\Checkout\\Http\\Controllers')->group(function () {
      ***************************************************************************************/
 
     Route::get('checkout/settings', 'CheckoutSettingsController@index');
+
+    /***************************************************************************************
+     ** Orders
+     ***************************************************************************************/
+    Route::get('orders/{order}', 'OrderController@get');
+    Route::post('orders', 'OrderController@create');
 });
 

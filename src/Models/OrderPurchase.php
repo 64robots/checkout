@@ -29,7 +29,7 @@ class OrderPurchase extends Model
      ** CREATE / UPDATE
      ***************************************************************************************/
 
-    public static function makeOne(CustomerContract $customer, array $data)
+    public static function makeOne(array $data, CustomerContract $customer)
     {
         $customerForeignKey = Customer::getForeignKey();
 
@@ -49,7 +49,7 @@ class OrderPurchase extends Model
         return $purchase;
     }
 
-    public static function makeFreePurchase(CustomerContract $customer, array $data)
+    public static function makeFreePurchase(array $data, CustomerContract $customer)
     {
         $customerForeignKey = Customer::getForeignKey();
 

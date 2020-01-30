@@ -63,8 +63,11 @@ class Order extends Resource
             ID::make()->sortable(),
 
             BelongsTo::make('Cart', 'cart', \App\Nova\Order::class),
-
             BelongsTo::make('Customer', 'customer', \App\Nova\Order::class),
+            BelongsTo::make('Coupon', 'coupon', \App\Nova\Coupon::class),
+
+            Text::make('Order number', 'order_number'),
+            Text::make('Token', 'token'),
 
             Text::make('Customer Email', 'customer_email'),
             Text::make('Shipping First Name', 'shipping_first_name'),
@@ -75,6 +78,7 @@ class Order extends Resource
             Text::make('Shipping Address Region', 'shipping_address_region'),
             Text::make('Shipping Address Zipcode', 'shipping_address_zipcode'),
             Text::make('Shipping Address Phone', 'shipping_address_phone'),
+
             Text::make('Billing First Name', 'billing_first_name'),
             Text::make('Billing Last Name', 'billing_last_name'),
             Text::make('Billing Address Line1', 'billing_address_line1'),

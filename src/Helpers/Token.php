@@ -8,6 +8,6 @@ class Token
 {
     public static function generate()
     {
-        return Str::random(30);
+        return Str::uuid();
     }
 }

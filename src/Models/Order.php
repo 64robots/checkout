@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 // includes
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Arr;
+use R64\Checkout\Helpers\Token;
 
 class Order extends Model
 {
@@ -19,6 +20,28 @@ class Order extends Model
     protected $dates = ['created_at', 'updated_at', 'deleted_at', 'delivery_date'];
     protected $casts = [];
     public $timestamps = true;
+
+    /***************************************************************************************
+     ** MODS
+     ***************************************************************************************/
+
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function ($order) {
+            $order->token = Token::generate();
+        });
+
+        static::created(function ($order) {
+            $order->order_number = $order->generateOrderNumber();
+            $order->save();
+        });
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'token';
+    }
 
     /***************************************************************************************
      ** RELATIONS
@@ -54,7 +77,9 @@ class Order extends Model
         $cart = Cart::byToken(Arr::get($data, 'cart_token'))->first();
 
         $customerForeignKey = Customer::getForeignKey();
+
         $order->{$customerForeignKey} = $purchase->{$customerForeignKey};
+        $order->coupon_id = $cart->coupon_id;
         $order->customer_email = !empty($data['customer_email']) ? $data['customer_email'] : $purchase->email;
         $order->shipping_first_name = Arr::get($data, 'shipping_first_name');
         $order->shipping_last_name = Arr::get($data, 'shipping_last_name');
@@ -65,6 +90,9 @@ class Order extends Model
         $order->shipping_address_region = Arr::get($data, 'shipping_address_region');
         $order->shipping_address_zipcode = Arr::get($data, 'shipping_address_zipcode');
         $order->shipping_address_phone = Arr::get($data, 'shipping_address_phone');
+
+        $order->billing_first_name = Arr::get($data, 'billing_first_name');
+        $order->billing_last_name = Arr::get($data, 'billing_last_name');
         $order->billing_address_line1 = Arr::get($data, 'billing_address_line1');
         $order->billing_address_line2 = Arr::get($data, 'billing_address_line2');
         $order->billing_address_city = Arr::get($data, 'billing_address_city');
@@ -74,7 +102,7 @@ class Order extends Model
         $order->status = Arr::get($data, 'status');
         $order->customer_notes = Arr::get($data, 'customer_notes');
         $order->admin_notes = Arr::get($data, 'admin_notes');
-
+        $order->currency = config('checkout.currency.code');
         $order->cart_id = $cart->id;
         $order->items_total = $cart->items_subtotal;
         $order->tax = $cart->tax;
@@ -101,5 +129,14 @@ class Order extends Model
     public function scopeByEmail($query, string $email)
     {
         return $query->where('customer_email', $email);
+    }
+
+    /***************************************************************************************
+     ** HELPERS
+     ***************************************************************************************/
+
+    public function generateOrderNumber()
+    {
+        return $this->id;
     }
 }

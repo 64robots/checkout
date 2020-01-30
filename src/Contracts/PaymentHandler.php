@@ -4,5 +4,5 @@ namespace R64\Checkout\Contracts;
 
 interface PaymentHandler
 {
-    public function purchase();
+    public function purchase(array $order, array $stripeDetails, Customer $customer);
 }
