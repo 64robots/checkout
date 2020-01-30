@@ -12,7 +12,7 @@ use R64\Stripe\PaymentProcessor;
 class PaymentHandler implements PaymentHandlerContract
 {
     /** @var PaymentProcessor */
-    private $processor;
+    protected $processor;
 
     /**
      * @param PaymentProcessor $processor
