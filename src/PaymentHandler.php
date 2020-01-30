@@ -38,7 +38,7 @@ class PaymentHandler implements PaymentHandlerContract
         return $this->recordPurchase($paymentResponse, $order, $customer, $stripeCustomer);
     }
 
-    private function getOrCreateCustomer(array $order, array $stripeDetails, CustomerContract $customer)
+    protected function getOrCreateCustomer(array $order, array $stripeDetails, CustomerContract $customer)
     {
         $orderPurchase = OrderPurchase::where('customer_id', $customer->getId())->first();
 
@@ -67,12 +67,12 @@ class PaymentHandler implements PaymentHandlerContract
         return $stripeCustomer;
     }
 
-    public function makePaymentAttempt(array $order, StripeCustomer $customer)
+    protected function makePaymentAttempt(array $order, StripeCustomer $customer)
     {
         return $this->chargeCard($order, $customer);
     }
 
-    public function chargeCard(array $order, StripeCustomer $customer)
+    protected function chargeCard(array $order, StripeCustomer $customer)
     {
         $charge = $this->processor->createCharge([
             'customer' => $customer->id,
@@ -87,14 +87,14 @@ class PaymentHandler implements PaymentHandlerContract
         return $charge;
     }
 
-    public function getAmount($order)
+    protected function getAmount($order)
     {
         $cart = Cart::byToken($order['cart_token'])->first();
 
         return $cart->total;
     }
 
-    public function recordPurchase($paymentResponse, array $order, CustomerContract $customer, StripeCustomer $stripeCustomer)
+    protected function recordPurchase($paymentResponse, array $order, CustomerContract $customer, StripeCustomer $stripeCustomer)
     {
         return OrderPurchase::makeOne([
             'customer_id' => $customer->getId(),
