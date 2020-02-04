@@ -191,7 +191,7 @@ class Cart extends Model
 
     public function setTotal()
     {
-        $this->total = $this->items_subtotal - $this->discount + $this->tax;
+        $this->total = $this->items_subtotal + $this->shipping - $this->discount + $this->tax;
         $this->save();
     }
 
