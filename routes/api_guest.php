@@ -12,6 +12,9 @@ Route::namespace('\\R64\\Checkout\\Http\\Controllers')->group(function () {
     Route::put('carts/{cart}', 'CartController@update');
     Route::delete('carts/{cart}', 'CartController@delete');
 
+    Route::put('carts/{cart}/zipcode', 'CartZipCodeController@update');
+    Route::put('carts/{cart}/shipping', 'CartShippingController@update');
+
     /***************************************************************************************
      ** Cart Items
      ***************************************************************************************/

@@ -112,18 +112,6 @@ class Cart extends Model
         $this->shipping_address_city = Arr::has($data, 'shipping_address_city') ? $data['shipping_address_city'] : $this->shipping_address_city;
         $this->shipping_address_region = Arr::has($data, 'shipping_address_region') ? $data['shipping_address_region'] : $this->shipping_address_region;
         $this->shipping_address_phone = Arr::has($data, 'shipping_address_phone') ? $data['shipping_address_phone'] : $this->shipping_address_phone;
-
-        if (Arr::has($data, 'shipping_address_zipcode') && $data['shipping_address_zipcode'] !== $this->shipping_address_zipcode) {
-            $address = AddressSearch::getByPostalCode($data['shipping_address_zipcode'])->first();
-
-            if (!is_null($address)) {
-                /** @var State $states */
-                $states = app(State::class);
-                $this->shipping_address_city = $address->getCityName();
-                $this->shipping_address_region = Arr::get($states->getByCode($address->getStateCode()), 'value');
-            }
-        }
-
         $this->shipping_address_zipcode = Arr::has($data, 'shipping_address_zipcode') ? $data['shipping_address_zipcode'] : $this->shipping_address_zipcode;
 
         $this->billing_same = Arr::has($data, 'billing_same') ? $data['billing_same'] : $this->billing_same;
@@ -158,6 +146,26 @@ class Cart extends Model
         }
 
         $this->save();
+    }
+
+    public function updateZipCode(array $data)
+    {
+        if (Arr::has($data, 'zipcode')) {
+            $address = AddressSearch::getByPostalCode($data['zipcode'])->first();
+
+            if (!is_null($address)) {
+                /** @var State $states */
+                $states = app(State::class);
+                $this->shipping_address_city = $address->getCityName();
+                $this->shipping_address_region = Arr::get($states->getByCode($address->getStateCode()), 'value');
+                $this->save();
+            }
+        }
+    }
+
+    public function updateShipping(array $data)
+    {
+
     }
 
     /***************************************************************************************
