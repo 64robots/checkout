@@ -85,9 +85,7 @@ class Cart extends Model
 
         $productForeignKey = Product::getForeignKey();
         if (Arr::get($data, $productForeignKey) !== null) {
-            CartItem::makeOne($cart, [
-                $productForeignKey => $data[$productForeignKey]
-            ]);
+            CartItem::makeOne($cart, $data);
         }
 
         return $cart;
