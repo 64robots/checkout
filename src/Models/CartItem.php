@@ -87,8 +87,8 @@ class CartItem extends Model
         $cartItem = new CartItem;
         $cartItem->cart_id = $cart->id;
         $cartItem->{$productForeignKey} = $product->id;
-        $cartItem->price = $product->getPrice();
         $cartItem->quantity = Arr::get($data, 'quantity', 1);
+        $cartItem->price = $product->getPrice() * $cartItem->quantity;
         $cartItem->token = Token::generate();
         $cartItem->save();
 
