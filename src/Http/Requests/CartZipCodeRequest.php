@@ -22,7 +22,7 @@ class CartZipCodeRequest extends JsonFormRequest
     public function rules()
     {
         return [
-            'zipcode' => 'string'
+            'zipcode' => 'postal_code:US'
         ];
     }
 }

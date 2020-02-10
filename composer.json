@@ -9,7 +9,8 @@
         "php": "^7.1.3",
         "illuminate/support": "^6.10",
         "64robots/stripe": "*",
-        "guzzlehttp/guzzle": "^6.5"
+        "guzzlehttp/guzzle": "^6.5",
+        "axlon/laravel-postal-code-validation": "^2.0"
     },
     "require-dev": {
         "filp/whoops": "^2.0",
