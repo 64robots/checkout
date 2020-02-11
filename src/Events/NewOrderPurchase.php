@@ -11,7 +11,7 @@ class NewOrderPurchase
     use Dispatchable, SerializesModels;
 
     /** @var OrderPurchase */
-    private $order;
+    public $order;
 
     /**
      * @param OrderPurchase $order

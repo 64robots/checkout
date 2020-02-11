@@ -11,7 +11,7 @@ class NewOrder
     use Dispatchable, SerializesModels;
 
     /** @var Order */
-    private $order;
+    public $order;
 
     /**
      * @param Order $order
