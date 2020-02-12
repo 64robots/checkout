@@ -139,4 +139,19 @@ class Order extends Model
     {
         return $this->id;
     }
+
+    public function hasDiscount()
+    {
+        return $this->discount > 0;
+    }
+
+    public function hasTax()
+    {
+        return $this->tax > 0;
+    }
+
+    public function hasShipping()
+    {
+        return $this->shipping > 0;
+    }
 }
