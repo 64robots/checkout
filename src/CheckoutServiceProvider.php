@@ -42,7 +42,7 @@ class CheckoutServiceProvider extends ServiceProvider
         $this->app->bind(Coupon::class, function () {
             $couponClass = config('checkout.coupon_model');
 
-            return new ConfigurableModel($couponClass);
+            return new ConfigurableModel(new $couponClass);
         });
 
         $this->app->singleton(State::class, function () {
