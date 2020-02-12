@@ -70,13 +70,4 @@ class OrderItem extends Model
 
         return $orderItem;
     }
-
-    /***************************************************************************************
-     ** HELPERS
-     ***************************************************************************************/
-
-    public function getFormattedPrice()
-    {
-        return displayMoney($this->price * $this->quantity);
-    }
 }
