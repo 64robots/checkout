@@ -8,13 +8,13 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
+use R64\Checkout\Contracts\Coupon;
 use R64\Checkout\Contracts\Customer;
 use R64\Checkout\Contracts\Product;
 use R64\Checkout\Contracts\State;
 use R64\Checkout\Helpers\Address\GeoNames;
 use R64\Checkout\Models\Cart;
 use R64\Checkout\Contracts\PaymentHandler;
-use R64\Checkout\Models\Coupon;
 use R64\Stripe\PaymentProcessor;
 
 class CheckoutServiceProvider extends ServiceProvider
@@ -42,7 +42,7 @@ class CheckoutServiceProvider extends ServiceProvider
         $this->app->bind(Coupon::class, function () {
             $couponClass = config('checkout.coupon_model');
 
-            return new $couponClass;
+            return new ConfigurableModel($couponClass);
         });
 
         $this->app->singleton(State::class, function () {
