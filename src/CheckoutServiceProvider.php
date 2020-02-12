@@ -14,6 +14,7 @@ use R64\Checkout\Contracts\State;
 use R64\Checkout\Helpers\Address\GeoNames;
 use R64\Checkout\Models\Cart;
 use R64\Checkout\Contracts\PaymentHandler;
+use R64\Checkout\Models\Coupon;
 use R64\Stripe\PaymentProcessor;
 
 class CheckoutServiceProvider extends ServiceProvider
@@ -36,6 +37,12 @@ class CheckoutServiceProvider extends ServiceProvider
             $cartClass = config('checkout.cart_model');
 
             return new $cartClass;
+        });
+
+        $this->app->bind(Coupon::class, function () {
+            $couponClass = config('checkout.coupon_model');
+
+            return new $couponClass;
         });
 
         $this->app->singleton(State::class, function () {
