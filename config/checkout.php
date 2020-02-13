@@ -38,5 +38,6 @@ return [
     'customer_model' => R64\Checkout\Models\Customer::class,
     'cart_model' => R64\Checkout\Models\Cart::class,
     'coupon_model' => R64\Checkout\Models\Coupon::class,
+    'product_resource' => R64\Checkout\Http\Resources\ProductResource::class,
     'payment' => R64\Checkout\PaymentHandler::class
 ];

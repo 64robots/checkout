@@ -21,6 +21,10 @@ class CheckoutServiceProvider extends ServiceProvider
 {
     public function register()
     {
+        $this->mergeConfigFrom(
+            __DIR__ . '/../config/checkout.php', 'checkout'
+        );
+
         $this->app->singleton(Product::class, function () {
             $productClass = config('checkout.product_model');
 

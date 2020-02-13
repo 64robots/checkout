@@ -14,12 +14,14 @@ class CartItemResource extends JsonResource
      */
     public function toArray($request)
     {
+        $productResource = config('checkout.product_resource');
+
         return [
             'cart_item_token' => $this->token,
             'price' => displayMoney($this->price),
             'quantity' => $this->quantity,
             'customer_note' => $this->customer_note,
-            'product' => new ProductResource($this->whenLoaded('product'))
+            'product' => new $productResource($this->whenLoaded('product'))
         ];
     }
 }
