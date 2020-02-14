@@ -55,7 +55,7 @@ class Order extends Model
 
     public function orderItems()
     {
-        return $this->hasMany(OrderItem::getClassName(), OrderItem::getForeignKey());
+        return $this->hasMany(OrderItem::getClassName(), \R64\Checkout\Facades\Order::getForeignKey());
     }
 
     public function customer()

@@ -58,7 +58,7 @@ class Cart extends Model
 
     public function cartItems()
     {
-        return $this->hasMany(CartItem::getClassName(), CartItem::getForeignKey());
+        return $this->hasMany(CartItem::getClassName(), \R64\Checkout\Facades\Cart::getForeignKey());
     }
 
     public function coupon()
