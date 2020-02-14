@@ -37,7 +37,10 @@ return [
     'product_model' => R64\Checkout\Models\Product::class,
     'customer_model' => R64\Checkout\Models\Customer::class,
     'cart_model' => R64\Checkout\Models\Cart::class,
+    'cart_item_model' => R64\Checkout\Models\CartItem::class,
     'coupon_model' => R64\Checkout\Models\Coupon::class,
+    'order_model' => R64\Checkout\Models\Order::class,
+    'order_item_model' => R64\Checkout\Models\OrderItem::class,
     'product_resource' => R64\Checkout\Http\Resources\ProductResource::class,
     'payment' => R64\Checkout\PaymentHandler::class
 ];

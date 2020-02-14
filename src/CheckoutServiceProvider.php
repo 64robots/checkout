@@ -8,12 +8,15 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
+use R64\Checkout\Contracts\Cart;
+use R64\Checkout\Contracts\CartItem;
 use R64\Checkout\Contracts\Coupon;
 use R64\Checkout\Contracts\Customer;
+use R64\Checkout\Contracts\Order;
+use R64\Checkout\Contracts\OrderItem;
 use R64\Checkout\Contracts\Product;
 use R64\Checkout\Contracts\State;
 use R64\Checkout\Helpers\Address\GeoNames;
-use R64\Checkout\Models\Cart;
 use R64\Checkout\Contracts\PaymentHandler;
 use R64\Stripe\PaymentProcessor;
 
@@ -25,13 +28,13 @@ class CheckoutServiceProvider extends ServiceProvider
             __DIR__ . '/../config/checkout.php', 'checkout'
         );
 
-        $this->app->singleton(Product::class, function () {
+        $this->app->bind(Product::class, function () {
             $productClass = config('checkout.product_model');
 
             return new ConfigurableModel(new $productClass);
         });
 
-        $this->app->singleton(Customer::class, function () {
+        $this->app->bind(Customer::class, function () {
             $customerClass = config('checkout.customer_model');
 
             return new ConfigurableModel(new $customerClass);
@@ -40,7 +43,25 @@ class CheckoutServiceProvider extends ServiceProvider
         $this->app->bind(Cart::class, function () {
             $cartClass = config('checkout.cart_model');
 
-            return new $cartClass;
+            return new ConfigurableModel(new $cartClass);
+        });
+
+        $this->app->bind(CartItem::class, function () {
+            $cartItemClass = config('checkout.cart_item_model');
+
+            return new ConfigurableModel(new $cartItemClass);
+        });
+
+        $this->app->bind(Order::class, function () {
+            $orderClass = config('checkout.order_model');
+
+            return new ConfigurableModel(new $orderClass);
+        });
+
+        $this->app->bind(OrderItem::class, function () {
+            $orderItemClass = config('checkout.order_item_model');
+
+            return new ConfigurableModel(new $orderItemClass);
         });
 
         $this->app->bind(Coupon::class, function () {

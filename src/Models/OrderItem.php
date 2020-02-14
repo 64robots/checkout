@@ -1,11 +1,14 @@
 <?php
 namespace R64\Checkout\Models;
 
+use Illuminate\Support\Arr;
+use R64\Checkout\Facades\Product;
+use R64\Checkout\Facades\CartItem;
+use R64\Checkout\Facades\Order;
+
 // extends
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Arr;
-use R64\Checkout\Facades\Product;
 
 class OrderItem extends Model
 {
@@ -29,7 +32,7 @@ class OrderItem extends Model
 
     public function cartItem()
     {
-        return $this->belongsTo(CartItem::class, 'cart_item_id');
+        return $this->belongsTo(CartItem::getClassName(), CartItem::getForeignKey());
     }
 
     /***************************************************************************************
@@ -41,10 +44,11 @@ class OrderItem extends Model
         $orderItem = new self;
 
         $productForeignKey = Product::getForeignKey();
+        $cartItemForeignKey = CartItem::getForeignKey();
 
         $orderItem->order_id = Arr::get($data, 'order_id');
         $orderItem->{$productForeignKey} = Arr::get($data, $productForeignKey);
-        $orderItem->cart_item_id = Arr::get($data, 'cart_item_id');
+        $orderItem->{$cartItemForeignKey} = Arr::get($data, $cartItemForeignKey);
         $orderItem->price = Arr::get($data, 'price');
         $orderItem->quantity = Arr::get($data, 'quantity');
         $orderItem->name = Arr::get($data, 'name');
@@ -58,11 +62,13 @@ class OrderItem extends Model
         $product = $cartItem->product;
 
         $productForeignKey = Product::getForeignKey();
+        $orderForeignKey = Order::getForeignKey();
+        $cartItemForeignKey = CartItem::getForeignKey();
 
         $orderItem = static::makeOne([
-            'order_id' => $orderId,
+            $orderForeignKey => $orderId,
             $productForeignKey => $product->id,
-            'cart_item_id' => $cartItem->id,
+            $cartItemForeignKey => $cartItem->id,
             'price' => $cartItem->price,
             'quantity' => $cartItem->quantity,
             'name' => $product->getName()

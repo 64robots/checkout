@@ -7,6 +7,8 @@ use Illuminate\Support\Str;
 use R64\Checkout\Helpers\Token;
 use Illuminate\Database\Eloquent\Model;
 use R64\Checkout\Facades\Product;
+use R64\Checkout\Facades\Cart;
+
 // includes
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -59,7 +61,7 @@ class CartItem extends Model
 
     public function cart()
     {
-        return $this->belongsTo(\R64\Checkout\Models\Cart::class, 'cart_id');
+        return $this->belongsTo(Cart::getClassName(), Cart::getForeignKey());
     }
 
     public function product()
@@ -74,7 +76,7 @@ class CartItem extends Model
     public static function makeOne(Cart $cart, array $data)
     {
         $productForeignKey = Product::getForeignKey();
-        $product = (Product::getModel())->findOrFail($data[$productForeignKey]);
+        $product = Product::getClassName()::findOrFail($data[$productForeignKey]);
 
         $cartItem = $cart->cartItems()->where($productForeignKey, $product->id)->first();
 
@@ -85,7 +87,7 @@ class CartItem extends Model
         }
 
         $cartItem = new CartItem;
-        $cartItem->cart_id = $cart->id;
+        $cartItem->{Cart::getForeignKey()} = $cart->id;
         $cartItem->{$productForeignKey} = $product->id;
         $cartItem->quantity = Arr::get($data, 'quantity', 1);
         $cartItem->price = $product->getPrice() * $cartItem->quantity;

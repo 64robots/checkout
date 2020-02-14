@@ -14,11 +14,13 @@ class OrderItemResource extends JsonResource
      */
     public function toArray($request)
     {
+        $productResource = config('checkout.product_resource');
+
         return [
             'name' => $this->name,
             'price' => displayMoney($this->price),
             'quantity' => $this->quantity,
-            'product' => new ProductResource($this->whenLoaded('product'))
+            'product' => new $productResource($this->whenLoaded('product'))
         ];
     }
 }

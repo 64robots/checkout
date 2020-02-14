@@ -3,6 +3,7 @@ namespace R64\Checkout\Models;
 
 // extends
 use R64\Checkout\Facades\Customer;
+use R64\Checkout\Facades\Cart;
 use Illuminate\Database\Eloquent\Model;
 
 // includes
@@ -49,12 +50,12 @@ class Order extends Model
 
     public function cart()
     {
-        return $this->belongsTo(Cart::class, 'cart_id');
+        return $this->belongsTo(Cart::getClassName(), Cart::getForeignKey());
     }
 
-    public function order_items()
+    public function orderItems()
     {
-        return $this->hasMany(OrderItem::class, 'order_id');
+        return $this->hasMany(OrderItem::getClassName(), OrderItem::getForeignKey());
     }
 
     public function customer()
@@ -74,7 +75,8 @@ class Order extends Model
     public static function makeOne(OrderPurchase $purchase, array $data)
     {
         $order = new self;
-        $cart = Cart::byToken(Arr::get($data, 'cart_token'))->first();
+
+        $cart = Cart::getClassName()::byToken(Arr::get($data, 'cart_token'))->first();
 
         $customerForeignKey = Customer::getForeignKey();
 
@@ -103,7 +105,7 @@ class Order extends Model
         $order->customer_notes = Arr::get($data, 'customer_notes');
         $order->admin_notes = Arr::get($data, 'admin_notes');
         $order->currency = config('checkout.currency.code');
-        $order->cart_id = $cart->id;
+        $order->{Cart::getForeignKey()} = $cart->id;
         $order->items_total = $cart->items_subtotal;
         $order->tax = $cart->tax;
         $order->tax_rate = $cart->tax_rate;

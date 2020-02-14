@@ -21,7 +21,7 @@ class OrderController extends Controller
      ***************************************************************************************/
     public function get(Order $order)
     {
-        $order->load(['order_items.product', 'orderPurchase']);
+        $order->load(['orderItems.product', 'orderPurchase']);
 
         return $this->success(new OrderResource($order));
     }
@@ -42,7 +42,7 @@ class OrderController extends Controller
         event(new NewOrderPurchase($purchase));
 
         $order = Order::makeOne($purchase, $request->order);
-        $order->load(['order_items', 'orderPurchase']);
+        $order->load(['orderItems', 'orderPurchase']);
 
         event(new NewOrder($order));
 

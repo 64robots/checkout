@@ -2,9 +2,12 @@
 
 namespace R64\Checkout\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use R64\Checkout\Facades\Customer;
+use R64\Checkout\Facades\Order;
 use R64\Checkout\Contracts\Customer as CustomerContract;
+
+//extends
+use Illuminate\Database\Eloquent\Model;
 
 class OrderPurchase extends Model
 {
@@ -22,7 +25,7 @@ class OrderPurchase extends Model
 
     public function order()
     {
-        return $this->belongsTo(Order::class);
+        return $this->belongsTo(Order::getClassName(), Order::getForeignKey());
     }
 
     /***************************************************************************************

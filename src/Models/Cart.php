@@ -10,9 +10,10 @@ use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use R64\Checkout\Facades\Product;
 use R64\Checkout\Facades\Customer;
+use R64\Checkout\Facades\CartItem;
+use R64\Checkout\Facades\Coupon;
 use R64\Checkout\Contracts\State;
 use R64\Checkout\Facades\AddressSearch;
-use R64\Checkout\Facades\Shipping;
 use R64\Checkout\Helpers\Price;
 
 class Cart extends Model
@@ -57,12 +58,12 @@ class Cart extends Model
 
     public function cartItems()
     {
-        return $this->hasMany(\R64\Checkout\Models\CartItem::class, 'cart_id');
+        return $this->hasMany(CartItem::getClassName(), CartItem::getForeignKey());
     }
 
     public function coupon()
     {
-        return $this->belongsTo(\R64\Checkout\Facades\Coupon::getClassName(), \R64\Checkout\Facades\Coupon::getForeignKey());
+        return $this->belongsTo(Coupon::getClassName(), Coupon::getForeignKey());
     }
 
     /***************************************************************************************
@@ -85,7 +86,7 @@ class Cart extends Model
 
         $productForeignKey = Product::getForeignKey();
         if (Arr::get($data, $productForeignKey) !== null) {
-            CartItem::makeOne($cart, $data);
+            CartItem::getClassName()::makeOne($cart, $data);
         }
 
         return $cart;
@@ -94,7 +95,7 @@ class Cart extends Model
     public function updateMe(array $data)
     {
         if (isset($data['coupon_code'])) {
-            $coupon = Coupon::byCode($data['coupon_code'])->first();
+            $coupon = Coupon::getClassName()::byCode($data['coupon_code'])->first();
             $this->coupon_id = $coupon->id;
             $this->discount = $coupon->calculateDiscount($this);
             $this->setTax();
@@ -195,7 +196,7 @@ class Cart extends Model
 
     public function setDiscount()
     {
-        if (!is_null($this->coupon_id)) {
+        if (!is_null($this->{Coupon::getForeignKey()})) {
             $this->discount = $this->coupon->calculateDiscount($this);
             $this->save();
         }
@@ -205,13 +206,6 @@ class Cart extends Model
     {
         $this->tax = Price::getTax($this->items_subtotal - $this->discount, $this->tax_rate);
         $this->save();
-    }
-
-    public function calculateTotal($shippingId)
-    {
-        $shippingMethod = Shipping::find($shippingId);
-
-        return $this->total + Arr::get($shippingMethod, 'price', 0);
     }
 
     public function hasDiscount()
