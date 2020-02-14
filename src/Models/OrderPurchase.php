@@ -2,8 +2,6 @@
 
 namespace R64\Checkout\Models;
 
-use R64\Checkout\Facades\Customer;
-use R64\Checkout\Facades\Order;
 use R64\Checkout\Contracts\Customer as CustomerContract;
 
 //extends
@@ -25,7 +23,7 @@ class OrderPurchase extends Model
 
     public function order()
     {
-        return $this->belongsTo(Order::getClassName(), Order::getForeignKey());
+        return $this->belongsTo(\R64\Checkout\Facades\Order::getClassName(), \R64\Checkout\Facades\Order::getForeignKey());
     }
 
     /***************************************************************************************
@@ -34,7 +32,7 @@ class OrderPurchase extends Model
 
     public static function makeOne(array $data, CustomerContract $customer)
     {
-        $customerForeignKey = Customer::getForeignKey();
+        $customerForeignKey = \R64\Checkout\Facades\Customer::getForeignKey();
 
         $purchase = new self;
         $purchase->{$customerForeignKey} = $customer->getId();
@@ -54,7 +52,7 @@ class OrderPurchase extends Model
 
     public static function makeFreePurchase(array $data, CustomerContract $customer)
     {
-        $customerForeignKey = Customer::getForeignKey();
+        $customerForeignKey = \R64\Checkout\Facades\Customer::getForeignKey();
 
         $purchase = new self;
         $purchase->{$customerForeignKey} = $customer->getId();

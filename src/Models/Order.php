@@ -2,8 +2,6 @@
 namespace R64\Checkout\Models;
 
 // extends
-use R64\Checkout\Facades\Customer;
-use R64\Checkout\Facades\Cart;
 use Illuminate\Database\Eloquent\Model;
 
 // includes
@@ -50,17 +48,17 @@ class Order extends Model
 
     public function cart()
     {
-        return $this->belongsTo(Cart::getClassName(), Cart::getForeignKey());
+        return $this->belongsTo(\R64\Checkout\Facades\Cart::getClassName(), \R64\Checkout\Facades\Cart::getForeignKey());
     }
 
     public function orderItems()
     {
-        return $this->hasMany(OrderItem::getClassName(), \R64\Checkout\Facades\Order::getForeignKey());
+        return $this->hasMany(\R64\Checkout\Facades\OrderItem::getClassName(), \R64\Checkout\Facades\Order::getForeignKey());
     }
 
     public function customer()
     {
-        return $this->belongsTo(Customer::getClassName(), Customer::getForeignKey());
+        return $this->belongsTo(\R64\Checkout\Facades\Customer::getClassName(), \R64\Checkout\Facades\Customer::getForeignKey());
     }
 
     public function orderPurchase()
@@ -76,12 +74,12 @@ class Order extends Model
     {
         $order = new self;
 
-        $cart = Cart::getClassName()::byToken(Arr::get($data, 'cart_token'))->first();
+        $cart = \R64\Checkout\Facades\Cart::getClassName()::byToken(Arr::get($data, 'cart_token'))->first();
 
-        $customerForeignKey = Customer::getForeignKey();
+        $customerForeignKey = \R64\Checkout\Facades\Customer::getForeignKey();
 
         $order->{$customerForeignKey} = $purchase->{$customerForeignKey};
-        $order->coupon_id = $cart->coupon_id;
+        $order->{\R64\Checkout\Facades\Coupon::getForeignKey()} = $cart->{\R64\Checkout\Facades\Coupon::getForeignKey()};
         $order->customer_email = !empty($data['customer_email']) ? $data['customer_email'] : $purchase->email;
         $order->shipping_first_name = Arr::get($data, 'shipping_first_name');
         $order->shipping_last_name = Arr::get($data, 'shipping_last_name');
@@ -105,7 +103,7 @@ class Order extends Model
         $order->customer_notes = Arr::get($data, 'customer_notes');
         $order->admin_notes = Arr::get($data, 'admin_notes');
         $order->currency = config('checkout.currency.code');
-        $order->{Cart::getForeignKey()} = $cart->id;
+        $order->{\R64\Checkout\Facades\Cart::getForeignKey()} = $cart->id;
         $order->items_total = $cart->items_subtotal;
         $order->tax = $cart->tax;
         $order->tax_rate = $cart->tax_rate;

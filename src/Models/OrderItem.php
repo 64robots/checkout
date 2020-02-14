@@ -2,9 +2,6 @@
 namespace R64\Checkout\Models;
 
 use Illuminate\Support\Arr;
-use R64\Checkout\Facades\Product;
-use R64\Checkout\Facades\CartItem;
-use R64\Checkout\Facades\Order;
 
 // extends
 use Illuminate\Database\Eloquent\Model;
@@ -27,12 +24,12 @@ class OrderItem extends Model
 
     public function product()
     {
-        return $this->belongsTo(Product::getClassName(), Product::getForeignKey());
+        return $this->belongsTo(\R64\Checkout\Facades\Product::getClassName(), \R64\Checkout\Facades\Product::getForeignKey());
     }
 
     public function cartItem()
     {
-        return $this->belongsTo(CartItem::getClassName(), CartItem::getForeignKey());
+        return $this->belongsTo(\R64\Checkout\Facades\CartItem::getClassName(), \R64\Checkout\Facades\CartItem::getForeignKey());
     }
 
     /***************************************************************************************
@@ -43,8 +40,8 @@ class OrderItem extends Model
     {
         $orderItem = new self;
 
-        $productForeignKey = Product::getForeignKey();
-        $cartItemForeignKey = CartItem::getForeignKey();
+        $productForeignKey = \R64\Checkout\Facades\Product::getForeignKey();
+        $cartItemForeignKey = \R64\Checkout\Facades\CartItem::getForeignKey();
 
         $orderItem->order_id = Arr::get($data, 'order_id');
         $orderItem->{$productForeignKey} = Arr::get($data, $productForeignKey);

@@ -6,8 +6,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use R64\Checkout\Helpers\Token;
 use Illuminate\Database\Eloquent\Model;
-use R64\Checkout\Facades\Product;
-use R64\Checkout\Facades\Cart;
 
 // includes
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -61,12 +59,12 @@ class CartItem extends Model
 
     public function cart()
     {
-        return $this->belongsTo(Cart::getClassName(), Cart::getForeignKey());
+        return $this->belongsTo(\R64\Checkout\Facades\Cart::getClassName(), \R64\Checkout\Facades\Cart::getForeignKey());
     }
 
     public function product()
     {
-        return $this->belongsTo(Product::getClassName(), Product::getForeignKey());
+        return $this->belongsTo(\R64\Checkout\Facades\Product::getClassName(), \R64\Checkout\Facades\Product::getForeignKey());
     }
 
     /***************************************************************************************
@@ -75,8 +73,8 @@ class CartItem extends Model
 
     public static function makeOne(Cart $cart, array $data)
     {
-        $productForeignKey = Product::getForeignKey();
-        $product = Product::getClassName()::findOrFail($data[$productForeignKey]);
+        $productForeignKey = \R64\Checkout\Facades\Product::getForeignKey();
+        $product = \R64\Checkout\Facades\Product::getClassName()::findOrFail($data[$productForeignKey]);
 
         $cartItem = $cart->cartItems()->where($productForeignKey, $product->id)->first();
 
@@ -87,7 +85,7 @@ class CartItem extends Model
         }
 
         $cartItem = new CartItem;
-        $cartItem->{Cart::getForeignKey()} = $cart->id;
+        $cartItem->{\R64\Checkout\Facades\Cart::getForeignKey()} = $cart->id;
         $cartItem->{$productForeignKey} = $product->id;
         $cartItem->quantity = Arr::get($data, 'quantity', 1);
         $cartItem->price = $product->getPrice() * $cartItem->quantity;

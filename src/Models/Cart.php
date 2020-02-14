@@ -8,10 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 use R64\Checkout\Helpers\Token;
 use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use R64\Checkout\Facades\Product;
-use R64\Checkout\Facades\Customer;
-use R64\Checkout\Facades\CartItem;
-use R64\Checkout\Facades\Coupon;
 use R64\Checkout\Contracts\State;
 use R64\Checkout\Facades\AddressSearch;
 use R64\Checkout\Helpers\Price;
@@ -53,17 +49,17 @@ class Cart extends Model
 
     public function customer()
     {
-        return $this->belongsTo(Customer::getClassName(), Customer::getForeignKey());
+        return $this->belongsTo(\R64\Checkout\Facades\Customer::getClassName(), \R64\Checkout\Facades\Customer::getForeignKey());
     }
 
     public function cartItems()
     {
-        return $this->hasMany(CartItem::getClassName(), \R64\Checkout\Facades\Cart::getForeignKey());
+        return $this->hasMany(\R64\Checkout\Facades\CartItem::getClassName(), \R64\Checkout\Facades\Cart::getForeignKey());
     }
 
     public function coupon()
     {
-        return $this->belongsTo(Coupon::getClassName(), Coupon::getForeignKey());
+        return $this->belongsTo(\R64\Checkout\Facades\Coupon::getClassName(), \R64\Checkout\Facades\Coupon::getForeignKey());
     }
 
     /***************************************************************************************
@@ -74,7 +70,7 @@ class Cart extends Model
     {
         $cart = new self;
 
-        $customerForeignKey = Customer::getForeignKey();
+        $customerForeignKey = \R64\Checkout\Facades\Customer::getForeignKey();
 
         $cart->{$customerForeignKey} = isset($data[$customerForeignKey]) ? $data[$customerForeignKey] : null;
         $cart->customer_email = auth()->user() ? auth()->user()->email : null;
@@ -84,9 +80,9 @@ class Cart extends Model
         $cart->ip_address = $data['ip_address'];
         $cart->save();
 
-        $productForeignKey = Product::getForeignKey();
+        $productForeignKey = \R64\Checkout\Facades\Product::getForeignKey();
         if (Arr::get($data, $productForeignKey) !== null) {
-            CartItem::getClassName()::makeOne($cart, $data);
+            \R64\Checkout\Facades\CartItem::getClassName()::makeOne($cart, $data);
         }
 
         return $cart;
@@ -95,8 +91,8 @@ class Cart extends Model
     public function updateMe(array $data)
     {
         if (isset($data['coupon_code'])) {
-            $coupon = Coupon::getClassName()::byCode($data['coupon_code'])->first();
-            $this->coupon_id = $coupon->id;
+            $coupon = \R64\Checkout\Facades\Coupon::getClassName()::byCode($data['coupon_code'])->first();
+            $this->{\R64\Checkout\Facades\Coupon::getForeignKey()} = $coupon->id;
             $this->discount = $coupon->calculateDiscount($this);
             $this->setTax();
             $this->setTotal();
@@ -196,7 +192,7 @@ class Cart extends Model
 
     public function setDiscount()
     {
-        if (!is_null($this->{Coupon::getForeignKey()})) {
+        if (!is_null($this->{\R64\Checkout\Facades\Coupon::getForeignKey()})) {
             $this->discount = $this->coupon->calculateDiscount($this);
             $this->save();
         }
