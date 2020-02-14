@@ -58,9 +58,9 @@ class OrderItem extends Model
     {
         $product = $cartItem->product;
 
-        $productForeignKey = Product::getForeignKey();
-        $orderForeignKey = Order::getForeignKey();
-        $cartItemForeignKey = CartItem::getForeignKey();
+        $productForeignKey = \R64\Checkout\Facades\Product::getForeignKey();
+        $orderForeignKey = \R64\Checkout\Facades\Order::getForeignKey();
+        $cartItemForeignKey = \R64\Checkout\Facades\CartItem::getForeignKey();
 
         $orderItem = static::makeOne([
             $orderForeignKey => $orderId,

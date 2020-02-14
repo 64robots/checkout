@@ -40,7 +40,7 @@ class PaymentHandler implements PaymentHandlerContract
 
     protected function getOrCreateCustomer(array $order, array $stripeDetails, CustomerContract $customer)
     {
-        $orderPurchase = OrderPurchase::where('customer_id', $customer->getId())->first();
+        $orderPurchase = OrderPurchase::where(\R64\Checkout\Facades\Customer::getForeignKey(), $customer->getId())->first();
 
         if ($orderPurchase) {
             return $this->processor->getCustomer($orderPurchase->stripe_customer_id);
@@ -89,15 +89,17 @@ class PaymentHandler implements PaymentHandlerContract
 
     protected function getAmount($order)
     {
-        $cart = Cart::byToken($order['cart_token'])->first();
+        $cart = \R64\Checkout\Facades\Cart::getClassName()::byToken($order['cart_token'])->first();
 
         return $cart->total;
     }
 
     protected function recordPurchase($paymentResponse, array $order, CustomerContract $customer, StripeCustomer $stripeCustomer)
     {
+        $customerId = \R64\Checkout\Facades\Customer::getForeignKey();
+
         return OrderPurchase::makeOne([
-            'customer_id' => $customer->getId(),
+            $customerId => $customer->getId(),
             'order_data' => $order,
             'email' => $stripeCustomer->email,
             'amount' => $paymentResponse->amount,
