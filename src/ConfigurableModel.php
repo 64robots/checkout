@@ -18,6 +18,14 @@ class ConfigurableModel
         $this->model = $model;
     }
 
+    /**
+     * @return Model
+     */
+    public function getModel()
+    {
+        return $this->model;
+    }
+
     public function getClassName()
     {
         return get_class($this->getModel());
