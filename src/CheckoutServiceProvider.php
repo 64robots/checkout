@@ -34,10 +34,18 @@ class CheckoutServiceProvider extends ServiceProvider
             return new ConfigurableModel(new $productClass);
         });
 
+        $this->app->bind(\R64\Checkout\Models\Product::class, function () {
+            return \R64\Checkout\Facades\Product::getModel();
+        });
+
         $this->app->bind(Customer::class, function () {
             $customerClass = config('checkout.customer_model');
 
             return new ConfigurableModel(new $customerClass);
+        });
+
+        $this->app->bind(\R64\Checkout\Models\Customer::class, function () {
+            return \R64\Checkout\Facades\Customer::getModel();
         });
 
         $this->app->bind(Cart::class, function () {
@@ -46,10 +54,18 @@ class CheckoutServiceProvider extends ServiceProvider
             return new ConfigurableModel(new $cartClass);
         });
 
+        $this->app->bind(\R64\Checkout\Models\Cart::class, function () {
+            return \R64\Checkout\Facades\Cart::getModel();
+        });
+
         $this->app->bind(CartItem::class, function () {
             $cartItemClass = config('checkout.cart_item_model');
 
             return new ConfigurableModel(new $cartItemClass);
+        });
+
+        $this->app->bind(\R64\Checkout\Models\CartItem::class, function () {
+            return \R64\Checkout\Facades\CartItem::getModel();
         });
 
         $this->app->bind(Order::class, function () {
@@ -58,16 +74,28 @@ class CheckoutServiceProvider extends ServiceProvider
             return new ConfigurableModel(new $orderClass);
         });
 
+        $this->app->bind(\R64\Checkout\Models\Order::class, function () {
+            return \R64\Checkout\Facades\Order::getModel();
+        });
+
         $this->app->bind(OrderItem::class, function () {
             $orderItemClass = config('checkout.order_item_model');
 
             return new ConfigurableModel(new $orderItemClass);
         });
 
+        $this->app->bind(\R64\Checkout\Models\OrderItem::class, function () {
+            return \R64\Checkout\Facades\OrderItem::getModel();
+        });
+
         $this->app->bind(Coupon::class, function () {
             $couponClass = config('checkout.coupon_model');
 
             return new ConfigurableModel(new $couponClass);
+        });
+
+        $this->app->bind(\R64\Checkout\Models\Coupon::class, function () {
+            return \R64\Checkout\Facades\Coupon::getModel();
         });
 
         $this->app->singleton(State::class, function () {
