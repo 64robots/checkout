@@ -2,6 +2,7 @@
 
 namespace R64\Checkout\Tests;
 
+use Axlon\PostalCodeValidation\ValidationServiceProvider;
 use R64\Checkout\CheckoutServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
@@ -17,7 +18,8 @@ class TestCase extends \Orchestra\Testbench\TestCase
     protected function getPackageProviders($app)
     {
         return [
-            CheckoutServiceProvider::class
+            CheckoutServiceProvider::class,
+            ValidationServiceProvider::class
         ];
     }
 

@@ -173,7 +173,7 @@ class CartControllerTest extends TestCase
      * @test
      * PUT /api/carts/{cart}
      */
-    public function billing_information_is_not_the_same_as_shipping_when_billing_same_false()
+    public function billing_information_is_not_the_same_as_shipping_when_billing_same_is_false()
     {
         $cart = factory(Cart::class)->create(['billing_same' => false]);
 
