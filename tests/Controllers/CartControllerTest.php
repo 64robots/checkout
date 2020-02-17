@@ -5,8 +5,10 @@ namespace Tests\Controllers\Checkout;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use phpDocumentor\Reflection\DocBlock\Description;
 use R64\Checkout\Helpers\Price;
 use R64\Checkout\Models\Cart;
+use R64\Checkout\Models\CartItem;
 use R64\Checkout\Models\Coupon;
 use R64\Checkout\Models\Customer;
 use R64\Checkout\Models\Product;
@@ -14,7 +16,7 @@ use R64\Checkout\Tests\TestCase;
 
 class CartControllerTest extends TestCase
 {
-    use RefreshDatabase, WithFaker, InteractsWithDatabase;
+    use RefreshDatabase;
 
     private $cartStructure = [
         'cart_token',
@@ -31,8 +33,8 @@ class CartControllerTest extends TestCase
                 'customer_note',
                 'product' => [
                     'name',
-                    'image'
-                ]
+                    'image',
+                ],
             ],
         ],
     ];
@@ -103,8 +105,136 @@ class CartControllerTest extends TestCase
         $this->assertCount(1, $cart['cart_items']);
         $this->assertDatabaseHas('carts', [
             'token' => $cart['cart_token'],
-            'items_subtotal' => $product->getPrice()
+            'items_subtotal' => $product->getPrice(),
         ]);
+    }
+
+    /**
+     * @test
+     * PUT /api/carts/{cart}
+     */
+    public function anybody_can_update_a_cart()
+    {
+        $cart = factory(Cart::class)->state('with_product')->create();
+
+        $this->json('PUT', "/api/carts/{$cart->token}", [
+            'customer_notes' => "here we go, it's a note",
+        ])
+            ->assertStatus(200)
+            ->assertJson(['success' => true])
+            ->assertJsonStructure([
+                'success',
+                'data' => $this->cartStructure,
+            ]);
+
+        $this->assertDatabaseHas('carts', [
+            'customer_notes' => "here we go, it's a note",
+        ]);
+    }
+
+    /**
+     * @test
+     * PUT /api/carts/{cart}
+     */
+    public function billing_information_is_the_same_as_shipping_by_default()
+    {
+        $cart = factory(Cart::class)->create();
+
+        $response = $this->json('PUT', "/api/carts/{$cart->token}", [
+            'shipping_first_name' => "first name",
+            'shipping_last_name' => "last name",
+            'shipping_address_line1' => "line 1",
+            'shipping_address_line2' => "line 2",
+            'shipping_address_city' => "city",
+            'shipping_address_region' => "region",
+            'shipping_address_zipcode' => "zipcode",
+            'shipping_address_phone' => "123123",
+        ])
+            ->assertStatus(200)
+            ->assertJson(['success' => true])
+            ->assertJsonStructure([
+                'success',
+                'data' => $this->cartStructure,
+            ]);
+
+        $response = json_decode($response->getContent(), true)['data'];
+
+        $this->assertEquals($response['shipping_first_name'], $response['billing_first_name']);
+        $this->assertEquals($response['shipping_last_name'], $response['billing_last_name']);
+        $this->assertEquals($response['shipping_address_line1'], $response['billing_address_line1']);
+        $this->assertEquals($response['shipping_address_line2'], $response['billing_address_line2']);
+        $this->assertEquals($response['shipping_address_city'], $response['billing_address_city']);
+        $this->assertEquals($response['shipping_address_region'], $response['billing_address_region']);
+        $this->assertEquals($response['shipping_address_zipcode'], $response['billing_address_zipcode']);
+        $this->assertEquals($response['shipping_address_phone'], $response['billing_address_phone']);
+    }
+
+    /**
+     * @test
+     * PUT /api/carts/{cart}
+     */
+    public function billing_information_is_not_the_same_as_shipping_when_billing_same_false()
+    {
+        $cart = factory(Cart::class)->create(['billing_same' => false]);
+
+        $response = $this->json('PUT', "/api/carts/{$cart->token}", [
+            'shipping_first_name' => "first name",
+            'shipping_last_name' => "last name",
+            'shipping_address_line1' => "line 1",
+            'shipping_address_line2' => "line 2",
+            'shipping_address_city' => "city",
+            'shipping_address_region' => "region",
+            'shipping_address_zipcode' => "zipcode",
+            'shipping_address_phone' => "123123",
+            'billing_first_name' => 'billing first name'
+        ])
+            ->assertStatus(200)
+            ->assertJson(['success' => true])
+            ->assertJsonStructure([
+                'success',
+                'data' => $this->cartStructure,
+            ]);
+
+        $response = json_decode($response->getContent(), true)['data'];
+
+        $this->assertEquals('billing first name', $response['billing_first_name']);
+
+        $this->assertNull($response['billing_last_name']);
+        $this->assertNull($response['billing_address_line1']);
+        $this->assertNull($response['billing_address_line2']);
+        $this->assertNull($response['billing_address_city']);
+        $this->assertNull($response['billing_address_region']);
+        $this->assertNull($response['billing_address_zipcode']);
+        $this->assertNull($response['billing_address_phone']);
+    }
+
+    /**
+     * @test
+     * PUT /api/carts/{cart}
+     */
+    public function discount_code_discounts_the_items_subtotal()
+    {
+        $cart = factory(Cart::class)->create();
+        $product = factory(Product::class)->create(['price' => 100000]);
+        CartItem::makeOne($cart, ['product_id' => $product->id]);
+
+        $coupon = factory(Coupon::class)->state('$10off')->create();
+
+        $response = $this->json('PUT', "/api/carts/{$cart->token}", [
+            'coupon_code' => $coupon->code,
+        ])
+            ->assertStatus(200)
+            ->assertJson(['success' => true])
+            ->assertJsonStructure([
+                'success',
+                'data' => $this->cartStructure,
+            ]);
+
+        $response = json_decode($response->getContent(), true)['data'];
+
+        $this->assertEquals('10.00', $response['discount']);
+        $this->assertEquals('1,000.00', $response['items_subtotal']);
+        $this->assertEquals('990.00', $response['total']);
     }
 
     /**
@@ -189,7 +319,7 @@ class CartControllerTest extends TestCase
     public function customer_can_update_a_cart()
     {
         $customer = factory(Customer::class)->create([
-            'email' => 'email@email.com'
+            'email' => 'email@email.com',
         ]);
         $cart = factory(Cart::class)->state('with_product')->create([
             'customer_id' => $customer->id,
@@ -207,7 +337,7 @@ class CartControllerTest extends TestCase
             ]);
 
         $this->assertDatabaseHas('carts', [
-            'customer_email' => 'new@email.com'
+            'customer_email' => 'new@email.com',
         ]);
     }
 }
