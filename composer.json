@@ -15,19 +15,20 @@
     "require-dev": {
         "filp/whoops": "^2.0",
         "fzaninotto/faker": "^1.4",
-        "phpunit/phpunit": "^7.5"
+        "phpunit/phpunit": "^8.3",
+        "orchestra/testbench": "^4.0"
     },
     "autoload": {
         "files": [
             "src/Helpers/Globals.php"
         ],
         "psr-4": {
-            "R64\\Checkout\\": "src/"
+            "R64\\Checkout\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "R64\\Checkout\\Tests\\": "tests/"
+            "R64\\Checkout\\Tests\\": "tests"
         }
     },
     "repositories": [
