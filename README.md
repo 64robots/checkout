@@ -5,7 +5,7 @@
 
 ## Checkout
 
-This package provides API endpoints and common functionality for cart, checkout, orders and coupons. You can use it with your own UI or use [Checkout Vue](https://github.com/64robots/checkout-vue) package that works out of the box.
+This package provides API endpoints and common functionality for cart, checkout, orders and coupons. You can use it with your own UI or use [Checkout Vue](https://github.com/64robots/checkout-vue) package that works with this API out of the box.
 
 ### Installation
 
