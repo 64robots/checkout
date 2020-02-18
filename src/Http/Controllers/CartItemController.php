@@ -18,7 +18,8 @@ class CartItemController extends Controller
     {
         CartItem::makeOne($cart, $request->validated());
 
-        $cart->load('cartItems.product')->fresh();
+        $cart = $cart->fresh();
+        $cart->load('cartItems.product');
 
         return $this->success(new CartResource($cart));
     }

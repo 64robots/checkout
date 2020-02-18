@@ -24,7 +24,3 @@ $factory->afterCreatingState(Cart::class, 'with_product', function (Cart $cart) 
         'cart_id' => $cart->id,
     ]);
 });
-
-$factory->state(Cart::class, 'without_user', [
-    'user_id' => null
-]);

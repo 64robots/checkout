@@ -5,7 +5,6 @@ namespace R64\Checkout\Tests\Controllers;
 use GuzzleHttp\Client;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithExceptionHandling;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use R64\Checkout\Helpers\Address\AddressSearch;
 use R64\Checkout\Helpers\Address\FakeGeoNames;
 use R64\Checkout\Helpers\Address\GeoNames;
 use R64\Checkout\Models\Cart;
