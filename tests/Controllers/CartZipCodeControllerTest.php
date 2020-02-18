@@ -12,14 +12,14 @@ use R64\Checkout\Tests\TestCase;
 
 class CartZipCodeControllerTest extends TestCase
 {
-    use RefreshDatabase, InteractsWithExceptionHandling;
+    use RefreshDatabase;
+
     /**
      * @test
      * PUT /api/carts/{cart}
      */
     public function autofill_shipping_city_and_state_from_zipcode()
     {
-        $this->withoutExceptionHandling();
         $this->instance(GeoNames::class, new FakeGeoNames(new Client(), 'username', 'code'));
         $cart = factory(Cart::class)->create();
 

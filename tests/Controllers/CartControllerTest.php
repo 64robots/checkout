@@ -186,7 +186,7 @@ class CartControllerTest extends TestCase
             'shipping_address_region' => "region",
             'shipping_address_zipcode' => "zipcode",
             'shipping_address_phone' => "123123",
-            'billing_first_name' => 'billing first name'
+            'billing_same' => false
         ])
             ->assertStatus(200)
             ->assertJson(['success' => true])
@@ -197,8 +197,7 @@ class CartControllerTest extends TestCase
 
         $response = json_decode($response->getContent(), true)['data'];
 
-        $this->assertEquals('billing first name', $response['billing_first_name']);
-
+        $this->assertNull($response['billing_first_name']);
         $this->assertNull($response['billing_last_name']);
         $this->assertNull($response['billing_address_line1']);
         $this->assertNull($response['billing_address_line2']);
@@ -214,7 +213,7 @@ class CartControllerTest extends TestCase
      */
     public function discount_code_discounts_the_items_subtotal()
     {
-        $cart = factory(Cart::class)->create();
+        $cart = factory(Cart::class)->create(['shipping' => 0]);
         $product = factory(Product::class)->create(['price' => 100000]);
         CartItem::makeOne($cart, ['product_id' => $product->id]);
 

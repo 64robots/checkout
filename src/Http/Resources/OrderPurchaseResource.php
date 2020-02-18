@@ -9,7 +9,7 @@ class OrderPurchaseResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'amount' => $this->amount,
+            'amount' => displayMoney($this->amount),
             'card_type' => $this->card_type,
             'card_last4' => $this->card_last4
         ];

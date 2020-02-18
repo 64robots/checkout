@@ -33,6 +33,8 @@ class OrderResource extends JsonResource
             'shipping_address_region' => $this->shipping_address_region,
             'shipping_address_zipcode' => $this->shipping_address_zipcode,
             'shipping_address_phone' => $this->shipping_address_phone,
+            'billing_first_name' => $this->billing_first_name,
+            'billing_last_name' => $this->billing_last_name,
             'billing_address_line1' => $this->billing_address_line1,
             'billing_address_line2' => $this->billing_address_line2,
             'billing_address_city' => $this->billing_address_city,

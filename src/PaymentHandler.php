@@ -77,7 +77,8 @@ class PaymentHandler implements PaymentHandlerContract
         $charge = $this->processor->createCharge([
             'customer' => $customer->id,
             'amount' => $this->getAmount($order),
-            'currency' => 'USD'
+            'currency' => 'USD',
+            'source' => ''
         ]);
 
         if (! $this->processor->attemptSuccessful()) {

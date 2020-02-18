@@ -9,7 +9,6 @@ return [
 //        'shipping_address_line2',
 //        'shipping_address_city',
 //        'shipping_address_region',
-//        'shipping_address_region',
 //        'shipping_address_zipcode',
 //        'shipping_address_phone',
 //        'billing_first_name',

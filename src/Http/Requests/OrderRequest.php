@@ -59,7 +59,6 @@ class OrderRequest extends JsonFormRequest
 
         $orderRules = [
             'cart_token' => 'required_if:is_post,true|string|exists:carts,token',
-            'status' => 'string|min:2',
             'customer_email' => 'required_if:is_post,true|string|email',
             'customer_notes' => 'nullable|string',
             'shipping_first_name' => 'string',

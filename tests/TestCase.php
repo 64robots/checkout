@@ -6,6 +6,7 @@ use Axlon\PostalCodeValidation\ValidationServiceProvider;
 use Illuminate\Foundation\Testing\TestResponse;
 use Illuminate\Http\JsonResponse;
 use R64\Checkout\CheckoutServiceProvider;
+use R64\Stripe\StripeServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
 {
@@ -21,7 +22,8 @@ class TestCase extends \Orchestra\Testbench\TestCase
     {
         return [
             CheckoutServiceProvider::class,
-            ValidationServiceProvider::class
+            ValidationServiceProvider::class,
+            StripeServiceProvider::class
         ];
     }
 
@@ -33,6 +35,8 @@ class TestCase extends \Orchestra\Testbench\TestCase
             'database' => ':memory:',
             'prefix' => '',
         ]);
+
+        $app['config']->set('stripe.mock', true);
     }
 
 
