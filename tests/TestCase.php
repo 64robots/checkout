@@ -3,6 +3,8 @@
 namespace R64\Checkout\Tests;
 
 use Axlon\PostalCodeValidation\ValidationServiceProvider;
+use Illuminate\Foundation\Testing\TestResponse;
+use Illuminate\Http\JsonResponse;
 use R64\Checkout\CheckoutServiceProvider;
 
 class TestCase extends \Orchestra\Testbench\TestCase
@@ -31,5 +33,11 @@ class TestCase extends \Orchestra\Testbench\TestCase
             'database' => ':memory:',
             'prefix' => '',
         ]);
+    }
+
+
+    protected function responseToData(TestResponse $response)
+    {
+        return json_decode($response->getContent(), true)['data'];
     }
 }
