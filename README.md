@@ -45,7 +45,7 @@ After the config has been published, you can find it's contents in `config/check
 return [
 
     /*
-     * Required parameters when submitting and order to /api/orders endpoint
+     * Required parameters when submitting an order to /api/orders endpoint
      */
     'required' => [
         'customer_email',
@@ -82,7 +82,7 @@ return [
     ],
 
     /*
-     * Percentage of Cart total and Fixed fee will be stored for every
+     * Percentage of Cart total and fixed fee will be stored for every
      * order purchase (transaction)
      */
     'stripe' => [
