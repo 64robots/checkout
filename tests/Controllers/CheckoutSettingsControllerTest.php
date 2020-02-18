@@ -12,7 +12,7 @@ class CheckoutSettingsControllerTest extends TestCase
      */
     public function anyone_can_get_checkout_settings()
     {
-        $response = $this
+        $this
             ->json('GET', '/api/checkout/settings')
             ->assertStatus(200)
             ->assertJson(['success' => true])
@@ -25,12 +25,5 @@ class CheckoutSettingsControllerTest extends TestCase
                     'currency_symbol'
                 ]
             ]);
-
-        $response = $this->responseToData($response);
-
-        // By default all fields are not required
-        $this->assertFalse(collect($response['required'])->reduce(function ($carry, $requiredField) {
-            return $carry || $requiredField;
-        }), false);
     }
 }
