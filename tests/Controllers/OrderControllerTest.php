@@ -2,14 +2,14 @@
 
 namespace R64\Checkout\Tests\Controllers;
 
-use Illuminate\Foundation\Testing\Concerns\InteractsWithExceptionHandling;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use R64\Checkout\Models\Cart;
+use R64\Checkout\Models\Order;
 use R64\Checkout\Tests\TestCase;
 
 class OrderControllerTest extends TestCase
 {
-    use RefreshDatabase, InteractsWithExceptionHandling;
+    use RefreshDatabase;
 
     private $orderStructure = [
         'token',
@@ -62,7 +62,6 @@ class OrderControllerTest extends TestCase
      */
     public function anyone_can_create_an_order()
     {
-        $this->withoutExceptionHandling();
         $cart = factory(Cart::class)->state('with_product')->create();
 
         $response = $this->json('POST', '/api/orders', [
@@ -127,5 +126,61 @@ class OrderControllerTest extends TestCase
         $this->assertCount(count($cart['cart_items']), $order['order_items']);
 
         $this->assertEquals($cart['total'], $order['order_purchase']['amount']);
+    }
+
+    /**
+     * @test
+     * GET /api/orders/{order-token}
+     */
+    public function anyone_can_get_an_order_by_token()
+    {
+        $cart = factory(Cart::class)->state('with_product')->create();
+
+        $response = $this->json('POST', '/api/orders', [
+            'stripe' => [
+                'token' => 'random token'
+            ],
+            'order' => [
+                'cart_token' => $cart->token,
+                'customer_email' => 'email@gmail.com',
+                'shipping_first_name' => 'First name',
+                'shipping_last_name' => 'Last name',
+                'shipping_address_line1' => 'Street 1',
+                'shipping_address_line2' => 'Line 2',
+                'shipping_address_city' => 'Beverly Hills',
+                'shipping_address_region' => 'California',
+                'shipping_address_zipcode' => '90210',
+                'shipping_address_phone' => '123321123',
+                'billing_first_name' => 'First name',
+                'billing_last_name' => 'Last name',
+                'billing_address_line1' => 'Street 1',
+                'billing_address_line2' => 'Line 2',
+                'billing_address_city' => 'Beverly Hills',
+                'billing_address_region' => 'California',
+                'billing_address_zipcode' => '90210',
+                'billing_address_phone' => '123321123',
+            ]
+        ])
+            ->assertStatus(200)
+            ->assertJson(['success' => true])
+            ->assertJsonStructure([
+                'success',
+                'data' => $this->orderStructure
+            ]);
+
+        $order = $this->responseToData($response);
+
+        $response = $this
+            ->json('GET', '/api/orders/' . $order['token'])
+            ->assertStatus(200)
+            ->assertJson(['success' => true])
+            ->assertJsonStructure([
+                'success',
+                'data' => $this->orderStructure
+            ]);
+
+        $orderResponse = $this->responseToData($response);
+
+        $this->assertEquals($order, $orderResponse);
     }
 }

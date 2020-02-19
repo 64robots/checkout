@@ -8,6 +8,7 @@ $factory->define(Order::class, function (Faker $faker) {
         'cart_id' => function () {
             return factory(R64\Checkout\Models\Cart::class)->create()->id;
         },
+        'items_total' => $faker->numberBetween(1000, 10000),
         'customer_email' => $faker->unique()->safeEmail,
         'shipping_first_name' => $faker->catchPhrase,
         'shipping_last_name' => $faker->catchPhrase,

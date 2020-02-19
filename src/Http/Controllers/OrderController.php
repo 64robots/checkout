@@ -42,7 +42,7 @@ class OrderController extends Controller
         event(new NewOrderPurchase($purchase));
 
         $order = Order::makeOne($purchase, $request->order);
-        $order->load(['orderItems', 'orderPurchase']);
+        $order->load(['orderItems.product', 'orderPurchase']);
 
         event(new NewOrder($order));
 
