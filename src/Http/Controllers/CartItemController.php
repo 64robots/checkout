@@ -30,8 +30,10 @@ class CartItemController extends Controller
     public function update(CartItem $cartItem, CartItemRequest $request)
     {
         $cartItem->updateMe($request->validated());
+        $cart = $cartItem->cart;
+        $cart->load('cartItems.product');
 
-        return $this->success(new CartItemResource($cartItem));
+        return $this->success(new CartResource($cart));
     }
 
     /***************************************************************************************

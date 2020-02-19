@@ -2,11 +2,7 @@
 
 namespace Tests\Controllers\Checkout;
 
-use Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use phpDocumentor\Reflection\DocBlock\Description;
-use R64\Checkout\Helpers\Price;
 use R64\Checkout\Models\Cart;
 use R64\Checkout\Models\CartItem;
 use R64\Checkout\Models\Coupon;

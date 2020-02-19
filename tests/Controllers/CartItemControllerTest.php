@@ -86,7 +86,7 @@ class CartItemControllerTest extends TestCase
             ->assertJson(['success' => true])
             ->assertJsonStructure([
                 'success',
-                'data' => $this->cartItemStructure
+                'data' => $this->cartStructure
             ]);
 
         $this->assertDatabaseHas('cart_items', ['id' => $cartItem->id, 'quantity' => $newQuantity]);
