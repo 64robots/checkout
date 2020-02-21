@@ -61,14 +61,12 @@ class CartItem extends Resource
     {
         return [
             ID::make()->sortable(),
+            
+            BelongsTo::make('Cart', 'cart', \App\Nova\Cart::class),
 
-            BelongsTo::make('Cart', 'cart', \App\Nova\CartItem::class),
+            BelongsTo::make('Product', 'product', \App\Nova\Product::class),
 
-            BelongsTo::make('Product', 'product', \App\Nova\CartItem::class),
-
-            BelongsTo::make('Coupon', 'coupon', \App\Nova\CartItem::class),
-
-            DateTime::make('Created At')->format('MM/DD h:mm a'),
+            DateTime::make('Created At'),
         ];
     }
 

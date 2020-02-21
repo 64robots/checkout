@@ -59,7 +59,11 @@ class Cart extends Resource
         return [
             ID::make()->sortable(),
 
-            BelongsTo::make('User', 'user', \App\Nova\Cart::class),
+            BelongsTo::make('Customer', 'customer', \App\Nova\Customer::class),
+
+            BelongsTo::make('Coupon', 'coupon', \App\Nova\Coupon::class),
+
+            HasMany::make('Cart Items', 'cartItems', \App\Nova\CartItem::class),
 
             Text::make('Shipping First Name', 'shipping_first_name'),
             Text::make('Shipping Last Name', 'shipping_last_name'),
@@ -79,7 +83,7 @@ class Cart extends Resource
             Text::make('Billing Address Phone', 'billing_address_phone'),
 
             Text::make('Token', 'token'),
-            DateTime::make('Created At')->format('MM/DD h:mm a'),
+            DateTime::make('Created At'),
         ];
     }
 

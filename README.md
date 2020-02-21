@@ -117,6 +117,14 @@ return [
 ];
 ```
 
+### Nova
+
+You can publish nova resources with:
+
+```
+php artisan vendor:publish --provider="R64\Checkout\CheckoutServiceProvider" --tag="nova"
+```
+
 ### Available API Endpoints
 
 Once you install the package and run migrations, these API endpoints will be available in your application.
