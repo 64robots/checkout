@@ -32,7 +32,7 @@ class PaymentHandler implements PaymentHandlerContract
         $stripeCustomer = $this->getOrCreateCustomer($order, $stripeDetails, $customer);
 
         // Create Transaction
-        $paymentResponse = $this->makePaymentAttempt($order, $stripeCustomer);
+        $paymentResponse = $this->makePaymentAttempt($order, $stripeDetails, $stripeCustomer);
 
         // Record Purchase
         return $this->recordPurchase($paymentResponse, $order, $customer, $stripeCustomer);
@@ -67,21 +67,38 @@ class PaymentHandler implements PaymentHandlerContract
         return $stripeCustomer;
     }
 
-    protected function makePaymentAttempt(array $order, StripeCustomer $customer)
+    protected function makePaymentAttempt(array $order, array $stripeDetails, StripeCustomer $customer)
     {
-        return $this->chargeCard($order, $customer);
+        return $this->chargeCard($order, $stripeDetails, $customer);
     }
 
-    protected function chargeCard(array $order, StripeCustomer $customer)
+    public function createCard(array $stripeDetails, StripeCustomer $customer)
     {
+        $card = $this->processor->createCard([
+            'customer' => $customer->id,
+            'token' => $stripeDetails['token'],
+        ]);
+
+        if (! $this->processor->attemptSuccessful()) {
+            abort(400, $this->processor->getErrorMessage());
+        }
+
+        return $card;
+    }
+
+    protected function chargeCard(array $order, array $stripeDetails, StripeCustomer $customer)
+    {
+        $card = $this->createCard($stripeDetails, $customer);
+
         $charge = $this->processor->createCharge([
             'customer' => $customer->id,
             'amount' => $this->getAmount($order),
             'currency' => 'USD',
-            'source' => ''
+            'source' => $card->id
         ]);
 
         if (! $this->processor->attemptSuccessful()) {
+            info($this->processor->getErrorMessage());
             abort(400, $this->processor->getErrorMessage());
         }
 

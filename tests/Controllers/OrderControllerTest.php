@@ -4,7 +4,6 @@ namespace R64\Checkout\Tests\Controllers;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use R64\Checkout\Models\Cart;
-use R64\Checkout\Models\Order;
 use R64\Checkout\Tests\TestCase;
 
 class OrderControllerTest extends TestCase
