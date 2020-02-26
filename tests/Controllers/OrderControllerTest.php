@@ -4,7 +4,9 @@ namespace R64\Checkout\Tests\Controllers;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use R64\Checkout\Models\Cart;
+use R64\Checkout\StripeMockHandler;
 use R64\Checkout\Tests\TestCase;
+use R64\Stripe\StripeInterface;
 
 class OrderControllerTest extends TestCase
 {
@@ -54,6 +56,19 @@ class OrderControllerTest extends TestCase
         ],
         'created_at'
     ];
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->app->bind(StripeInterface::class, function ($app) {
+            $options['secret_key'] = $app['config']->get('stripe.secret');
+            $options['stripe_connect_id'] = $app['config']->get('stripe.connect_id') ?? $app->request->get('stripe_connect_id');
+            $options['skip_stripe_connect'] = $app['config']->get('stripe.skip_connect') ?? $app->request->get('skip_stripe_connect', true);
+
+            return new StripeMockHandler($options);
+        });
+    }
 
     /**
      * @test

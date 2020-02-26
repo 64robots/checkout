@@ -4,7 +4,6 @@ namespace R64\Checkout;
 
 use R64\Checkout\Contracts\PaymentHandler as PaymentHandlerContract;
 use R64\Checkout\Contracts\Customer as CustomerContract;
-use R64\Checkout\Models\Cart;
 use R64\Checkout\Models\OrderPurchase;
 use R64\Stripe\Objects\Customer as StripeCustomer;
 use R64\Stripe\PaymentProcessor;
@@ -32,7 +31,7 @@ class PaymentHandler implements PaymentHandlerContract
         $stripeCustomer = $this->getOrCreateCustomer($order, $stripeDetails, $customer);
 
         // Create Transaction
-        $paymentResponse = $this->makePaymentAttempt($order, $stripeDetails, $stripeCustomer);
+        $paymentResponse = $this->makePaymentAttempt($order, $stripeCustomer);
 
         // Record Purchase
         return $this->recordPurchase($paymentResponse, $order, $customer, $stripeCustomer);
@@ -67,38 +66,20 @@ class PaymentHandler implements PaymentHandlerContract
         return $stripeCustomer;
     }
 
-    protected function makePaymentAttempt(array $order, array $stripeDetails, StripeCustomer $customer)
+    protected function makePaymentAttempt(array $order, StripeCustomer $customer)
     {
-        return $this->chargeCard($order, $stripeDetails, $customer);
+        return $this->chargeCard($order, $customer);
     }
 
-    public function createCard(array $stripeDetails, StripeCustomer $customer)
+    protected function chargeCard(array $order, StripeCustomer $customer)
     {
-        $card = $this->processor->createCard([
-            'customer' => $customer->id,
-            'token' => $stripeDetails['token'],
-        ]);
-
-        if (! $this->processor->attemptSuccessful()) {
-            abort(400, $this->processor->getErrorMessage());
-        }
-
-        return $card;
-    }
-
-    protected function chargeCard(array $order, array $stripeDetails, StripeCustomer $customer)
-    {
-        $card = $this->createCard($stripeDetails, $customer);
-
         $charge = $this->processor->createCharge([
             'customer' => $customer->id,
             'amount' => $this->getAmount($order),
-            'currency' => 'USD',
-            'source' => $card->id
+            'currency' => 'USD'
         ]);
 
         if (! $this->processor->attemptSuccessful()) {
-            info($this->processor->getErrorMessage());
             abort(400, $this->processor->getErrorMessage());
         }
 
