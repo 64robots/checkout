@@ -49,6 +49,7 @@ class OrderItem extends Model
         $orderItem->price = Arr::get($data, 'price');
         $orderItem->quantity = Arr::get($data, 'quantity');
         $orderItem->name = Arr::get($data, 'name');
+        $orderItem->customer_note = Arr::get($data, 'customer_note');
         $orderItem->save();
 
         return $orderItem;
@@ -68,7 +69,8 @@ class OrderItem extends Model
             $cartItemForeignKey => $cartItem->id,
             'price' => $cartItem->price,
             'quantity' => $cartItem->quantity,
-            'name' => $product->getName()
+            'name' => $product->getName(),
+            'customer_note' => $cartItem->customer_note
         ]);
 
         return $orderItem;

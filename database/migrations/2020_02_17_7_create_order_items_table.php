@@ -21,7 +21,7 @@ class CreateOrderItemsTable extends Migration
             $table->integer('price');
             $table->integer('quantity');
             $table->string('name');
-            $table->json('data')->nullable();
+            $table->string('customer_note')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

@@ -68,6 +68,8 @@ class OrderItem extends Resource
 
             Text::make('Name', 'name'),
 
+            Text::make('Customer Note', 'customer_note'),
+
             DateTime::make('Created At')->format('MM/DD h:mm a'),
         ];
     }
