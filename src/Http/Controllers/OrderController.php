@@ -35,7 +35,7 @@ class OrderController extends Controller
 
         $cart = Cart::byToken($request->order['cart_token'])->firstOrFail();
 
-        if ($cart->total) {
+        if ($cart->total > 0) {
             $purchase = $payment->purchase($request->order, $request->stripe, $customer);
         } else {
             $purchase = OrderPurchase::makeFreePurchase($request->order, $customer);
