@@ -39,7 +39,7 @@ class PaymentHandler implements PaymentHandlerContract
 
     protected function getOrCreateCustomer(array $order, array $stripeDetails, CustomerContract $customer)
     {
-        $orderPurchase = OrderPurchase::where(\R64\Checkout\Facades\Customer::getForeignKey(), $customer->getId())->first();
+        $orderPurchase = OrderPurchase::where('email', $customer->getEmail())->first();
 
         if ($orderPurchase) {
             return $this->processor->getCustomer($orderPurchase->stripe_customer_id);

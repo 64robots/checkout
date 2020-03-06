@@ -33,8 +33,10 @@ class OrderController extends Controller
     {
         $customer = $this->getCustomer($request->order);
 
-        if ($request->has('stripe.token')) {
-            $purchase = $payment->purchase($request->order, $request-> stripe, $customer);
+        $cart = Cart::byToken($request->order['cart_token'])->firstOrFail();
+
+        if ($cart->total) {
+            $purchase = $payment->purchase($request->order, $request->stripe, $customer);
         } else {
             $purchase = OrderPurchase::makeFreePurchase($request->order, $customer);
         }
