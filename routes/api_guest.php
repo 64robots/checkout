@@ -14,6 +14,7 @@ Route::namespace('\\R64\\Checkout\\Http\\Controllers')->group(function () {
 
     Route::put('carts/{cart}/zipcode', 'CartZipCodeController@update');
     Route::put('carts/{cart}/shipping', 'CartShippingController@update');
+    Route::put('carts/{cart}/email', 'CartEmailController@update');
 
     /***************************************************************************************
      ** Cart Items
