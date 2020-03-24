@@ -10,7 +10,7 @@ class CartOptionsController extends Controller
 {
     public function store(Cart $cart, CartOptionsRequest $request)
     {
-        $cart->addOptions($request->validated());
+        $cart->addOptions($request->validated()['options']);
 
         return $this->success(new CartResource($cart->load('cartItems.product')));
     }
