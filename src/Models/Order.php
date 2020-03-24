@@ -110,6 +110,7 @@ class Order extends Model
         $order->discount = $cart->discount;
         $order->shipping = $cart->shipping;
         $order->total = $cart->total;
+        $order->options = $cart->options;
         $order->save();
 
         $cart->cartItems->each(function (CartItem $cartItem) use ($order) {
