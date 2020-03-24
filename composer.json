@@ -10,7 +10,8 @@
         "illuminate/support": "^6.10",
         "64robots/stripe": "*",
         "guzzlehttp/guzzle": "^6.5",
-        "axlon/laravel-postal-code-validation": "^2.0"
+        "axlon/laravel-postal-code-validation": "^2.0",
+        "doctrine/dbal": "^2.10"
     },
     "require-dev": {
         "filp/whoops": "^2.0",

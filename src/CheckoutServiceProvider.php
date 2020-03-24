@@ -194,6 +194,13 @@ class CheckoutServiceProvider extends ServiceProvider
             ], 'migrations');
         }
 
+        if (!class_exists('AddOptionsToCartsAndOrdersTable')) {
+            $migrationFileName = $this->getMigrationFilename('add_options_to_carts_and_orders_table', $time + 8, $filesystem);
+            $this->publishes([
+                __DIR__ . '/../database/migrations/2020_03_24_9_add_options_to_carts_and_orders_table.php.php' => $migrationFileName,
+            ], 'migrations');
+        }
+
         $this->publishes([
             __DIR__ . '/../database/factories/' => database_path('factories'),
         ], 'migrations');

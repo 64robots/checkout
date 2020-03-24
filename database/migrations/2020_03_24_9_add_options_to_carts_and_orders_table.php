@@ -14,11 +14,11 @@ class AddOptionsToCartsAndOrdersTable extends Migration
     public function up()
     {
         Schema::table('carts', function (Blueprint $table) {
-            $table->text('options');
+            $table->text('options')->nullable();
         });
 
         Schema::table('orders', function (Blueprint $table) {
-            $table->text('options');
+            $table->text('options')->nullable();
         });
     }
 
@@ -33,7 +33,7 @@ class AddOptionsToCartsAndOrdersTable extends Migration
             $table->dropColumn('options');
         });
 
-        Schema::table('options', function (Blueprint $table) {
+        Schema::table('orders', function (Blueprint $table) {
             $table->dropColumn('options');
         });
     }
