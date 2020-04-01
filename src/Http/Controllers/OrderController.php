@@ -12,7 +12,6 @@ use R64\Checkout\Models\Order;
 use R64\Checkout\Models\OrderPurchase;
 use R64\Checkout\GuestCustomer;
 use R64\Checkout\PaymentHandler;
-use R64\Checkout\PaymentHandlerFactory;
 
 class OrderController extends Controller
 {
@@ -43,7 +42,7 @@ class OrderController extends Controller
 
         event(new NewOrderPurchase($purchase));
 
-        $order = Order::makeOne($purchase, $request->order);
+        $order = R64\Checkout\Facades\Order::getClassName()::makeOne($purchase, $request->order);
         $order->load(['orderItems.product', 'orderPurchase']);
 
         event(new NewOrder($order));
@@ -53,7 +52,6 @@ class OrderController extends Controller
 
     private function getCustomer($order)
     {
-        /** @var PaymentHandler $handler */
         $customer = auth()->user();
 
         if (is_null($customer)) {
