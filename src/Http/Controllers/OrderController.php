@@ -42,7 +42,7 @@ class OrderController extends Controller
 
         event(new NewOrderPurchase($purchase));
 
-        $order = R64\Checkout\Facades\Order::getClassName()::makeOne($purchase, $request->order);
+        $order = \R64\Checkout\Facades\Order::getClassName()::makeOne($purchase, $request->order);
         $order->load(['orderItems.product', 'orderPurchase']);
 
         event(new NewOrder($order));

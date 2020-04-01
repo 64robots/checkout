@@ -2,6 +2,7 @@
 
 namespace R64\Checkout\Tests\Controllers;
 
+use Illuminate\Foundation\Testing\Concerns\InteractsWithExceptionHandling;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use R64\Checkout\Models\Cart;
 use R64\Checkout\StripeMockHandler;
@@ -10,7 +11,7 @@ use R64\Stripe\StripeInterface;
 
 class OrderControllerTest extends TestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, InteractsWithExceptionHandling;
 
     private $orderStructure = [
         'token',
