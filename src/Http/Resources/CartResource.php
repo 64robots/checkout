@@ -42,6 +42,7 @@ class CartResource extends JsonResource
             'billing_address_phone' => $this->billing_address_phone,
             'customer_notes' => $this->customer_notes,
             'cart_items' => CartItemResource::collection($this->whenLoaded('cartItems')),
+            'order' => new OrderResource($this->whenLoaded('order'))
         ];
     }
 }

@@ -62,6 +62,11 @@ class Cart extends Model
         return $this->belongsTo(\R64\Checkout\Facades\Coupon::getClassName(), \R64\Checkout\Facades\Coupon::getForeignKey());
     }
 
+    public function order()
+    {
+        return $this->hasOne(\R64\Checkout\Facades\Order::getClassName(), \R64\Checkout\Facades\Order::getForeignKey());
+    }
+
     /***************************************************************************************
      ** CRUD
      ***************************************************************************************/
