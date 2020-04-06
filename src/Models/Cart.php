@@ -64,7 +64,7 @@ class Cart extends Model
 
     public function order()
     {
-        return $this->hasOne(\R64\Checkout\Facades\Order::getClassName(), \R64\Checkout\Facades\Order::getForeignKey());
+        return $this->hasOne(\R64\Checkout\Facades\Order::getClassName(), \R64\Checkout\Facades\Cart::getForeignKey());
     }
 
     /***************************************************************************************
