@@ -46,7 +46,8 @@ class OrderResource extends JsonResource
             'admin_notes' => $this->admin_notes,
             'order_items' => OrderItemResource::collection($this->whenLoaded('orderItems')),
             'order_purchase' => new OrderPurchaseResource($this->whenLoaded('orderPurchase')),
-            'created_at' => $this->created_at->format('M, d, Y')
+            'created_at' => $this->created_at->format('M, d, Y'),
+            'options' => $this->options
         ];
     }
 }

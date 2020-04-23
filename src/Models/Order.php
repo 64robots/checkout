@@ -17,7 +17,10 @@ class Order extends Model
     protected $guarded = ['id'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
     protected $dates = ['created_at', 'updated_at', 'deleted_at', 'delivery_date'];
-    protected $casts = [];
+    protected $casts = [
+        'shipping_info' => 'json',
+        'options' => 'json'
+    ];
     public $timestamps = true;
 
     /***************************************************************************************
