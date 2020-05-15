@@ -17,6 +17,9 @@ Route::namespace('\\R64\\Checkout\\Http\\Controllers')->group(function () {
     Route::put('carts/{cart}/email', 'CartEmailController@update');
     Route::post('carts/{cart}/options', 'CartOptionsController@store');
 
+    Route::put('carts/{cart}/coupon-code', 'CartCouponController@update');
+    route::delete('carts/{cart}/coupon-code', 'CartCouponController@delete');
+
     /***************************************************************************************
      ** Cart Items
      ***************************************************************************************/

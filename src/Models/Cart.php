@@ -95,14 +95,6 @@ class Cart extends Model
 
     public function updateMe(array $data)
     {
-        if (isset($data['coupon_code'])) {
-            $coupon = \R64\Checkout\Facades\Coupon::getClassName()::byCode($data['coupon_code'])->first();
-            $this->{\R64\Checkout\Facades\Coupon::getForeignKey()} = $coupon->id;
-            $this->discount = $coupon->calculateDiscount($this);
-            $this->setTax();
-            $this->setTotal();
-        }
-
         $this->customer_notes = Arr::has($data, 'customer_notes') ? $data['customer_notes'] : $this->customer_notes;
         $this->customer_email = Arr::has($data, 'customer_email') ? $data['customer_email'] : $this->customer_email;
         $this->shipping_first_name = Arr::has($data, 'shipping_first_name') ? $data['shipping_first_name'] : $this->shipping_first_name;
@@ -146,6 +138,31 @@ class Cart extends Model
         }
 
         $this->save();
+    }
+
+    public function addCoupon(array $data)
+    {
+        if (isset($data['coupon_code'])) {
+            $coupon = \R64\Checkout\Facades\Coupon::getClassName()::byCode($data['coupon_code'])->first();
+            $this->{\R64\Checkout\Facades\Coupon::getForeignKey()} = $coupon->id;
+            $this->discount = $coupon->calculateDiscount($this);
+            $this->setTax();
+            $this->setTotal();
+        }
+    }
+
+    public function removeCoupon()
+    {
+        $coupon = $this->coupon;
+
+        if (!$coupon) {
+            return;
+        }
+
+        $this->{\R64\Checkout\Facades\Coupon::getForeignKey()} = null;
+        $this->discount = 0;
+        $this->setTax();
+        $this->setTotal();
     }
 
     public function updateZipCode(array $data)

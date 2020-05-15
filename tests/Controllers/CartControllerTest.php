@@ -206,35 +206,6 @@ class CartControllerTest extends TestCase
 
     /**
      * @test
-     * PUT /api/carts/{cart}
-     */
-    public function discount_code_discounts_the_items_subtotal()
-    {
-        $cart = factory(Cart::class)->create(['shipping' => 0]);
-        $product = factory(Product::class)->create(['price' => 100000]);
-        CartItem::makeOne($cart, ['product_id' => $product->id]);
-
-        $coupon = factory(Coupon::class)->state('$10off')->create();
-
-        $response = $this->json('PUT', "/api/carts/{$cart->token}", [
-            'coupon_code' => $coupon->code,
-        ])
-            ->assertStatus(200)
-            ->assertJson(['success' => true])
-            ->assertJsonStructure([
-                'success',
-                'data' => $this->cartStructure,
-            ]);
-
-        $response = json_decode($response->getContent(), true)['data'];
-
-        $this->assertEquals('10.00', $response['discount']);
-        $this->assertEquals('1,000.00', $response['items_subtotal']);
-        $this->assertEquals('990.00', $response['total']);
-    }
-
-    /**
-     * @test
      * DELETE /api/carts
      */
     public function anybody_can_delete_a_cart()
