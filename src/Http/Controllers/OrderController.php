@@ -11,7 +11,7 @@ use R64\Checkout\Models\Customer;
 use R64\Checkout\Models\Order;
 use R64\Checkout\Models\OrderPurchase;
 use R64\Checkout\GuestCustomer;
-use R64\Checkout\PaymentHandler;
+use R64\Checkout\Contracts\PaymentHandler;
 
 class OrderController extends Controller
 {
