@@ -113,7 +113,7 @@ return [
     'order_model' => R64\Checkout\Models\Order::class,
     'order_item_model' => R64\Checkout\Models\OrderItem::class,
     'product_resource' => R64\Checkout\Http\Resources\ProductResource::class,
-    'payment' => R64\Checkout\PaymentHandler::class
+    'payment' => R64\Checkout\StripePaymentHandler::class
 ];
 ```
 

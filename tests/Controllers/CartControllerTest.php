@@ -2,11 +2,8 @@
 
 namespace Tests\Controllers\Checkout;
 
-use Illuminate\Foundation\Testing\Concerns\InteractsWithExceptionHandling;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use R64\Checkout\Models\Cart;
-use R64\Checkout\Models\CartItem;
-use R64\Checkout\Models\Coupon;
 use R64\Checkout\Models\Customer;
 use R64\Checkout\Models\Product;
 use R64\Checkout\Tests\TestCase;

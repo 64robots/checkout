@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Validation\ValidationException;
 
 Route::namespace('\\R64\\Checkout\\Http\\Controllers')->group(function () {
     /***************************************************************************************

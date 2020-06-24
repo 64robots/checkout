@@ -8,6 +8,9 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Route;
+use PayPalCheckoutSdk\Core\PayPalHttpClient;
+use PayPalCheckoutSdk\Core\ProductionEnvironment;
+use PayPalCheckoutSdk\Core\SandboxEnvironment;
 use R64\Checkout\Contracts\Cart;
 use R64\Checkout\Contracts\CartItem;
 use R64\Checkout\Contracts\Coupon;
@@ -17,7 +20,6 @@ use R64\Checkout\Contracts\OrderItem;
 use R64\Checkout\Contracts\Product;
 use R64\Checkout\Contracts\State;
 use R64\Checkout\Helpers\Address\GeoNames;
-use R64\Checkout\Contracts\PaymentHandler;
 use R64\Stripe\PaymentProcessor;
 
 class CheckoutServiceProvider extends ServiceProvider
@@ -102,10 +104,25 @@ class CheckoutServiceProvider extends ServiceProvider
             return new \R64\Checkout\State();
         });
 
-        $this->app->singleton(PaymentHandler::class, function (Container $app) {
-            $paymentHandler = config('checkout.payment');
+        $this->app->singleton(StripePaymentHandler::class, function (Container $app) {
+            $paymentHandler = config('checkout.stripe_payment');
 
             return new $paymentHandler($app->get(PaymentProcessor::class));
+        });
+
+        $this->app->singleton(PaypalPaymentHandler::class, function (Container $app) {
+            $paymentHandler = config('checkout.paypal_payment');
+
+            $clientId = config('paypal.client_id');
+            $clientSecret = config('paypal.client_secret');
+
+            if (config('paypal.sandbox')) {
+                $environment = new SandboxEnvironment($clientId, $clientSecret);
+            } else {
+                $environment = new ProductionEnvironment($clientId, $clientSecret);
+            }
+
+            return new $paymentHandler(new PayPalHttpClient($environment));
         });
 
         $this->app->singleton(GeoNames::class, function () {
@@ -198,6 +215,13 @@ class CheckoutServiceProvider extends ServiceProvider
             $migrationFileName = $this->getMigrationFilename('add_options_to_carts_and_orders_table', $time + 8, $filesystem);
             $this->publishes([
                 __DIR__ . '/../database/migrations/2020_03_24_9_add_options_to_carts_and_orders_table.php' => $migrationFileName,
+            ], 'migrations');
+        }
+
+        if (!class_exists('AddPaypalColumnsToOrderPurchasesTable')) {
+            $migrationFileName = $this->getMigrationFileName('add_paypal_columns_to_order_purchases_table', $time + 9, $filesystem);
+            $this->publishes([
+                __DIR__ . '/../database/migrations/2020_06_03_10_add_paypal_columns_to_order_purchases_table.php' => $migrationFileName,
             ], 'migrations');
         }
 

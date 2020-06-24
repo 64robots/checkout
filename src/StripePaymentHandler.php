@@ -8,7 +8,7 @@ use R64\Checkout\Models\OrderPurchase;
 use R64\Stripe\Objects\Customer as StripeCustomer;
 use R64\Stripe\PaymentProcessor;
 
-class PaymentHandler implements PaymentHandlerContract
+class StripePaymentHandler implements PaymentHandlerContract
 {
     /** @var PaymentProcessor */
     protected $processor;
@@ -21,14 +21,14 @@ class PaymentHandler implements PaymentHandlerContract
         $this->processor = $processor;
     }
 
-    public function purchase(array $order, array $stripeDetails, CustomerContract $customer)
+    public function purchase(array $order, array $paymentDetails, CustomerContract $customer)
     {
-        if (!isset($stripeDetails['token'])) {
-            abort(500, 'Internal Error: E902');
+        if (!isset($paymentDetails['token'])) {
+            throw new PaymentException("Stripe: Token is missing");
         }
 
         // Create Customer
-        $stripeCustomer = $this->getOrCreateCustomer($order, $stripeDetails, $customer);
+        $stripeCustomer = $this->getOrCreateCustomer($order, $paymentDetails, $customer);
 
         // Create Transaction
         $paymentResponse = $this->makePaymentAttempt($order, $stripeCustomer);
@@ -37,9 +37,9 @@ class PaymentHandler implements PaymentHandlerContract
         return $this->recordPurchase($paymentResponse, $order, $customer, $stripeCustomer);
     }
 
-    protected function getOrCreateCustomer(array $order, array $stripeDetails, CustomerContract $customer)
+    protected function getOrCreateCustomer(array $order, array $paymentDetails, CustomerContract $customer)
     {
-        $orderPurchase = OrderPurchase::where('email', $customer->getEmail())->first();
+        $orderPurchase = OrderPurchase::byEmail($customer->getEmail())->stripe()->first();
 
         if ($orderPurchase) {
             return $this->processor->getCustomer($orderPurchase->stripe_customer_id);
@@ -51,7 +51,7 @@ class PaymentHandler implements PaymentHandlerContract
 
         $stripeCustomer = $this->processor->createCustomer([
             'description' => '64robots checkout ' . $firstName . ' ' . $lastName,
-            'source' => $stripeDetails['token'],
+            'source' => $paymentDetails['token'],
             'email' => $email,
             'metadata' => [
                 'first_name' => $firstName,
@@ -61,7 +61,7 @@ class PaymentHandler implements PaymentHandlerContract
         ]);
 
         if (!$this->processor->attemptSuccessful()) {
-            abort(400, $this->processor->getErrorMessage());
+            throw new PaymentException("Stripe: " . $this->processor->getErrorMessage());
         }
         return $stripeCustomer;
     }
@@ -80,7 +80,7 @@ class PaymentHandler implements PaymentHandlerContract
         ]);
 
         if (! $this->processor->attemptSuccessful()) {
-            abort(400, $this->processor->getErrorMessage());
+            throw new PaymentException("Stripe: " . $this->processor->getErrorMessage());
         }
 
         return $charge;
@@ -99,6 +99,7 @@ class PaymentHandler implements PaymentHandlerContract
 
         return OrderPurchase::makeOne([
             $customerId => $customer->getId(),
+            'payment_processor' => PaymentHandlerFactory::STRIPE,
             'order_data' => $order,
             'email' => $stripeCustomer->email,
             'amount' => $paymentResponse->amount,

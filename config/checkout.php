@@ -44,8 +44,13 @@ return [
      * order purchase (transaction)
      */
     'stripe' => [
-        'percentage_fee' => env('CHECKOUT_STRIPE_PERCENTAGE_FEE', 29 / 1000),
+        'percentage_fee' => env('CHECKOUT_STRIPE_PERCENTAGE_FEE', 2.9 / 100),
         'fixed_fee' => env('CHECKOUT_STRIPE_FIXED_FEE', 30)
+    ],
+
+    'paypal' => [
+        'percentage_fee' => env('CHECKOUT_PAYPAL_PERCENTAGE_FEE', 2.9 / 100),
+        'fixed_fee' => env('CHECKOUT_PAYPAL_FIXED_FEE', 30)
     ],
 
     /*
@@ -71,5 +76,6 @@ return [
     'order_model' => R64\Checkout\Models\Order::class,
     'order_item_model' => R64\Checkout\Models\OrderItem::class,
     'product_resource' => R64\Checkout\Http\Resources\ProductResource::class,
-    'payment' => R64\Checkout\PaymentHandler::class
+    'stripe_payment' => R64\Checkout\StripePaymentHandler::class,
+    'paypal_payment' => R64\Checkout\PaypalPaymentHandler::class
 ];
