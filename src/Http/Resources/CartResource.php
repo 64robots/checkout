@@ -20,6 +20,7 @@ class CartResource extends JsonResource
             'tax_rate' => displayTaxRate($this->tax_rate),
             'tax' => displayMoney($this->tax),
             'total' => displayMoney($this->total),
+            'total_cents' => $this->total,
             'discount' => displayMoney($this->discount),
             'shipping' => displayMoney($this->shipping),
             'customer_email' => $this->customer_email,
