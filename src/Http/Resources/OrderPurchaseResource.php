@@ -11,7 +11,8 @@ class OrderPurchaseResource extends JsonResource
         return [
             'amount' => displayMoney($this->amount),
             'card_type' => $this->card_type,
-            'card_last4' => $this->card_last4
+            'card_last4' => $this->card_last4,
+            'payment_method' => $this->payment_processor
         ];
     }
 }
