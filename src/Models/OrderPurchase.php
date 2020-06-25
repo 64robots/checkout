@@ -6,6 +6,7 @@ use R64\Checkout\Contracts\Customer as CustomerContract;
 
 //extends
 use Illuminate\Database\Eloquent\Model;
+use R64\Checkout\PaymentHandlerFactory;
 
 class OrderPurchase extends Model
 {
@@ -39,12 +40,23 @@ class OrderPurchase extends Model
         $purchase->order_data = $data['order_data'];
         $purchase->email = $data['email'];
         $purchase->amount = $data['amount'];
-        $purchase->card_type = $data['card_type'];
-        $purchase->card_last4 = $data['card_last4'];
-        $purchase->stripe_customer_id = $data['stripe_customer_id'];
-        $purchase->stripe_card_id = $data['stripe_card_id'];
-        $purchase->stripe_charge_id = $data['stripe_charge_id'];
-        $purchase->stripe_fee = round($purchase->amount * config('checkout.stripe.percentage_fee')) + config('checkout.stripe.fixed_fee');
+        $purchase->payment_processor = $data['payment_processor'];
+
+        if ($data['payment_processor'] === PaymentHandlerFactory::STRIPE) {
+            $purchase->card_type = $data['card_type'];
+            $purchase->card_last4 = $data['card_last4'];
+            $purchase->stripe_customer_id = $data['stripe_customer_id'];
+            $purchase->stripe_card_id = $data['stripe_card_id'];
+            $purchase->stripe_charge_id = $data['stripe_charge_id'];
+            $purchase->stripe_fee = round($purchase->amount * config('checkout.stripe.percentage_fee')) + config('checkout.stripe.fixed_fee');
+        } elseif ($data['payment_processor'] === PaymentHandlerFactory::PAYPAL) {
+            $purchase->paypal_order_id = $data['paypal_order_id'];
+            $purchase->paypal_authorization_id = $data['paypal_authorization_id'];
+            $purchase->paypal_capture_id = $data['paypal_capture_id'];
+            $purchase->paypal_payer_id = $data['paypal_payer_id'];
+            $purchase->paypal_fee = ceil($purchase->amount * config('checkout.paypal.percentage_fee')) + config('checkout.paypal.fixed_fee');
+        }
+
         $purchase->save();
 
         return $purchase;
@@ -62,5 +74,18 @@ class OrderPurchase extends Model
         $purchase->save();
 
         return $purchase;
+    }
+
+    /***************************************************************************************
+     ** SCOPES
+     ***************************************************************************************/
+    public function scopeStripe($query)
+    {
+        return $query->where('payment_processor', PaymentHandlerFactory::STRIPE);
+    }
+
+    public function scopeByEmail($query, $email)
+    {
+        return $query->where('email', $email);
     }
 }

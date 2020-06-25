@@ -38,21 +38,36 @@ class OrderRequest extends JsonFormRequest
      */
     public function rules()
     {
-        $stripeRules = [
+        $paymentRules = [
             'stripe.token' => [
                 'string',
                 'max:255',
                 Rule::requiredIf(function () {
-                    // Stripe token is required only when total > 0
-                    $cartToken = Arr::get($this->get('order'), 'cart_token');
-
-                    if (!is_null($cartToken)) {
+                    if ($this->has('paypal')) {
                         return false;
                     }
 
-                    $cart = Cart::byToken($cartToken)->firstOrFail();
+                    return $this->isCartFree();
+                })
+            ],
+            'paypal.order_id' => [
+                'string',
+                Rule::requiredIf(function () {
+                    if ($this->has('stripe')) {
+                        return false;
+                    }
 
-                    return $cart->total > 0;
+                    return $this->isCartFree();
+                })
+            ],
+            'paypal.authorization_id' => [
+                'string',
+                Rule::requiredIf(function () {
+                    if ($this->has('stripe')) {
+                        return false;
+                    }
+
+                    return $this->isCartFree();
                 })
             ]
         ];
@@ -82,7 +97,7 @@ class OrderRequest extends JsonFormRequest
         $orderRules = $this->addRequiredFields($orderRules);
         $orderRules = $this->addOrderPrefix($orderRules);
 
-        return array_merge($stripeRules, $orderRules);
+        return array_merge($paymentRules, $orderRules);
     }
 
     /***************************************************************************************
@@ -151,5 +166,28 @@ class OrderRequest extends JsonFormRequest
             array_map(function ($key) { return "order.${key}"; }, array_keys($rules)),
             $rules
         );
+    }
+
+    private function isCartFree()
+    {
+        $cartToken = Arr::get($this->get('order'), 'cart_token');
+
+        if (!is_null($cartToken)) {
+            return false;
+        }
+
+        $cart = Cart::byToken($cartToken)->firstOrFail();
+
+        return $cart->total > 0;
+    }
+
+    public function isStripe()
+    {
+        return $this->has('stripe');
+    }
+
+    public function isPaypal()
+    {
+        return $this->has('paypal');
     }
 }

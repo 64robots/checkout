@@ -11,7 +11,8 @@
         "64robots/stripe": "*",
         "guzzlehttp/guzzle": "^6.5",
         "axlon/laravel-postal-code-validation": "^2.0",
-        "doctrine/dbal": "^2.10"
+        "doctrine/dbal": "^2.10",
+        "paypal/paypal-checkout-sdk": "1.0.1"
     },
     "require-dev": {
         "filp/whoops": "^2.0",
