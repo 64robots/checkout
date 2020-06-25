@@ -48,11 +48,6 @@ return [
         'fixed_fee' => env('CHECKOUT_STRIPE_FIXED_FEE', 30)
     ],
 
-    'paypal' => [
-        'percentage_fee' => env('CHECKOUT_PAYPAL_PERCENTAGE_FEE', 2.9 / 100),
-        'fixed_fee' => env('CHECKOUT_PAYPAL_FIXED_FEE', 30)
-    ],
-
     /*
      * Shipping city and state is automatically resolved from zip code
      * using GeoNames service http://www.geonames.org/

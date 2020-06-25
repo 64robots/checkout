@@ -5,6 +5,7 @@ namespace R64\Checkout;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Orders\OrdersGetRequest;
 use PayPalCheckoutSdk\Payments\AuthorizationsCaptureRequest;
+use PayPalCheckoutSdk\Payments\CapturesGetRequest;
 use R64\Checkout\Contracts\Customer;
 use R64\Checkout\Contracts\Customer as CustomerContract;
 use R64\Checkout\Contracts\PaymentHandler;
@@ -42,6 +43,8 @@ class PaypalPaymentHandler implements PaymentHandler
         if ($captureResponse->statusCode !== 201) {
             throw new PaymentException("Paypal Capture failed");
         }
+
+        $captureResponse = $this->captureDetails($this->getPaypalCaptureId($captureResponse));
 
         return $this->recordPurchase($paymentDetails, $order, $orderResponse, $captureResponse, $customer);
     }
@@ -101,6 +104,15 @@ class PaypalPaymentHandler implements PaymentHandler
     }
 
     /**
+     * @param \PayPalHttp\HttpResponse $response
+     * @return string
+     */
+    protected function getFee(\PayPalHttp\HttpResponse $response): string
+    {
+        return (int) (((float) $response->result->seller_receivable_breakdown->paypal_fee->value) * 100);
+    }
+
+    /**
      * @param array $paymentDetails
      *
      * @return \PayPalHttp\HttpResponse
@@ -109,6 +121,12 @@ class PaypalPaymentHandler implements PaymentHandler
     {
         $request = new AuthorizationsCaptureRequest($paymentDetails['authorization_id']);
         $request->body = "{}";
+        return $this->client->execute($request);
+    }
+
+    protected function captureDetails($captureId)
+    {
+        $request = new CapturesGetRequest($captureId);
         return $this->client->execute($request);
     }
 
@@ -126,6 +144,7 @@ class PaypalPaymentHandler implements PaymentHandler
             'paypal_authorization_id' => $paymentDetails['authorization_id'],
             'paypal_capture_id' => $this->getPaypalCaptureId($captureResponse),
             'paypal_payer_id' => $this->getPaypalPayerId($orderResponse),
+            'paypal_fee' => $this->getFee($captureResponse)
         ], $customer);
     }
 }
