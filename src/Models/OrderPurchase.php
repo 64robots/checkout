@@ -54,7 +54,7 @@ class OrderPurchase extends Model
             $purchase->paypal_authorization_id = $data['paypal_authorization_id'];
             $purchase->paypal_capture_id = $data['paypal_capture_id'];
             $purchase->paypal_payer_id = $data['paypal_payer_id'];
-            $purchase->paypal_fee = round($purchase->amount * config('checkout.paypal.percentage_fee')) + config('checkout.paypal.fixed_fee');
+            $purchase->paypal_fee = ceil($purchase->amount * config('checkout.paypal.percentage_fee')) + config('checkout.paypal.fixed_fee');
         }
 
         $purchase->save();
