@@ -42,7 +42,11 @@ class StripePaymentHandler implements PaymentHandlerContract
         $orderPurchase = OrderPurchase::byEmail($customer->getEmail())->stripe()->first();
 
         if ($orderPurchase) {
-            return $this->processor->getCustomer($orderPurchase->stripe_customer_id);
+            $stripeCustomer = $this->processor->getCustomer($orderPurchase->stripe_customer_id);
+
+            if ($stripeCustomer) {
+                return $stripeCustomer;
+            }
         }
 
         $email = $order['customer_email'];
