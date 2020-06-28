@@ -57,15 +57,14 @@ class CartControllerTest extends TestCase
      */
     public function anybody_can_create_an_empty_cart()
     {
-        $response = $this->json('POST', '/api/carts', [])
+        $cart = $this->json('POST', '/api/carts', [])
             ->assertStatus(200)
             ->assertJson(['success' => true])
             ->assertJsonStructure([
                 'success',
                 'data' => $this->cartStructure,
-            ]);
-
-        $cart = json_decode($response->getContent(), true)['data'];
+            ])
+            ->decodeResponseJson('data');
 
         $this->assertCount(0, $cart['cart_items']);
         $this->assertDatabaseHas('carts', [
@@ -85,16 +84,14 @@ class CartControllerTest extends TestCase
     {
         $product = factory(Product::class)->create();
 
-        $response = $this->json('POST', '/api/carts', ['product_id' => $product->id]);
-
-        $response->assertStatus(200)
+        $cart = $this->json('POST', '/api/carts', ['product_id' => $product->id])
+            ->assertStatus(200)
             ->assertJson(['success' => true])
             ->assertJsonStructure([
                 'success',
                 'data' => $this->cartStructure,
-            ]);
-
-        $cart = json_decode($response->getContent(), true)['data'];
+            ])
+            ->decodeResponseJson('data');
 
         $this->assertCount(1, $cart['cart_items']);
         $this->assertDatabaseHas('carts', [
@@ -134,7 +131,7 @@ class CartControllerTest extends TestCase
     {
         $cart = factory(Cart::class)->create();
 
-        $response = $this->json('PUT', "/api/carts/{$cart->token}", [
+        $cartResponse = $this->json('PUT', "/api/carts/{$cart->token}", [
             'shipping_first_name' => "first name",
             'shipping_last_name' => "last name",
             'shipping_address_line1' => "line 1",
@@ -149,18 +146,17 @@ class CartControllerTest extends TestCase
             ->assertJsonStructure([
                 'success',
                 'data' => $this->cartStructure,
-            ]);
+            ])
+            ->decodeResponseJson('data');
 
-        $response = json_decode($response->getContent(), true)['data'];
-
-        $this->assertEquals($response['shipping_first_name'], $response['billing_first_name']);
-        $this->assertEquals($response['shipping_last_name'], $response['billing_last_name']);
-        $this->assertEquals($response['shipping_address_line1'], $response['billing_address_line1']);
-        $this->assertEquals($response['shipping_address_line2'], $response['billing_address_line2']);
-        $this->assertEquals($response['shipping_address_city'], $response['billing_address_city']);
-        $this->assertEquals($response['shipping_address_region'], $response['billing_address_region']);
-        $this->assertEquals($response['shipping_address_zipcode'], $response['billing_address_zipcode']);
-        $this->assertEquals($response['shipping_address_phone'], $response['billing_address_phone']);
+        $this->assertEquals($cartResponse['shipping_first_name'], $cartResponse['billing_first_name']);
+        $this->assertEquals($cartResponse['shipping_last_name'], $cartResponse['billing_last_name']);
+        $this->assertEquals($cartResponse['shipping_address_line1'], $cartResponse['billing_address_line1']);
+        $this->assertEquals($cartResponse['shipping_address_line2'], $cartResponse['billing_address_line2']);
+        $this->assertEquals($cartResponse['shipping_address_city'], $cartResponse['billing_address_city']);
+        $this->assertEquals($cartResponse['shipping_address_region'], $cartResponse['billing_address_region']);
+        $this->assertEquals($cartResponse['shipping_address_zipcode'], $cartResponse['billing_address_zipcode']);
+        $this->assertEquals($cartResponse['shipping_address_phone'], $cartResponse['billing_address_phone']);
     }
 
     /**
@@ -171,7 +167,7 @@ class CartControllerTest extends TestCase
     {
         $cart = factory(Cart::class)->create(['billing_same' => false]);
 
-        $response = $this->json('PUT', "/api/carts/{$cart->token}", [
+        $cartResponse = $this->json('PUT', "/api/carts/{$cart->token}", [
             'shipping_first_name' => "first name",
             'shipping_last_name' => "last name",
             'shipping_address_line1' => "line 1",
@@ -187,18 +183,17 @@ class CartControllerTest extends TestCase
             ->assertJsonStructure([
                 'success',
                 'data' => $this->cartStructure,
-            ]);
+            ])
+            ->decodeResponseJson('data');
 
-        $response = json_decode($response->getContent(), true)['data'];
-
-        $this->assertNull($response['billing_first_name']);
-        $this->assertNull($response['billing_last_name']);
-        $this->assertNull($response['billing_address_line1']);
-        $this->assertNull($response['billing_address_line2']);
-        $this->assertNull($response['billing_address_city']);
-        $this->assertNull($response['billing_address_region']);
-        $this->assertNull($response['billing_address_zipcode']);
-        $this->assertNull($response['billing_address_phone']);
+        $this->assertNull($cartResponse['billing_first_name']);
+        $this->assertNull($cartResponse['billing_last_name']);
+        $this->assertNull($cartResponse['billing_address_line1']);
+        $this->assertNull($cartResponse['billing_address_line2']);
+        $this->assertNull($cartResponse['billing_address_city']);
+        $this->assertNull($cartResponse['billing_address_region']);
+        $this->assertNull($cartResponse['billing_address_zipcode']);
+        $this->assertNull($cartResponse['billing_address_phone']);
     }
 
     /**
@@ -229,16 +224,15 @@ class CartControllerTest extends TestCase
     {
         $customer = factory(Customer::class)->create();
 
-        $response = $this->actingAs($customer)
+        $cart = $this->actingAs($customer)
             ->json('POST', '/api/carts', [])
             ->assertStatus(200)
             ->assertJson(['success' => true])
             ->assertJsonStructure([
                 'success',
                 'data' => $this->cartStructure,
-            ]);
-
-        $cart = json_decode($response->getContent(), true)['data'];
+            ])
+            ->decodeResponseJson('data');
 
         $this->assertCount(0, $cart['cart_items']);
         $this->assertDatabaseHas('carts', [
@@ -258,16 +252,15 @@ class CartControllerTest extends TestCase
         $customer = factory(Customer::class)->create();
         $product = factory(Product::class)->create();
 
-        $response = $this->actingAs($customer)
+        $cart = $this->actingAs($customer)
             ->json('POST', '/api/carts', ['product_id' => $product->id])
             ->assertStatus(200)
             ->assertJson(['success' => true])
             ->assertJsonStructure([
                 'success',
                 'data' => $this->cartStructure,
-            ]);
-
-        $cart = json_decode($response->getContent(), true)['data'];
+            ])
+            ->decodeResponseJson('data');
 
         $this->assertCount(1, $cart['cart_items']);
         $this->assertDatabaseHas('carts', [
