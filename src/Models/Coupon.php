@@ -32,7 +32,7 @@ class Coupon extends Model
     public function calculateDiscount(Cart $cart)
     {
         if ($this->percentage) {
-            return $cart->items_subtotal * $this->discount / 100 / 100;
+            return $cart->items_subtotal * $this->discount / 100;
         }
 
         $discount = $this->discount;
