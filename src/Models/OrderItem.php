@@ -1,6 +1,7 @@
 <?php
 namespace R64\Checkout\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Arr;
 
 // extends
@@ -9,6 +10,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class OrderItem extends Model
 {
+    use SoftDeletes;
+    use HasFactory;
+
     protected $table = 'order_items';
     protected $guarded = ['id'];
     protected $hidden = ['created_at', 'updated_at', 'deleted_at'];
@@ -16,7 +20,6 @@ class OrderItem extends Model
     protected $casts = [];
     public $timestamps = true;
 
-    use SoftDeletes;
 
     /***************************************************************************************
      ** RELATIONS

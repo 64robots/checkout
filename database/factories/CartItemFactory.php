@@ -1,19 +1,34 @@
 <?php
 
-use R64\Checkout\Helpers\Token;
-use Faker\Generator as Faker;
-use R64\Checkout\Models\CartItem;
+namespace R64\Database\Factories;
 
-$factory->define(CartItem::class, function (Faker $faker) {
-    return [
-        'cart_id' => function () {
-            return factory(R64\Checkout\Models\Cart::class)->create()->id;
-        },
-        'product_id' => function () {
-            return factory(R64\Checkout\Models\Product::class)->create()->id;
-        },
-        'price' => $faker->numberBetween(200, 400),
-        'quantity' => $faker->numberBetween(1, 10),
-        'token' => Token::generate(),
-    ];
-});
+use R64\Checkout\Models\Cart;
+use R64\Checkout\Helpers\Token;
+use R64\Checkout\Models\Product;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class CartItemFactory extends Factory
+{
+    use WithFaker;
+
+    protected $model = \R64\Checkout\Models\CartItem::class;
+
+    /**
+     * @return array
+     */
+    public function definition()
+    {
+        return [
+            'cart_id' => function () {
+                return Cart::factory()->create()->id;
+            },
+            'product_id' => function () {
+                return Product::factory()->create()->id;
+            },
+            'price' => $this->faker->numberBetween(200, 400),
+            'quantity' => $this->faker->numberBetween(1, 10),
+            'token' => Token::generate(),
+        ];
+    }
+}

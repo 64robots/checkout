@@ -2,12 +2,14 @@
 
 namespace R64\Checkout\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Coupon extends Model
 {
     use SoftDeletes;
+    use HasFactory;
 
     protected $table = 'coupons';
     protected $guarded = ['id'];

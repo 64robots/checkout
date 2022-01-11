@@ -2,6 +2,7 @@
 namespace R64\Checkout\Models;
 
 // extends
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 // includes
@@ -12,6 +13,7 @@ use R64\Checkout\Helpers\Token;
 class Order extends Model
 {
     use SoftDeletes;
+    use HasFactory;
 
     protected $table = 'orders';
     protected $guarded = ['id'];

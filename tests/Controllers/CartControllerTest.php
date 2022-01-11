@@ -83,8 +83,9 @@ class CartControllerTest extends TestCase
      */
     public function anybody_can_create_cart_with_one_item()
     {
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
+        dd($product);
         $response = $this->json('POST', '/api/carts', ['product_id' => $product->id]);
 
         $response->assertStatus(200)

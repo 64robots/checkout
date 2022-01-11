@@ -2,6 +2,7 @@
 namespace R64\Checkout\Models;
 
 // extends
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 // includes
@@ -15,6 +16,7 @@ use R64\Checkout\Helpers\Price;
 class Cart extends Model
 {
     use SoftDeletes;
+    use HasFactory;
 
     protected $table = 'carts';
     protected $guarded = ['id'];

@@ -1,13 +1,19 @@
 <?php
 
-/** @var \Illuminate\Database\Eloquent\Factory $factory */
+namespace R64\Checkout\Database\Factories;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 use R64\Checkout\Models\Product;
-use Faker\Generator as Faker;
 
-$factory->define(Product::class, function (Faker $faker) {
-    return [
-        'price' => $faker->numberBetween(100, 400),
-        'name' => $faker->name
-    ];
-});
+class ProductFactory extends Factory
+{
+    protected $model = Product::class;
+
+    public function definition()
+    {
+        return [
+            'price' => $this->faker->numberBetween(100, 400),
+            'name' => $this->faker->name
+        ];
+    }
+}
