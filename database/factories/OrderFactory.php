@@ -1,6 +1,6 @@
 <?php
 
-namespace R64\Database\Factories;
+namespace R64\Checkout\Database\Factories;
 
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Database\Eloquent\Factories\Factory;

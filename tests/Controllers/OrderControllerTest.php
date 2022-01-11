@@ -77,7 +77,7 @@ class OrderControllerTest extends TestCase
      */
     public function anyone_can_create_an_order()
     {
-        $cart = factory(Cart::class)->state('with_product')->create();
+        $cart = Cart::factory()->withProducts()->create();
 
         $response = $this->json('POST', '/api/orders', [
             'stripe' => [
@@ -149,7 +149,7 @@ class OrderControllerTest extends TestCase
      */
     public function anyone_can_get_an_order_by_token()
     {
-        $cart = factory(Cart::class)->state('with_product')->create();
+        $cart = Cart::factory()->withProducts()->create();
 
         $response = $this->json('POST', '/api/orders', [
             'stripe' => [

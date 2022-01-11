@@ -1,6 +1,6 @@
 <?php
 
-namespace R64\Database\Factories;
+namespace R64\Checkout\Database\Factories;
 
 use R64\Checkout\Models\Cart;
 use R64\Checkout\Helpers\Token;

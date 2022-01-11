@@ -1,9 +1,10 @@
 <?php
 
-namespace R64\Database\Factories;
+namespace R64\Checkout\Database\Factories;
 
 use Illuminate\Foundation\Testing\WithFaker;
 use R64\Checkout\Helpers\Token;
+use R64\Checkout\Models\Cart;
 use R64\Checkout\Models\CartItem;
 use R64\Checkout\Models\Customer;
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -45,8 +46,10 @@ class CartFactory extends Factory
 
     public function withProducts()
     {
-        return $this->afterCreating(function () {
-
+        return $this->afterCreating(function (Cart $cart) {
+            CartItem::factory()->create([
+                'cart_id' => $cart->id
+            ]);
         });
     }
 }

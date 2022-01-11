@@ -3,7 +3,8 @@
 namespace R64\Checkout\Tests;
 
 use Axlon\PostalCodeValidation\ValidationServiceProvider;
-use Illuminate\Foundation\Testing\TestResponse;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Testing\TestResponse;
 use Illuminate\Http\JsonResponse;
 use R64\Checkout\CheckoutServiceProvider;
 use R64\Stripe\StripeServiceProvider;
@@ -16,6 +17,10 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         $this->withFactories(__DIR__ . '/../database/factories');
+
+        Factory::guessFactoryNamesUsing(
+            fn (string $modelName) => 'R64\\Checkout\\Database\\Factories\\'.class_basename($modelName).'Factory'
+        );
     }
 
     protected function getPackageProviders($app)
