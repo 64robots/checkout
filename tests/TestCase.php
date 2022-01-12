@@ -16,7 +16,6 @@ class TestCase extends \Orchestra\Testbench\TestCase
         parent::setUp();
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-        $this->withFactories(__DIR__ . '/../database/factories');
 
         Factory::guessFactoryNamesUsing(
             fn (string $modelName) => 'R64\\Checkout\\Database\\Factories\\'.class_basename($modelName).'Factory'
