@@ -2,6 +2,7 @@
 
 namespace R64\Checkout\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use R64\Checkout\Contracts\Customer as CustomerContract;
 
 //extends
@@ -10,6 +11,8 @@ use R64\Checkout\PaymentHandlerFactory;
 
 class OrderPurchase extends Model
 {
+    use HasFactory;
+
     protected $guarded = ['id'];
     protected $hidden = [];
     protected $dates = ['created_at', 'updated_at'];

@@ -40,11 +40,12 @@ class CartCouponControllerTest extends TestCase
      */
     public function discount_code_discounts_the_total_price()
     {
-        $cart = factory(Cart::class)->create(['shipping' => 0]);
-        $product = factory(Product::class)->create(['price' => 100000]);
+        $cart = Cart::factory()->create(['shipping' => 0]);
+        $product = Product::factory()->create(['price' => 100000]);
+
         CartItem::makeOne($cart, ['product_id' => $product->id]);
 
-        $coupon = factory(Coupon::class)->state('$10off')->create();
+        $coupon = Coupon::factory()->tenDollarsOff()->create();
 
         $response = $this->json('PUT', "/api/carts/{$cart->token}/coupon-code", [
             'coupon_code' => $coupon->code,
@@ -69,11 +70,11 @@ class CartCouponControllerTest extends TestCase
      */
     public function removing_discount_code_removes_discount_from_total()
     {
-        $cart = factory(Cart::class)->create(['shipping' => 0]);
-        $product = factory(Product::class)->create(['price' => 100000]);
+        $cart = Cart::factory()->create(['shipping' => 0]);
+        $product = Product::factory()->create(['price' => 100000]);
         CartItem::makeOne($cart, ['product_id' => $product->id]);
 
-        $coupon = factory(Coupon::class)->state('$10off')->create();
+        $coupon = Coupon::factory()->tenDollarsOff()->create();
 
         $this->json('PUT', "/api/carts/{$cart->token}/coupon-code", [
             'coupon_code' => $coupon->code,

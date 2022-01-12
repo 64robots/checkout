@@ -1,16 +1,26 @@
 <?php
 
-use Faker\Generator as Faker;
-use R64\Checkout\Models\OrderItem;
+namespace R64\Checkout\Database\Factories;
 
-$factory->define(OrderItem::class, function (Faker $faker) {
-    return [
-        'product_id' => function () {
-            return factory(R64\Checkout\Models\Product::class)->create()->id;
-        },
-        'cart_item_id' => function () {
-            return factory(R64\Checkout\Models\CartItem::class)->create()->id;
-        },
-        'name' => $faker->catchPhrase,
-    ];
-});
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class OrderItemFactory extends Factory
+{
+    use WithFaker;
+
+    protected $model = \R64\Checkout\Models\OrderItem::class;
+
+    public function definition()
+    {
+        return [
+            'product_id' => function () {
+                return \R64\Checkout\Models\Product::factory()->create()->id;
+            },
+            'cart_item_id' => function () {
+                return \R64\Checkout\Models\CartItem::factory()->create()->id;
+            },
+            'name' => $this->faker->word,
+        ];
+    }
+}

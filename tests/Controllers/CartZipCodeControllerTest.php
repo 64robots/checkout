@@ -21,7 +21,7 @@ class CartZipCodeControllerTest extends TestCase
     public function autofill_shipping_city_and_state_from_zipcode()
     {
         $this->instance(GeoNames::class, new FakeGeoNames(new Client(), 'username', 'code'));
-        $cart = factory(Cart::class)->create();
+        $cart = Cart::factory()->create();
 
         $response = $this->json('PUT', "/api/carts/{$cart->token}/zipcode", [
             'zipcode' => 21224,

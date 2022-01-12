@@ -50,8 +50,8 @@ class CartItemControllerTest extends TestCase
      */
     public function anyone_can_add_a_product_to_a_cart()
     {
-        $cart = factory(Cart::class)->create();
-        $product = factory(Product::class)->create();
+        $cart = Cart::factory()->create();
+        $product = Product::factory()->create();
 
         $this->json('POST', "/api/carts/{$cart->token}/cart-items", [
             'product_id' => $product->id,
@@ -74,7 +74,7 @@ class CartItemControllerTest extends TestCase
      */
     public function anyone_can_update_cart_item_quantity()
     {
-        $cart = factory(Cart::class)->states(['with_product'])->create();
+        $cart = Cart::factory()->withProducts()->create();
         $cartItem = $cart->cartItems->first();
 
         $newQuantity = $cartItem->quantity + 10;
@@ -113,7 +113,7 @@ class CartItemControllerTest extends TestCase
         $this->assertEquals('0.00', $cartResponse['total']);
         $this->assertEmpty($cartResponse['cart_items']);
 
-        $product = factory(Product::class)->create(['price' => 1000]);
+        $product = Product::factory()->create(['price' => 1000]);
 
         $cartResponse = $this->json('POST', "/api/carts/${cartResponse['cart_token']}/cart-items", [
             'product_id' => $product->id,
@@ -143,7 +143,7 @@ class CartItemControllerTest extends TestCase
      */
     public function anyone_can_delete_cart_item()
     {
-        $cart = factory(Cart::class)->states(['with_product'])->create();
+        $cart = Cart::factory()->withProducts()->create();
         $cartItem = $cart->cartItems->first();
 
         $this->json('DELETE', "/api/cart-items/{$cartItem->token}")

@@ -5,27 +5,31 @@
     "license": "MIT",
     "type": "library",
     "require": {
-        "laravel/framework": "^6.0",
-        "php": "^7.1.3",
-        "illuminate/support": "^6.10",
         "64robots/stripe": "*",
-        "guzzlehttp/guzzle": "^6.5",
-        "axlon/laravel-postal-code-validation": "^2.0",
-        "doctrine/dbal": "^2.10",
-        "paypal/paypal-checkout-sdk": "1.0.1"
+        "axlon/laravel-postal-code-validation": "^3.0",
+        "doctrine/dbal": "^2.12",
+        "guzzlehttp/guzzle": "^7.0.1",
+        "illuminate/support": "^8.71",
+        "illuminate/database": "^8.71",
+        "laravel/framework": "^8.0",
+        "paypal/paypal-checkout-sdk": "1.0.1",
+        "php": "^7.1.3 || ^8.0"
     },
     "require-dev": {
         "filp/whoops": "^2.0",
-        "fzaninotto/faker": "^1.4",
         "phpunit/phpunit": "^8.3",
-        "orchestra/testbench": "^4.0"
+        "orchestra/testbench": "^6.23"
+    },
+    "scripts" : {
+        "test" : "vendor/bin/phpunit"
     },
     "autoload": {
         "files": [
             "src/Helpers/Globals.php"
         ],
         "psr-4": {
-            "R64\\Checkout\\": "src"
+            "R64\\Checkout\\": "src",
+            "R64\\Checkout\\Database\\Factories\\": "database/factories"
         }
     },
     "autoload-dev": {

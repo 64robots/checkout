@@ -1,31 +1,41 @@
 <?php
 
-use Faker\Generator as Faker;
-use R64\Checkout\Models\Order;
+namespace R64\Checkout\Database\Factories;
 
-$factory->define(Order::class, function (Faker $faker) {
-    return [
-        'cart_id' => function () {
-            return factory(R64\Checkout\Models\Cart::class)->create()->id;
-        },
-        'items_total' => $faker->numberBetween(1000, 10000),
-        'customer_email' => $faker->unique()->safeEmail,
-        'shipping_first_name' => $faker->catchPhrase,
-        'shipping_last_name' => $faker->catchPhrase,
-        'shipping_address_line1' => $faker->catchPhrase,
-        'shipping_address_line2' => $faker->catchPhrase,
-        'shipping_address_city' => $faker->catchPhrase,
-        'shipping_address_region' => $faker->catchPhrase,
-        'shipping_address_zipcode' => $faker->catchPhrase,
-        'shipping_address_phone' => $faker->catchPhrase,
-        'billing_address_line1' => $faker->catchPhrase,
-        'billing_address_line2' => $faker->catchPhrase,
-        'billing_address_city' => $faker->catchPhrase,
-        'billing_address_region' => $faker->catchPhrase,
-        'billing_address_zipcode' => $faker->catchPhrase,
-        'billing_address_phone' => $faker->catchPhrase,
-        'status' => $faker->catchPhrase,
-        'customer_notes' => $faker->text,
-        'admin_notes' => $faker->text,
-    ];
-});
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Database\Eloquent\Factories\Factory;
+
+class OrderFactory extends Factory
+{
+    use WithFaker;
+
+    protected $model = \R64\Checkout\Models\Order::class;
+
+    public function definition()
+    {
+        return [
+            'cart_id' => function () {
+                return \R64\Checkout\Models\Cart::factory()->create()->id;
+            },
+            'items_total' => $this->faker->numberBetween(1000, 10000),
+            'customer_email' => $this->faker->unique()->safeEmail,
+            'shipping_first_name' => $this->faker->catchPhrase,
+            'shipping_last_name' => $this->faker->catchPhrase,
+            'shipping_address_line1' => $this->faker->catchPhrase,
+            'shipping_address_line2' => $this->faker->catchPhrase,
+            'shipping_address_city' => $this->faker->catchPhrase,
+            'shipping_address_region' => $this->faker->catchPhrase,
+            'shipping_address_zipcode' => $this->faker->catchPhrase,
+            'shipping_address_phone' => $this->faker->catchPhrase,
+            'billing_address_line1' => $this->faker->catchPhrase,
+            'billing_address_line2' => $this->faker->catchPhrase,
+            'billing_address_city' => $this->faker->catchPhrase,
+            'billing_address_region' => $this->faker->catchPhrase,
+            'billing_address_zipcode' => $this->faker->catchPhrase,
+            'billing_address_phone' => $this->faker->catchPhrase,
+            'status' => $this->faker->catchPhrase,
+            'customer_notes' => $this->faker->text,
+            'admin_notes' => $this->faker->text,
+        ];
+    }
+}

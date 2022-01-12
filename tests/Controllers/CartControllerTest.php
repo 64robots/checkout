@@ -39,7 +39,7 @@ class CartControllerTest extends TestCase
      */
     public function anybody_can_view_cart_by_token()
     {
-        $cart = factory(Cart::class)->state('with_product')->create();
+        $cart = Cart::factory()->withProducts()->create();
 
         $this
             ->json('GET', "/api/carts/{$cart->token}")
@@ -83,7 +83,7 @@ class CartControllerTest extends TestCase
      */
     public function anybody_can_create_cart_with_one_item()
     {
-        $product = factory(Product::class)->create();
+        $product = Product::factory()->create();
 
         $response = $this->json('POST', '/api/carts', ['product_id' => $product->id]);
 
@@ -109,7 +109,7 @@ class CartControllerTest extends TestCase
      */
     public function anybody_can_update_a_cart()
     {
-        $cart = factory(Cart::class)->state('with_product')->create();
+        $cart = Cart::factory()->withProducts()->create();
 
         $this->json('PUT', "/api/carts/{$cart->token}", [
             'customer_notes' => "here we go, it's a note",
@@ -132,7 +132,7 @@ class CartControllerTest extends TestCase
      */
     public function billing_information_is_the_same_as_shipping_by_default()
     {
-        $cart = factory(Cart::class)->create();
+        $cart = Cart::factory()->create();
 
         $response = $this->json('PUT', "/api/carts/{$cart->token}", [
             'shipping_first_name' => "first name",
@@ -169,7 +169,7 @@ class CartControllerTest extends TestCase
      */
     public function billing_information_is_not_the_same_as_shipping_when_billing_same_is_false()
     {
-        $cart = factory(Cart::class)->create(['billing_same' => false]);
+        $cart = Cart::factory()->create(['billing_same' => false]);
 
         $response = $this->json('PUT', "/api/carts/{$cart->token}", [
             'shipping_first_name' => "first name",
@@ -207,7 +207,7 @@ class CartControllerTest extends TestCase
      */
     public function anybody_can_delete_a_cart()
     {
-        $cart = factory(Cart::class)->state('with_product')->create();
+        $cart = Cart::factory()->withProducts()->create();
 
         $this->json('DELETE', "/api/carts/{$cart->token}")
             ->assertJson(['success' => true]);
@@ -227,7 +227,7 @@ class CartControllerTest extends TestCase
      */
     public function customer_can_create_an_empty_cart()
     {
-        $customer = factory(Customer::class)->create();
+        $customer = Customer::factory()->create();
 
         $response = $this->actingAs($customer)
             ->json('POST', '/api/carts', [])
@@ -255,8 +255,8 @@ class CartControllerTest extends TestCase
      */
     public function customer_can_create_cart_with_one_item()
     {
-        $customer = factory(Customer::class)->create();
-        $product = factory(Product::class)->create();
+        $customer = Customer::factory()->create();
+        $product = Product::factory()->create();
 
         $response = $this->actingAs($customer)
             ->json('POST', '/api/carts', ['product_id' => $product->id])
@@ -282,14 +282,14 @@ class CartControllerTest extends TestCase
      */
     public function customer_can_update_a_cart()
     {
-        $customer = factory(Customer::class)->create([
+        $customer = Customer::factory()->create([
             'email' => 'email@email.com',
         ]);
-        $cart = factory(Cart::class)->state('with_product')->create([
+        $cart = Cart::factory()->withProducts()->create([
             'customer_id' => $customer->id,
         ]);
 
-        $this->actingAs($customer, 'api')
+        $this->actingAs($customer)
             ->json('PUT', "/api/carts/{$cart->token}", [
                 'customer_email' => 'new@email.com',
             ])
