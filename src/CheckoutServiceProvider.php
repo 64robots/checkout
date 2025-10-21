@@ -27,7 +27,8 @@ class CheckoutServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(
-            __DIR__ . '/../config/checkout.php', 'checkout'
+            __DIR__ . '/../config/checkout.php',
+            'checkout'
         );
 
         $this->app->bind(Product::class, function () {
@@ -228,7 +229,6 @@ class CheckoutServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../database/factories/' => database_path('factories'),
         ], 'migrations');
-
     }
 
     protected function publishPolicies()
@@ -258,7 +258,10 @@ class CheckoutServiceProvider extends ServiceProvider
             'namespace' => 'R64\Checkout\Http\Controllers',
             'as' => 'checkout.api.',
             'prefix' => 'api',
-            'middleware' => ['throttle:60,1', 'bindings'],
+            'middleware' => [
+                'throttle:60,1',
+                \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            ],
         ];
     }
 
