@@ -17,8 +17,6 @@ class TestCase extends \Orchestra\Testbench\TestCase
 
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
-        $this->artisan('migrate:fresh', ['--database' => 'sqlite'])->run();
-
         Factory::guessFactoryNamesUsing(
             fn(string $modelName) => 'R64\\Checkout\\Database\\Factories\\' . class_basename($modelName) . 'Factory'
         );
